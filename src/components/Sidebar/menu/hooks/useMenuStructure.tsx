@@ -24,17 +24,13 @@ import { CustomersIcon } from "@dashboard/icons/Customers";
 import { DiscountsIcon } from "@dashboard/icons/Discounts";
 import { HomeIcon } from "@dashboard/icons/Home";
 import { MarketplaceIcon } from "@dashboard/icons/Marketplace";
-import ModelingIcon from "@dashboard/icons/Modeling";
 import { OrdersIcon } from "@dashboard/icons/Orders";
 import { ProductsIcon } from "@dashboard/icons/Products";
 import { TranslationsIcon } from "@dashboard/icons/Translations";
 import { commonMessages, sectionNames } from "@dashboard/intl";
-import { pageListPath } from "@dashboard/modeling/urls";
-import { pageTypeListUrl } from "@dashboard/modelTypes/urls";
 import { orderDraftListUrl, orderListUrl } from "@dashboard/orders/urls";
 import { productListUrl } from "@dashboard/products/urls";
 import { SearchShortcut } from "@dashboard/search/SearchShortcut";
-import { menuListUrl } from "@dashboard/structures/urls";
 import { languageListUrl } from "@dashboard/translations/urls";
 import { Box, SearchIcon } from "@saleor/macaw-ui-next";
 import isEmpty from "lodash/isEmpty";
@@ -261,45 +257,6 @@ export function useMenuStructure() {
       permissions: [PermissionEnum.MANAGE_DISCOUNTS],
       url: saleListUrl(),
       id: "discounts",
-      type: "itemGroup",
-    },
-    {
-      children: [
-        {
-          label: intl.formatMessage(sectionNames.models),
-          id: "models",
-          url: pageListPath,
-          permissions: [PermissionEnum.MANAGE_PAGES],
-          type: "item",
-        },
-        {
-          label: intl.formatMessage(sectionNames.modelTypes),
-          id: "model-types",
-          url: pageTypeListUrl(),
-          permissions: [
-            PermissionEnum.MANAGE_PAGES,
-            PermissionEnum.MANAGE_PAGE_TYPES_AND_ATTRIBUTES,
-          ],
-          type: "item",
-        },
-        {
-          label: intl.formatMessage(sectionNames.structures),
-          id: "structures",
-          url: menuListUrl(),
-          permissions: [PermissionEnum.MANAGE_MENUS],
-          type: "item",
-        },
-        ...mapToExtensionsItems(
-          extensions.NAVIGATION_PAGES,
-          appExtensionsHeaderItem,
-          showExtensions,
-        ),
-      ],
-      icon: renderIcon(<ModelingIcon />),
-      label: intl.formatMessage(sectionNames.modeling),
-      permissions: [PermissionEnum.MANAGE_PAGES, PermissionEnum.MANAGE_MENUS],
-      id: "modeling",
-      url: pageListPath,
       type: "itemGroup",
     },
     {

@@ -4,8 +4,6 @@ import React from "react";
 
 import { CategoryItem } from "./CategoryItem";
 import { CollectionItem } from "./CollectionItem";
-import { ModelItem } from "./ModelItem";
-import { ModelTypeItem } from "./ModelTypeItem";
 import { OrderItem } from "./OrderItem";
 import { ItemData } from "./prepareResults";
 import { ProductItem } from "./ProductItem";
@@ -100,11 +98,6 @@ export const ResultsTable = ({ data, onItemClick }: ResultsTableProps) => {
             <GridTable.Col />
             <GridTable.Col __width="160px" />
           </GridTable.Colgroup>
-          <GridTable.Body>
-            {data.models.map(result => (
-              <ModelItem key={result.id} node={result} onClick={onItemClick} />
-            ))}
-          </GridTable.Body>
         </GridTable>
       )}
       {data.modelTypes.length > 0 && (
@@ -114,11 +107,6 @@ export const ResultsTable = ({ data, onItemClick }: ResultsTableProps) => {
             <GridTable.Col />
             <GridTable.Col __width="160px" />
           </GridTable.Colgroup>
-          <GridTable.Body>
-            {data.modelTypes.map(result => (
-              <ModelTypeItem key={result.id} node={result} onClick={onItemClick} />
-            ))}
-          </GridTable.Body>
         </GridTable>
       )}
     </Box>

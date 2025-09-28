@@ -16,7 +16,6 @@ import { sectionNames } from "@dashboard/intl";
 import { findById } from "@dashboard/misc";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
-import { useOnboarding } from "@dashboard/welcomePage/WelcomePageOnboarding/onboardingContext";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
 
@@ -33,11 +32,6 @@ export const CustomAppList = ({ params }: CustomAppListProps) => {
   const notify = useNotifier();
   const intl = useIntl();
   const client = useApolloClient();
-  const { markOnboardingStepAsCompleted } = useOnboarding();
-
-  useEffect(() => {
-    markOnboardingStepAsCompleted("view-webhooks");
-  }, []);
 
   const [openModal, closeModal] = createDialogActionHandlers<
     CustomAppListUrlDialog,

@@ -24,17 +24,11 @@ import {
   ListCustomersDocument,
   ListCustomersQuery,
   ListCustomersQueryVariables,
-  MenuListDocument,
-  MenuListQuery,
-  MenuListQueryVariables,
   OrderFulfillDataQuery,
   OrderFulfillDataQueryVariables,
   OrderListDocument,
   OrderListQuery,
   OrderListQueryVariables,
-  PageListDocument,
-  PageListQuery,
-  PageListQueryVariables,
   ProductListDocument,
   ProductListQuery,
   ProductListQueryVariables,
@@ -77,9 +71,7 @@ export type TData =
   | CustomerDetailsQuery
   | OrderFulfillDataQuery
   | ListCustomersQuery
-  | MenuListQuery
   | OrderListQuery
-  | PageListQuery
   | ProductListQuery
   | ProductVariantListQuery
   | RootCategoriesQuery
@@ -102,9 +94,7 @@ export type TVariables =
   | CollectionListQueryVariables
   | CustomerDetailsQueryVariables
   | OrderFulfillDataQueryVariables
-  | MenuListQueryVariables
   | OrderListQueryVariables
-  | PageListQueryVariables
   | ProductListQueryVariables
   | ProductVariantListQueryVariables
   | RootCategoriesQueryVariables
@@ -158,20 +148,10 @@ export const DocumentMap: Record<string, Document> = {
     displayedAttribute: "email",
     // TODO inverted name
   },
-  MENU: {
-    document: MenuListDocument,
-    variables: DefaultVariables,
-    displayedAttribute: "name",
-  },
   ORDER: {
     document: OrderListDocument,
     variables: DefaultVariables,
     displayedAttribute: "number",
-  },
-  PAGE: {
-    document: PageListDocument,
-    variables: DefaultVariables,
-    displayedAttribute: "title",
   },
   PRODUCT: {
     document: ProductListDocument,

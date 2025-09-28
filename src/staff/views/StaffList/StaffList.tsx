@@ -1,4 +1,3 @@
-import { newPasswordUrl } from "@dashboard/auth/urls";
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter";
 import { createStaffMembersQueryVariables } from "@dashboard/components/ConditionalFilter/queryVariables";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
@@ -25,7 +24,6 @@ import createSortHandler from "@dashboard/utils/handlers/sortHandler";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import { getSortParams } from "@dashboard/utils/sort";
 import { getAppMountUriForRedirect } from "@dashboard/utils/urls";
-import { useOnboarding } from "@dashboard/welcomePage/WelcomePageOnboarding/onboardingContext";
 import React from "react";
 import { useIntl } from "react-intl";
 import urlJoin from "url-join";
@@ -50,7 +48,6 @@ export const StaffList = ({ params }: StaffListProps) => {
   const notify = useNotifier();
   const { updateListSettings, settings } = useListSettings(ListViews.STAFF_MEMBERS_LIST);
   const intl = useIntl();
-  const { markOnboardingStepAsCompleted } = useOnboarding();
   const { enabled: isStaffMembersFilteringEnabled } = useFlag("new_filters");
   const { valueProvider } = useConditionalFilterContext();
   const filters = createStaffMembersQueryVariables(valueProvider.value);
@@ -89,7 +86,6 @@ export const StaffList = ({ params }: StaffListProps) => {
   const [addStaffMember, addStaffMemberData] = useStaffMemberAddMutation({
     onCompleted: data => {
       if (data?.staffCreate?.errors?.length === 0) {
-        markOnboardingStepAsCompleted("invite-staff");
         notify({
           status: "success",
           text: intl.formatMessage(commonMessages.savedChanges),
@@ -145,11 +141,7 @@ export const StaffList = ({ params }: StaffListProps) => {
           email: variables.email,
           firstName: variables.firstName,
           lastName: variables.lastName,
-          redirectUrl: urlJoin(
-            window.location.origin,
-            getAppMountUriForRedirect(),
-            newPasswordUrl().replace(/\?/, ""),
-          ),
+          redirectUrl: urlJoin(window.location.origin, getAppMountUriForRedirect()),
         },
       },
     });

@@ -13,7 +13,6 @@ import { useInstalledExtensionsFilter } from "@dashboard/extensions/views/Instal
 import { useHasManagedAppsPermission } from "@dashboard/hooks/useHasManagedAppsPermission";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import { useOnboarding } from "@dashboard/welcomePage/WelcomePageOnboarding/onboardingContext";
 import { Box, ChevronRightIcon, Text } from "@saleor/macaw-ui-next";
 import React, { useEffect } from "react";
 import { useIntl } from "react-intl";
@@ -32,12 +31,7 @@ export const InstalledExtensions = ({ params }: InstalledExtensionsProps) => {
   const intl = useIntl();
   const navigate = useNavigator();
   const { hasManagedAppsPermission } = useHasManagedAppsPermission();
-  const { markOnboardingStepAsCompleted } = useOnboarding();
   const subtitle = useContextualLink("extensions");
-
-  useEffect(() => {
-    markOnboardingStepAsCompleted("view-extensions");
-  }, [markOnboardingStepAsCompleted]);
 
   const [openModal, closeModal] = createDialogActionHandlers<
     ExtensionsListUrlDialog,

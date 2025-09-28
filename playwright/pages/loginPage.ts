@@ -11,7 +11,6 @@ export class LoginPage {
     readonly emailInput = page.getByTestId("email"),
     readonly passwordInput = page.getByTestId("password"),
     readonly signInButton = page.getByTestId("submit"),
-    readonly resetPasswordLink = page.getByTestId("reset-password-link"),
     readonly sendEmailWithResetLinkButton = page.getByTestId("submit"),
     readonly backToLoginPageButton = page.getByTestId("back-to-login-button"),
   ) {
@@ -21,10 +20,6 @@ export class LoginPage {
 
   async clickBackToLoginPageButton() {
     await this.backToLoginPageButton.click();
-  }
-
-  async clickResetPasswordLink() {
-    await this.resetPasswordLink.click();
   }
 
   async clickSendEmailWithResetLinkButton() {

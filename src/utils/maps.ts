@@ -9,7 +9,6 @@ import {
   PageFragment,
 } from "@dashboard/graphql";
 import { getFullName } from "@dashboard/misc";
-import { pageUrl } from "@dashboard/modeling/urls";
 import { productUrl, productVariantEditUrl } from "@dashboard/products/urls";
 import { Node, SlugNode, TagNode } from "@dashboard/types";
 import { Choice } from "@saleor/macaw-ui";
@@ -158,8 +157,6 @@ export function getEntityUrl({
       return categoryUrl(entityId);
     case AttributeEntityTypeEnum.COLLECTION:
       return collectionUrl(entityId);
-    case AttributeEntityTypeEnum.PAGE:
-      return pageUrl(entityId);
     case AttributeEntityTypeEnum.PRODUCT:
       return productUrl(entityId);
     case AttributeEntityTypeEnum.PRODUCT_VARIANT:

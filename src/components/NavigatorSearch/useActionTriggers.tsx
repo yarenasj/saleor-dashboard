@@ -3,8 +3,6 @@ import { categoryAddUrl, categoryListUrl } from "@dashboard/categories/urls";
 import { channelAddUrl, channelsListUrl } from "@dashboard/channels/urls";
 import { collectionAddUrl, collectionListUrl } from "@dashboard/collections/urls";
 import Link from "@dashboard/components/Link";
-import { pageCreateUrl, pageListUrl } from "@dashboard/modeling/urls";
-import { pageTypeAddPath, pageTypeListUrl } from "@dashboard/modelTypes/urls";
 import { orderListUrl } from "@dashboard/orders/urls";
 import { productListUrl } from "@dashboard/products/urls";
 import { shippingZoneAddUrl, shippingZonesListUrl } from "@dashboard/shipping/urls";
@@ -184,74 +182,6 @@ const allActions: TriggerDescriptor[] = [
       <Box onClick={onClick}>
         <ActionLinkItem href={collectionListUrl()}>
           <FormattedMessage id="ITYiRy" defaultMessage="Go to collections" />
-        </ActionLinkItem>
-      </Box>
-    ),
-  },
-  {
-    section: {
-      id: "blWvag",
-      defaultMessage: "Models",
-    },
-    name: {
-      id: "vbop3G",
-      defaultMessage: "Create new model",
-    },
-    Component: ({ onClick }) => (
-      <Box onClick={onClick}>
-        <ActionLinkItem href={pageCreateUrl()}>
-          <FormattedMessage id="vbop3G" defaultMessage="Create new model" />
-        </ActionLinkItem>
-      </Box>
-    ),
-  },
-  {
-    section: {
-      id: "blWvag",
-      defaultMessage: "Models",
-    },
-    name: {
-      id: "dQn96a",
-      defaultMessage: "Go to models",
-    },
-    Component: ({ onClick }) => (
-      <Box onClick={onClick}>
-        <ActionLinkItem href={pageListUrl()}>
-          <FormattedMessage id="dQn96a" defaultMessage="Go to models" />
-        </ActionLinkItem>
-      </Box>
-    ),
-  },
-  {
-    section: {
-      id: "blWvag",
-      defaultMessage: "Models",
-    },
-    name: {
-      id: "Ed2705",
-      defaultMessage: "Create new model type",
-    },
-    Component: ({ onClick }) => (
-      <Box onClick={onClick}>
-        <ActionLinkItem href={pageTypeAddPath}>
-          <FormattedMessage id="Ed2705" defaultMessage="Create new model type" />
-        </ActionLinkItem>
-      </Box>
-    ),
-  },
-  {
-    section: {
-      id: "blWvag",
-      defaultMessage: "Models",
-    },
-    name: {
-      id: "5nrCxC",
-      defaultMessage: "Go to model types",
-    },
-    Component: ({ onClick }) => (
-      <Box onClick={onClick}>
-        <ActionLinkItem href={pageTypeListUrl()}>
-          <FormattedMessage id="5nrCxC" defaultMessage="Go to model types" />
         </ActionLinkItem>
       </Box>
     ),

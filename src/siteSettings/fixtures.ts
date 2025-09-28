@@ -28,7 +28,6 @@ export const shop: SiteSettingsQuery["shop"] = {
       country: "United Arab Emirates",
     },
   ],
-  customerSetPasswordUrl: "https://example.com/reset-password",
   defaultMailSenderAddress: "noreply@example.com",
   defaultMailSenderName: "Saleor",
   description: "Lorem ipsum dolor sit amet",

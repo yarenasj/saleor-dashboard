@@ -5,7 +5,6 @@ import { PermissionEnum } from "@dashboard/graphql";
 import { Box } from "@saleor/macaw-ui-next";
 import React from "react";
 
-import { WelcomePageOnboarding } from "./WelcomePageOnboarding";
 import { WelcomePageSidebar } from "./WelcomePageSidebar";
 import { WelcomePageTilesContainer } from "./WelcomePageTilesContainer";
 import { WelcomePageTitle } from "./WelcomePageTitle";
@@ -43,7 +42,6 @@ export const WelcomePage = () => {
           desktop: "2",
         }}
       >
-        <WelcomePageOnboarding />
         <WelcomePageTilesContainer />
       </Box>
       <Box gridColumn="1">

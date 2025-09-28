@@ -436,21 +436,6 @@ export const sectionNames = defineMessages({
     defaultMessage: "All Search Results",
     description: "search section name",
   },
-  modeling: {
-    id: "NVp0fa",
-    defaultMessage: "Modeling",
-    description: "modeling section name",
-  },
-  models: {
-    id: "GFioCC",
-    defaultMessage: "Models",
-    description: "models section name",
-  },
-  structures: {
-    id: "21cJ+Z",
-    defaultMessage: "Structures",
-    description: "structures section name",
-  },
   apps: {
     id: "9q562c",
     defaultMessage: "Apps",
@@ -525,11 +510,6 @@ export const sectionNames = defineMessages({
     id: "9XYfOt",
     defaultMessage: "Fulfillment",
     description: "fulfillment section name",
-  },
-  modelTypes: {
-    id: "Gbhrqd",
-    defaultMessage: "Model Types",
-    description: "model types section name",
   },
   content: {
     id: "NelCIl",

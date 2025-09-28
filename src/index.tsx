@@ -7,11 +7,7 @@ import { history, Route, Router } from "@dashboard/components/Router";
 import { extensionsSection } from "@dashboard/extensions/urls";
 import { PermissionEnum } from "@dashboard/graphql";
 import useAppState from "@dashboard/hooks/useAppState";
-import { pageListPath } from "@dashboard/modeling/urls";
-import { modelTypesPath } from "@dashboard/modelTypes/urls";
-import { structuresListPath } from "@dashboard/structures/urls";
 import { ThemeProvider } from "@dashboard/theme";
-import { OnboardingProvider } from "@dashboard/welcomePage/WelcomePageOnboarding/onboardingContext";
 import { ThemeProvider as LegacyThemeProvider } from "@saleor/macaw-ui";
 import { SaleorProvider } from "@saleor/sdk";
 import React from "react";
@@ -40,7 +36,6 @@ import { DateProvider } from "./components/Date";
 import { DevModeProvider } from "./components/DevModePanel/DevModeProvider";
 import ErrorPage from "./components/ErrorPage";
 import ExitFormDialogProvider from "./components/Form/ExitFormDialogProvider";
-import { legacyRedirects } from "./components/LegacyRedirects";
 import { LocaleProvider } from "./components/Locale";
 import MessageManagerProvider from "./components/messages";
 import { NavigatorSearchProvider } from "./components/NavigatorSearch/NavigatorSearchProvider";
@@ -65,8 +60,6 @@ import { giftCardsSectionUrlName } from "./giftCards/urls";
 import { apolloClient, saleorClient } from "./graphql/client";
 import { useLocationState } from "./hooks/useLocationState";
 import { commonMessages } from "./intl";
-import PageSection from "./modeling";
-import PageTypesSection from "./modelTypes";
 import { NotFound } from "./NotFound";
 import OrdersSection from "./orders";
 import PermissionGroupSection from "./permissionGroups";
@@ -78,7 +71,6 @@ import errorTracker from "./services/errorTracking";
 import ShippingSection from "./shipping";
 import SiteSettingsSection from "./siteSettings";
 import StaffSection from "./staff";
-import NavigationSection from "./structures";
 import TaxesSection from "./taxes";
 import { paletteOverrides, themeOverrides } from "./themeOverrides";
 import TranslationsSection from "./translations";
@@ -132,9 +124,7 @@ const App = () => (
                                   <NavigatorSearchProvider>
                                     <SavebarRefProvider>
                                       <FeatureFlagsProviderWithUser>
-                                        <OnboardingProvider>
-                                          <Routes />
-                                        </OnboardingProvider>
+                                        <Routes />
                                       </FeatureFlagsProviderWithUser>
                                     </SavebarRefProvider>
                                   </NavigatorSearchProvider>
@@ -189,7 +179,6 @@ const Routes = () => {
               )}
             >
               <Switch>
-                {legacyRedirects}
                 <SectionRoute exact path="/" component={WelcomePage} />
                 <SectionRoute
                   permissions={[
@@ -226,20 +215,6 @@ const Routes = () => {
                   permissions={[PermissionEnum.MANAGE_DISCOUNTS]}
                   path="/discounts"
                   component={DiscountSection}
-                />
-                <SectionRoute
-                  permissions={[PermissionEnum.MANAGE_PAGES]}
-                  path={pageListPath}
-                  component={PageSection}
-                />
-                <SectionRoute
-                  permissions={[
-                    PermissionEnum.MANAGE_PAGES,
-                    PermissionEnum.MANAGE_PAGE_TYPES_AND_ATTRIBUTES,
-                  ]}
-                  path={modelTypesPath}
-                  component={PageTypesSection}
-                  matchPermission="any"
                 />
                 <SectionRoute
                   permissions={[PermissionEnum.MANAGE_PLUGINS]}
@@ -282,11 +257,6 @@ const Routes = () => {
                   permissions={[PermissionEnum.MANAGE_TRANSLATIONS]}
                   path="/translations"
                   component={TranslationsSection}
-                />
-                <SectionRoute
-                  permissions={[PermissionEnum.MANAGE_MENUS]}
-                  path={structuresListPath}
-                  component={NavigationSection}
                 />
                 <SectionRoute
                   permissions={[

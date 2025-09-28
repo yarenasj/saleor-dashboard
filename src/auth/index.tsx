@@ -5,16 +5,8 @@ import { Switch } from "react-router-dom";
 
 import Layout from "./components/Layout";
 import { UserContext as Context } from "./types";
-import {
-  LoginUrlQueryParams,
-  newPasswordPath,
-  passwordResetPath,
-  passwordResetSuccessPath,
-} from "./urls";
+import { LoginUrlQueryParams } from "./urls";
 import LoginViewComponent from "./views/Login";
-import NewPassword from "./views/NewPassword";
-import ResetPassword from "./views/ResetPassword";
-import ResetPasswordSuccess from "./views/ResetPasswordSuccess";
 
 const LoginView = () => {
   const qs = parseQs(location.search.substr(1)) as any;
@@ -38,9 +30,6 @@ export const UserContext = React.createContext<Context>({
 const AuthRouter = () => (
   <Layout>
     <Switch>
-      <Route path={passwordResetSuccessPath} component={ResetPasswordSuccess} />
-      <Route path={passwordResetPath} component={ResetPassword} />
-      <Route path={newPasswordPath} component={NewPassword} />
       <Route component={LoginView} />
     </Switch>
   </Layout>

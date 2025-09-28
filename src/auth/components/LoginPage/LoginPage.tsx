@@ -1,5 +1,4 @@
 import { UserContextError } from "@dashboard/auth/types";
-import { passwordResetUrl } from "@dashboard/auth/urls";
 import { ButtonWithLoader } from "@dashboard/components/ButtonWithLoader/ButtonWithLoader";
 import { FormSpacer } from "@dashboard/components/FormSpacer";
 import { AvailableExternalAuthenticationsQuery } from "@dashboard/graphql";
@@ -101,15 +100,6 @@ const LoginPage = (props: LoginCardProps) => {
             }
             required
           />
-          <Link to={passwordResetUrl}>
-            <Text className={classes.link} fontSize={3} data-test-id="reset-password-link">
-              <FormattedMessage
-                id="3tbL7x"
-                defaultMessage="Forgot password?"
-                description="description"
-              />
-            </Text>
-          </Link>
 
           <div className={classes.buttonContainer}>
             <ButtonWithLoader
