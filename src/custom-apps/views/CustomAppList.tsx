@@ -16,7 +16,7 @@ import { sectionNames } from "@dashboard/intl";
 import { findById } from "@dashboard/misc";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
-import React, { useEffect } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 
 import CustomAppListPage from "../components/CustomAppListPage";

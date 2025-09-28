@@ -14,7 +14,7 @@ import { useHasManagedAppsPermission } from "@dashboard/hooks/useHasManagedAppsP
 import useNavigator from "@dashboard/hooks/useNavigator";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
 import { Box, ChevronRightIcon, Text } from "@saleor/macaw-ui-next";
-import React, { useEffect } from "react";
+import React from "react";
 import { useIntl } from "react-intl";
 
 import { AddExtensionDropdown } from "./components/AddExtensionDropdown";

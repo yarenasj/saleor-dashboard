@@ -5,16 +5,19 @@ import {
 } from "@dashboard/components/TypeDeleteWarningDialog/useViewProducts";
 import { ProductCountQueryVariables, useProductCountQuery } from "@dashboard/graphql";
 import {
-  UseTypeDeleteData,
-  UseTypeDeleteProps,
-} from "@dashboard/modelTypes/hooks/usePageTypeDelete/types";
-import {
   ProductTypeListUrlQueryParams,
   ProductTypeUrlQueryParams,
 } from "@dashboard/productTypes/urls";
+import { Ids } from "@dashboard/types";
 import { useMemo } from "react";
 
 import * as messages from "./messages";
+
+export interface UseTypeDeleteProps<T> {
+  params: T;
+  selectedTypes?: Ids;
+  singleId?: string;
+}
 
 type UseProductTypeDeleteProps<T = ProductTypeListUrlQueryParams | ProductTypeUrlQueryParams> =
   UseTypeDeleteProps<T> & { typeBaseData: ProductTypeBaseData[] | undefined };
@@ -24,7 +27,7 @@ function useProductTypeDelete({
   singleId,
   selectedTypes,
   typeBaseData,
-}: UseProductTypeDeleteProps): UseTypeDeleteData {
+}: UseProductTypeDeleteProps): any {
   const productTypes = useMemo(() => selectedTypes || [singleId], [selectedTypes, singleId]);
 
   const filteredTypes = productTypes.filter((type): type is string => !!type);
