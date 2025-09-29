@@ -4,7 +4,6 @@ import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata, MetadataFormData } from "@dashboard/components/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
 import { ProductTypeKindEnum, TaxClassBaseFragment, WeightUnitsEnum } from "@dashboard/graphql";
 import { SubmitPromise } from "@dashboard/hooks/useForm";
@@ -16,14 +15,13 @@ import {
 } from "@dashboard/productTypes/handlers";
 import { productTypeListUrl } from "@dashboard/productTypes/urls";
 import { FetchMoreProps, UserError } from "@dashboard/types";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import React from "react";
 
 import ProductTypeDetails from "../ProductTypeDetails/ProductTypeDetails";
 import ProductTypeShipping from "../ProductTypeShipping/ProductTypeShipping";
 import ProductTypeTaxes from "../ProductTypeTaxes/ProductTypeTaxes";
 
-export interface ProductTypeForm extends MetadataFormData {
+export interface ProductTypeForm {
   name: string;
   kind: ProductTypeKindEnum;
   isShippingRequired: boolean;
@@ -46,10 +44,8 @@ export interface ProductTypeCreatePageProps {
 
 const formInitialData: ProductTypeForm = {
   isShippingRequired: false,
-  metadata: [],
   name: "",
   kind: ProductTypeKindEnum.NORMAL,
-  privateMetadata: [],
   taxClassId: "",
   weight: 0,
 };
@@ -67,7 +63,6 @@ const ProductTypeCreatePage = ({
 }: ProductTypeCreatePageProps) => {
   const navigate = useNavigator();
   const [taxClassDisplayName, setTaxClassDisplayName] = useStateFromProps("");
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
   const initialData = {
     ...formInitialData,
     kind: kind || formInitialData.kind,
@@ -76,7 +71,6 @@ const ProductTypeCreatePage = ({
   return (
     <Form confirmLeave initial={initialData} onSubmit={onSubmit} disabled={disabled}>
       {({ change, data, isSaveDisabled, submit }) => {
-        const changeMetadata = makeMetadataChangeHandler(change);
         const changeKind = makeProductTypeKindChangeHandler(change, onChangeKind);
 
         return (
@@ -101,8 +95,6 @@ const ProductTypeCreatePage = ({
                 }
                 onFetchMore={onFetchMoreTaxClasses}
               />
-              <CardSpacer />
-              <Metadata data={data} onChange={changeMetadata} />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>
               <ProductTypeShipping

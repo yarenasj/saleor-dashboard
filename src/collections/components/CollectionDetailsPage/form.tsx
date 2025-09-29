@@ -3,19 +3,16 @@ import { ChannelCollectionData } from "@dashboard/channels/utils";
 import { createChannelsChangeHandler } from "@dashboard/collections/utils";
 import { COLLECTION_DETAILS_FORM_ID } from "@dashboard/collections/views/consts";
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
-import { MetadataFormData } from "@dashboard/components/Metadata";
 import { CollectionDetailsFragment } from "@dashboard/graphql";
 import useForm, { CommonUseFormResultWithHandlers, FormChange } from "@dashboard/hooks/useForm";
 import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
 import { mapMetadataItemToInput } from "@dashboard/utils/maps";
-import getMetadata from "@dashboard/utils/metadata/getMetadata";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { RichTextContext, RichTextContextValues } from "@dashboard/utils/richText/context";
 import useRichText from "@dashboard/utils/richText/useRichText";
 import { OutputData } from "@editorjs/editorjs";
 import React, { useEffect } from "react";
 
-export interface CollectionUpdateFormData extends MetadataFormData {
+export interface CollectionUpdateFormData {
   backgroundImageAlt: string;
   channelListings: ChannelCollectionData[];
   name: string;
@@ -51,9 +48,7 @@ const getInitialData = (
 ): CollectionUpdateFormData => ({
   backgroundImageAlt: collection?.backgroundImage?.alt || "",
   channelListings: currentChannels,
-  metadata: collection?.metadata?.map(mapMetadataItemToInput),
   name: collection?.name || "",
-  privateMetadata: collection?.privateMetadata?.map(mapMetadataItemToInput),
   seoDescription: collection?.seoDescription || "",
   seoTitle: collection?.seoTitle || "",
   slug: collection?.slug || "",
@@ -88,12 +83,6 @@ function useCollectionUpdateForm(
     loading: !collection,
     triggerChange,
   });
-  const {
-    isMetadataModified,
-    isPrivateMetadataModified,
-    makeChangeHandler: makeMetadataChangeHandler,
-  } = useMetadataChangeTrigger();
-  const changeMetadata = makeMetadataChangeHandler(handleChange);
   const data: CollectionUpdateData = {
     ...formData,
     description: null,
@@ -105,7 +94,6 @@ function useCollectionUpdateForm(
   });
   const getSubmitData = async (): Promise<CollectionUpdateData> => ({
     ...(await getData()),
-    ...getMetadata(formData, isMetadataModified, isPrivateMetadataModified),
   });
   const handleChannelChange = createChannelsChangeHandler(
     currentChannels,
@@ -122,7 +110,7 @@ function useCollectionUpdateForm(
     data,
     handlers: {
       changeChannels: handleChannelChange,
-      changeMetadata,
+      changeMetadata: {} as any,
     },
     submit,
     richText,

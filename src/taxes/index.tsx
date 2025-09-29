@@ -13,7 +13,6 @@ import {
   TaxesUrlQueryParams,
 } from "./urls";
 import TaxChannelsListComponent from "./views/TaxChannelsList";
-import TaxClassesListComponent from "./views/TaxClassesList";
 import TaxCountriesListComponent from "./views/TaxCountriesList";
 
 const TaxChannelsList = ({ match, location }: RouteComponentProps<{ id: string }>) => {
@@ -26,9 +25,6 @@ const TaxCountriesList = ({ match }: RouteComponentProps<{ id: string }>) => {
 
   return <TaxCountriesListComponent id={decodeURIComponent(match.params.id)} params={qs} />;
 };
-const TaxClassesList = ({ match }: RouteComponentProps<{ id: string }>) => (
-  <TaxClassesListComponent id={decodeURIComponent(match.params.id)} />
-);
 const Component = () => {
   const intl = useIntl();
 
@@ -40,8 +36,6 @@ const Component = () => {
         <Route path={taxConfigurationListPath()} component={TaxChannelsList} />
         <Route path={taxCountriesListPath(":id")} component={TaxCountriesList} />
         <Route path={taxCountriesListPath()} component={TaxCountriesList} />
-        <Route path={taxClassesListUrl(":id")} component={TaxClassesList} />
-        <Route path={taxClassesListUrl()} component={TaxClassesList} />
       </Switch>
     </>
   );

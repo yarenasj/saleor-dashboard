@@ -3,8 +3,6 @@ import {
   AttributeErrorCode,
   AttributeErrorFragment,
   useAttributeCreateMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useListSettings from "@dashboard/hooks/useListSettings";
 import useLocalPageInfo, { getMaxPage } from "@dashboard/hooks/useLocalPageInfo";
@@ -13,7 +11,6 @@ import useNotifier from "@dashboard/hooks/useNotifier";
 import { getMutationErrors, getStringOrPlaceholder } from "@dashboard/misc";
 import { ListViews, ReorderEvent } from "@dashboard/types";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataCreateHandler from "@dashboard/utils/handlers/metadataCreateHandler";
 import { add, isSelected, move, remove, updateAtIndex } from "@dashboard/utils/lists";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -72,8 +69,6 @@ const AttributeDetails = ({ params }: AttributeDetailsProps) => {
       }
     },
   });
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const id: ParamId = params.id ? parseInt(params.id, 10) + pageInfo.startCursor : undefined;
   const [openModal, closeModal] = createDialogActionHandlers<
     AttributeAddUrlDialog,
@@ -143,11 +138,6 @@ const AttributeDetails = ({ params }: AttributeDetailsProps) => {
       errors: getMutationErrors(result),
     };
   };
-  const handleSubmit = createMetadataCreateHandler(
-    handleCreate,
-    updateMetadata,
-    updatePrivateMetadata,
-  );
 
   return (
     <AttributePage
@@ -155,7 +145,7 @@ const AttributeDetails = ({ params }: AttributeDetailsProps) => {
       disabled={attributeCreateOpts.loading}
       errors={attributeCreateOpts?.data?.attributeCreate?.errors || []}
       onDelete={() => undefined}
-      onSubmit={handleSubmit}
+      onSubmit={handleCreate}
       onValueAdd={() => openModal("add-value")}
       onValueDelete={id =>
         openModal("remove-value", {

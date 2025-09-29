@@ -9,14 +9,11 @@ import { ChannelData } from "@dashboard/channels/utils";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
 import AssignAttributeValueDialog from "@dashboard/components/AssignAttributeValueDialog";
 import { AttributeInput, Attributes } from "@dashboard/components/Attributes";
-import CardSpacer from "@dashboard/components/CardSpacer";
 import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { useDevModeContext } from "@dashboard/components/DevModePanel/hooks";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
-import { SeoForm } from "@dashboard/components/SeoForm";
 import {
   ChannelFragment,
   PermissionEnum,
@@ -58,10 +55,8 @@ import { useIntl } from "react-intl";
 import { AttributeValuesMetadata, getChoices } from "../../utils/data";
 import { ProductDetailsForm } from "../ProductDetailsForm";
 import ProductMedia from "../ProductMedia";
-import ProductTaxes from "../ProductTaxes";
 import ProductVariants from "../ProductVariants";
 import ProductUpdateForm from "./form";
-import { messages } from "./messages";
 import ProductChannelsListingsDialog from "./ProductChannelsListingsDialog";
 import { ProductUpdateData, ProductUpdateHandlers, ProductUpdateSubmitData } from "./types";
 
@@ -345,25 +340,6 @@ export const ProductUpdatePage = ({
                 onChange={handlers.changeVariants}
                 onRowClick={onVariantShow}
               />
-              <CardSpacer />
-              <SeoForm
-                errors={productErrors}
-                title={data.seoTitle}
-                titlePlaceholder={data.name}
-                description={data.seoDescription}
-                descriptionPlaceholder={""} // TODO: cast description to string
-                slug={data.slug}
-                slugPlaceholder={data.name}
-                loading={disabled}
-                onClick={onSeoClick}
-                onChange={change}
-                helperText={intl.formatMessage({
-                  id: "LKoIB1",
-                  defaultMessage:
-                    "Add search engine title and description to make this product easier to find",
-                })}
-              />
-              <Metadata data={data} onChange={handlers.changeMetadata} />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>
               <ProductOrganization
@@ -385,16 +361,6 @@ export const ProductUpdatePage = ({
                 selectedProductCategory={selectedProductCategory}
               />
               <ChannelsAvailabilityCard {...availabilityCommonProps} channels={listings ?? []} />
-              <Box paddingBottom={52}>
-                <ProductTaxes
-                  value={data.taxClassId}
-                  disabled={disabled}
-                  onChange={handlers.selectTaxClass}
-                  taxClassDisplayName={selectedTaxClass}
-                  taxClasses={taxClasses}
-                  onFetchMore={fetchMoreTaxClasses}
-                />
-              </Box>
             </DetailPageLayout.RightSidebar>
 
             <Savebar>

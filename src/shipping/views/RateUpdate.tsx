@@ -18,8 +18,6 @@ import {
   useShippingPriceExcludeProductMutation,
   useShippingPriceRemoveProductFromExcludeMutation,
   useShippingZoneQuery,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
   useUpdateShippingRateMutation,
 } from "@dashboard/graphql";
 import useBulkActions from "@dashboard/hooks/useBulkActions";
@@ -57,7 +55,6 @@ import {
 import { useTaxClassFetchMore } from "@dashboard/taxes/utils/useTaxClassFetchMore";
 import { MinMax } from "@dashboard/types";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import { ShippingMethodPostalCodeRule } from "@saleor/sdk/dist/apollo/types";
 import React from "react";
@@ -154,8 +151,6 @@ export const RateUpdate = ({ id, rateId, params }: RateUpdateProps) => {
       }
     },
   });
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const [state, dispatch] = React.useReducer(postalCodesReducer, {
     codesToDelete: [],
     havePostalCodesChanged: false,
@@ -218,12 +213,6 @@ export const RateUpdate = ({ id, rateId, params }: RateUpdateProps) => {
 
     return errors;
   };
-  const handleSubmit = createMetadataUpdateHandler(
-    rate!,
-    updateData,
-    variables => updateMetadata({ variables }),
-    variables => updatePrivateMetadata({ variables }),
-  );
   const handleProductAssign = (ids: string[]) =>
     assignProduct({
       variables: { id: rateId, input: { products: ids } },
@@ -340,7 +329,7 @@ export const RateUpdate = ({ id, rateId, params }: RateUpdateProps) => {
         saveButtonBarState={updateShippingRateOpts.status}
         onDelete={() => openModal("remove")}
         backHref={shippingZoneUrl(id)}
-        onSubmit={handleSubmit}
+        onSubmit={updateData}
         rate={rate!}
         errors={updateShippingRateOpts.data?.shippingPriceUpdate?.errors || []}
         channelErrors={

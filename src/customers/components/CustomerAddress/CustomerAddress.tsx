@@ -114,11 +114,6 @@ const CustomerAddress = (props: CustomerAddressProps) => {
                 testId: "set-default-shipping-address",
               },
               {
-                label: intl.formatMessage(messages.setDefaultBilling),
-                onSelect: () => onSetAsDefault(AddressTypeEnum.BILLING),
-                testId: "set-default-billing-address",
-              },
-              {
                 label: intl.formatMessage(messages.editAddress),
                 onSelect: () => onEdit(),
                 testId: "edit-address",

@@ -5,9 +5,7 @@ import { TopNav } from "@dashboard/components/AppLayout/TopNav";
 import { CardSpacer } from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
-import { SeoForm } from "@dashboard/components/SeoForm";
 import { Tab, TabContainer } from "@dashboard/components/Tab";
 import { CategoryDetailsQuery, PermissionEnum, ProductErrorFragment } from "@dashboard/graphql";
 import { useBackLinkWithState } from "@dashboard/hooks/useBackLinkWithState";
@@ -129,30 +127,6 @@ export const CategoryUpdatePage = ({
               image={category?.backgroundImage}
               onChange={change}
             />
-
-            <CardSpacer />
-
-            <SeoForm
-              helperText={intl.formatMessage({
-                id: "wQdR8M",
-                defaultMessage:
-                  "Add search engine title and description to make this category easier to find",
-              })}
-              errors={errors}
-              title={data.seoTitle}
-              titlePlaceholder={data.name}
-              description={data.seoDescription}
-              descriptionPlaceholder={data.name}
-              slug={data.slug}
-              slugPlaceholder={data.name}
-              loading={!category}
-              onChange={change}
-              disabled={disabled}
-            />
-
-            <CardSpacer />
-
-            <Metadata data={data} onChange={handlers.changeMetadata} />
 
             <CardSpacer />
 

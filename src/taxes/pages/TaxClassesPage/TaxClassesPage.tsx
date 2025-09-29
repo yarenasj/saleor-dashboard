@@ -3,7 +3,6 @@ import CardTitle from "@dashboard/components/CardTitle";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Grid from "@dashboard/components/Grid";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
 import VerticalSpacer from "@dashboard/components/VerticalSpacer";
 import { configurationMenuUrl } from "@dashboard/configuration";
@@ -237,8 +236,6 @@ export const TaxClassesPage = (props: TaxClassesPageProps) => {
                           </>
                         )}
                       </Card>
-                      <VerticalSpacer spacing={3} />
-                      <Metadata data={data} onChange={handlers.changeMetadata} />
                     </div>
                   )}
                 </Grid>

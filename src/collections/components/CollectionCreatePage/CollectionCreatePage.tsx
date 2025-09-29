@@ -6,9 +6,7 @@ import { CardSpacer } from "@dashboard/components/CardSpacer";
 import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
-import { SeoForm } from "@dashboard/components/SeoForm";
 import {
   CollectionChannelListingErrorFragment,
   CollectionErrorFragment,
@@ -104,25 +102,6 @@ const CollectionCreatePage = ({
               onChange={change}
               data={data}
             />
-            <CardSpacer />
-            <SeoForm
-              allowEmptySlug={true}
-              description={data.seoDescription}
-              disabled={disabled}
-              descriptionPlaceholder=""
-              helperText={intl.formatMessage({
-                id: "Rj8LxK",
-                defaultMessage:
-                  "Add search engine title and description to make this collection easier to find",
-              })}
-              slug={data.slug}
-              slugPlaceholder={data.name}
-              title={data.seoTitle}
-              titlePlaceholder={data.name}
-              onChange={change}
-            />
-            <CardSpacer />
-            <Metadata data={data} onChange={handlers.changeMetadata} />
           </DetailPageLayout.Content>
           <DetailPageLayout.RightSidebar>
             <ChannelsAvailabilityCard

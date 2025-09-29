@@ -19,7 +19,6 @@ import {
 import { ChannelData, ChannelPriceArgs } from "@dashboard/channels/utils";
 import { AttributeInput, AttributeInputData } from "@dashboard/components/Attributes";
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
-import { MetadataFormData } from "@dashboard/components/Metadata";
 import {
   ProductErrorWithAttributesFragment,
   ProductTypeQuery,
@@ -62,7 +61,6 @@ import { PRODUCT_CREATE_FORM_ID } from "@dashboard/products/views/ProductCreate/
 import { FetchMoreProps, RelayToFlat, ReorderEvent } from "@dashboard/types";
 import createMultiselectChangeHandler from "@dashboard/utils/handlers/multiselectChangeHandler";
 import createSingleAutocompleteSelectHandler from "@dashboard/utils/handlers/singleAutocompleteSelectChangeHandler";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { RichTextContext } from "@dashboard/utils/richText/context";
 import { useMultipleRichText } from "@dashboard/utils/richText/useMultipleRichText";
 import useRichText from "@dashboard/utils/richText/useRichText";
@@ -73,7 +71,7 @@ import { useIntl } from "react-intl";
 
 import { ProductStockFormsetData, ProductStockInput } from "../ProductStocks";
 
-export interface ProductCreateFormData extends MetadataFormData {
+export interface ProductCreateFormData {
   category: string;
   channelListings: ChannelData[];
   collections: Option[];
@@ -182,9 +180,7 @@ function useProductCreateForm(
     collections: [],
     description: null,
     isAvailable: false,
-    metadata: [],
     name: "",
-    privateMetadata: [],
     productType: null,
     rating: 0,
     seoDescription: "",
@@ -224,7 +220,6 @@ function useProductCreateForm(
     initial: null,
     triggerChange,
   });
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
   const handleCollectionSelect = createMultiselectChangeHandler(
     toggleValues,
     opts.setSelectedCollections,
@@ -300,7 +295,6 @@ function useProductCreateForm(
     opts.setSelectedTaxClass,
     opts.taxClasses,
   );
-  const changeMetadata = makeMetadataChangeHandler(handleChange);
   const handleChannelsChange = createChannelsChangeHandler(
     opts.currentChannels,
     opts.setChannels,
@@ -411,7 +405,7 @@ function useProductCreateForm(
       addStock: handleStockAdd,
       changeChannelPrice: handleChannelPriceChange,
       changeChannels: handleChannelsChange,
-      changeMetadata,
+      changeMetadata: {} as any,
       changeStock: handleStockChange,
       changePreorderEndDate: handlePreorderEndDateChange,
       deleteStock: handleStockDelete,

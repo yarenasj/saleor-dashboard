@@ -6,7 +6,6 @@ import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButto
 import { useDevModeContext } from "@dashboard/components/DevModePanel/hooks";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata, MetadataIdSchema } from "@dashboard/components/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
 import {
   OrderDetailsFragment,
@@ -27,22 +26,15 @@ import { useIntl } from "react-intl";
 import { getMutationErrors, maybe } from "../../../misc";
 import OrderChannelSectionCard from "../OrderChannelSectionCard";
 import OrderCustomer from "../OrderCustomer";
-import OrderCustomerNote from "../OrderCustomerNote";
 import OrderDraftDetails from "../OrderDraftDetails/OrderDraftDetails";
 import { FormData as OrderDraftDetailsProductsFormData } from "../OrderDraftDetailsProducts";
 import OrderFulfilledProductsCard from "../OrderFulfilledProductsCard";
 import OrderHistory, { FormData as HistoryFormData } from "../OrderHistory";
-import OrderInvoiceList from "../OrderInvoiceList";
 import { OrderPaymentOrTransaction } from "../OrderPaymentOrTransaction/OrderPaymentOrTransaction";
 import OrderUnfulfilledProductsCard from "../OrderUnfulfilledProductsCard";
 import { messages } from "./messages";
 import Title from "./Title";
-import {
-  createMetadataHandler,
-  createOrderMetadataIdSchema,
-  filteredConditionalItems,
-  hasAnyItemsReplaceable,
-} from "./utils";
+import { filteredConditionalItems, hasAnyItemsReplaceable } from "./utils";
 
 export interface OrderDetailsPageProps {
   order: OrderDetailsFragment | OrderDetailsFragment;
@@ -82,7 +74,7 @@ export interface OrderDetailsPageProps {
   onTransactionAction: (transactionId: string, actionType: TransactionActionEnum) => any;
   onAddManualTransaction: () => any;
   onRefundAdd: () => void;
-  onSubmit: (data: MetadataIdSchema) => SubmitPromise;
+  onSubmit: (data: any) => SubmitPromise;
 }
 
 const OrderDetailsPage = (props: OrderDetailsPageProps) => {
@@ -130,12 +122,11 @@ const OrderDetailsPage = (props: OrderDetailsPageProps) => {
   const notAllowedToFulfillUnpaid =
     shop?.fulfillmentAutoApprove && !shop?.fulfillmentAllowUnpaid && !order?.isPaid;
   const unfulfilled = (order?.lines || []).filter(line => line.quantityToFulfill > 0);
-  const handleSubmit = async (data: MetadataIdSchema) => {
+  const handleSubmit = async (data: any) => {
     const result = await onSubmit(data);
 
     return getMutationErrors(result);
   };
-  const initial = createOrderMetadataIdSchema(order);
   const saveLabel = isOrderUnconfirmed
     ? { confirm: intl.formatMessage(messages.confirmOrder) }
     : undefined;
@@ -156,44 +147,18 @@ const OrderDetailsPage = (props: OrderDetailsPageProps) => {
       },
       shouldExist: canCancel,
     },
-    {
-      item: {
-        label: intl.formatMessage(messages.returnOrder),
-        onSelect: onOrderReturn,
-      },
-      shouldExist: hasAnyItemsReplaceable(order),
-    },
   ]);
-  const context = useDevModeContext();
-  const openPlaygroundURL = () => {
-    context.setDevModeContent(defaultGraphiQLQuery);
-    context.setVariables(`{ "id": "${order?.id}" }`);
-    context.setDevModeVisibility(true);
-  };
-
   const backLinkUrl = useBackLinkWithState({
     path: orderListUrl(),
   });
 
   return (
-    <Form confirmLeave initial={initial} onSubmit={handleSubmit} mergeData={false}>
+    <Form confirmLeave initial={{}} onSubmit={handleSubmit} mergeData={false}>
       {({ set, triggerChange, data, submit }) => {
-        const handleChangeMetadata = createMetadataHandler(data, set, triggerChange);
-
         return (
           <DetailPageLayout>
             <TopNav href={backLinkUrl} title={<Title order={order} />}>
-              <TopNav.Menu
-                dataTestId="menu"
-                items={[
-                  ...selectCardMenuItems,
-                  {
-                    label: intl.formatMessage(messages.openGraphiQL),
-                    onSelect: openPlaygroundURL,
-                    testId: "graphiql-redirect",
-                  },
-                ]}
-              />
+              <TopNav.Menu dataTestId="menu" items={[...selectCardMenuItems]} />
             </TopNav>
 
             <DetailPageLayout.Content data-test-id="order-fulfillment">
@@ -232,13 +197,7 @@ const OrderDetailsPage = (props: OrderDetailsPageProps) => {
                   onOrderFulfillmentCancel={() => onFulfillmentCancel(fulfillment.id)}
                   onTrackingCodeAdd={() => onFulfillmentTrackingNumberUpdate(fulfillment.id)}
                   onOrderFulfillmentApprove={() => onFulfillmentApprove(fulfillment.id)}
-                >
-                  <Metadata
-                    isLoading={loading}
-                    data={data[fulfillment.id]}
-                    onChange={x => handleChangeMetadata(x, fulfillment.id)}
-                  />
-                </OrderFulfilledProductsCard>
+                ></OrderFulfilledProductsCard>
               ))}
               <OrderPaymentOrTransaction
                 order={order}
@@ -250,11 +209,6 @@ const OrderDetailsPage = (props: OrderDetailsPageProps) => {
                 onMarkAsPaid={onMarkAsPaid}
                 onAddManualTransaction={onAddManualTransaction}
                 onRefundAdd={onRefundAdd}
-              />
-              <Metadata
-                isLoading={loading}
-                data={data[order?.id]}
-                onChange={x => handleChangeMetadata(x, order?.id)}
               />
               <OrderHistory
                 history={order?.events}
@@ -276,19 +230,6 @@ const OrderDetailsPage = (props: OrderDetailsPageProps) => {
               />
               <CardSpacer />
               <OrderChannelSectionCard channel={order?.channel} />
-              <CardSpacer />
-              {!isOrderUnconfirmed && (
-                <>
-                  <OrderInvoiceList
-                    invoices={order?.invoices}
-                    onInvoiceClick={onInvoiceClick}
-                    onInvoiceGenerate={onInvoiceGenerate}
-                    onInvoiceSend={onInvoiceSend}
-                  />
-                  <CardSpacer />
-                </>
-              )}
-              <OrderCustomerNote note={maybe(() => order.customerNote)} />
             </DetailPageLayout.RightSidebar>
             <Savebar>
               <Savebar.Spacer />

@@ -4,13 +4,10 @@ import {
   ProductTypeKindEnum,
   useProductTypeCreateDataQuery,
   useProductTypeCreateMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import useNotifier from "@dashboard/hooks/useNotifier";
 import { useTaxClassFetchMore } from "@dashboard/taxes/utils/useTaxClassFetchMore";
-import createMetadataCreateHandler from "@dashboard/utils/handlers/metadataCreateHandler";
 import React from "react";
 import { useIntl } from "react-intl";
 
@@ -26,8 +23,6 @@ export const ProductTypeCreate = ({ params }: ProductTypeCreateProps) => {
   const navigate = useNavigator();
   const notify = useNotifier();
   const intl = useIntl();
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const handleChangeKind = (kind: ProductTypeKindEnum) =>
     navigate(
       productTypeAddUrl({
@@ -72,11 +67,6 @@ export const ProductTypeCreate = ({ params }: ProductTypeCreateProps) => {
       errors: getMutationErrors(result),
     };
   };
-  const handleSubmit = createMetadataCreateHandler(
-    handleCreate,
-    updateMetadata,
-    updatePrivateMetadata,
-  );
 
   return (
     <>
@@ -101,7 +91,7 @@ export const ProductTypeCreate = ({ params }: ProductTypeCreateProps) => {
         onFetchMoreTaxClasses={fetchMoreTaxClasses}
         kind={params.kind}
         onChangeKind={handleChangeKind}
-        onSubmit={handleSubmit}
+        onSubmit={handleCreate as any}
       />
     </>
   );

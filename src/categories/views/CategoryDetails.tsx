@@ -11,8 +11,6 @@ import {
   useCategoryDetailsQuery,
   useCategoryUpdateMutation,
   useProductBulkDeleteMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useListSettings from "@dashboard/hooks/useListSettings";
 import useLocalPaginator, {
@@ -25,7 +23,6 @@ import { useRowSelection } from "@dashboard/hooks/useRowSelection";
 import { commonMessages, errorMessages } from "@dashboard/intl";
 import { ListViews } from "@dashboard/types";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import { getParsedDataForJsonStringField } from "@dashboard/utils/richText/misc";
 import { Box } from "@saleor/macaw-ui-next";
@@ -52,8 +49,6 @@ export const CategoryDetails = ({ id, params }: CategoryDetailsProps) => {
   const navigate = useNavigator();
   const notify = useNotifier();
   const intl = useIntl();
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const {
     clearRowSelection: clearProductRowSelection,
     selectedRowIds: selectedProductRowIds,
@@ -228,12 +223,6 @@ export const CategoryDetails = ({ id, params }: CategoryDetailsProps) => {
       setSelectedProductRowIds,
     ],
   );
-  const handleSubmit = createMetadataUpdateHandler(
-    data?.category!,
-    handleUpdate,
-    variables => updateMetadata({ variables }),
-    variables => updatePrivateMetadata({ variables }),
-  );
 
   if (category === null) {
     return <NotFoundPage onBack={() => navigate(categoryListUrl())} />;
@@ -273,7 +262,7 @@ export const CategoryDetails = ({ id, params }: CategoryDetailsProps) => {
             },
           })
         }
-        onSubmit={handleSubmit}
+        onSubmit={handleUpdate}
         products={products}
         saveButtonBarState={updateResult.status}
         subcategories={subcategories}

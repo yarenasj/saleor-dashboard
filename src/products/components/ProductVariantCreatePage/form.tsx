@@ -21,7 +21,6 @@ import {
 } from "@dashboard/channels/utils";
 import { AttributeInput } from "@dashboard/components/Attributes";
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
-import { MetadataFormData } from "@dashboard/components/Metadata";
 import {
   ProductErrorWithAttributesFragment,
   ProductVariantCreateDataQuery,
@@ -53,7 +52,6 @@ import {
 } from "@dashboard/products/utils/handlers";
 import { validateProductVariant } from "@dashboard/products/utils/validation";
 import { FetchMoreProps, RelayToFlat, ReorderEvent } from "@dashboard/types";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { useMultipleRichText } from "@dashboard/utils/richText/useMultipleRichText";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -64,7 +62,7 @@ import {
   createChannelsWithPreorderInfo,
 } from "../ProductVariantChannels/formOpretations";
 
-export interface ProductVariantCreateFormData extends MetadataFormData {
+export interface ProductVariantCreateFormData {
   sku: string;
   trackInventory: boolean;
   weight: string;
@@ -129,8 +127,6 @@ export interface ProductVariantCreateFormProps extends UseProductVariantCreateFo
 }
 
 const initial: ProductVariantCreateFormData = {
-  metadata: [],
-  privateMetadata: [],
   sku: "",
   trackInventory: true,
   weight: "",
@@ -170,8 +166,6 @@ function useProductVariantCreateForm(
   const { setExitDialogSubmitRef } = useExitFormDialog({
     formId,
   });
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
-  const changeMetadata = makeMetadataChangeHandler(handleChange);
   const handleAttributeChangeWithName = (id: string, value: string) => {
     triggerChange();
     attributes.change(id, value === "" ? [] : [value]);
@@ -302,7 +296,7 @@ function useProductVariantCreateForm(
       addStock: handleStockAdd,
       changeChannels: handleChannelChange,
       updateChannels: handleUpdateChannels,
-      changeMetadata,
+      changeMetadata: {} as any,
       changeStock: handleStockChange,
       changePreorderEndDate: handlePreorderEndDateChange,
       deleteStock: handleStockDelete,

@@ -21,7 +21,6 @@ import {
 } from "@dashboard/channels/utils";
 import { AttributeInput } from "@dashboard/components/Attributes";
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
-import { MetadataFormData } from "@dashboard/components/Metadata";
 import {
   ProductErrorWithAttributesFragment,
   ProductVariantFragment,
@@ -56,9 +55,6 @@ import {
 import { validateProductVariant } from "@dashboard/products/utils/validation";
 import { FetchMoreProps, RelayToFlat, ReorderEvent } from "@dashboard/types";
 import { arrayDiff } from "@dashboard/utils/arrays";
-import { mapMetadataItemToInput } from "@dashboard/utils/maps";
-import getMetadata from "@dashboard/utils/metadata/getMetadata";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { useMultipleRichText } from "@dashboard/utils/richText/useMultipleRichText";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
@@ -69,7 +65,7 @@ import {
   extractChannelPricesFromVariantChannel,
 } from "../ProductVariantChannels/formOpretations";
 
-export interface ProductVariantUpdateFormData extends MetadataFormData {
+export interface ProductVariantUpdateFormData {
   sku: string;
   trackInventory: boolean;
   weight: string;
@@ -120,7 +116,6 @@ export interface ProductVariantUpdateHandlers
     Record<"addStock", (id: string, label: string) => void>,
     Record<"deleteStock", (id: string) => void> {
   changePreorderEndDate: FormChange;
-  changeMetadata: FormChange;
   changeMedia: (ids: string[]) => void;
   updateChannels: (selectedChannelsIds: string[]) => void;
   fetchReferences: (value: string) => void;
@@ -168,8 +163,6 @@ function useProductVariantUpdateForm(
   });
   const channelsInput = getChannelsInput(currentChannelsWithPreorderInfo);
   const initial: ProductVariantUpdateFormData = {
-    metadata: variant?.metadata?.map(mapMetadataItemToInput),
-    privateMetadata: variant?.privateMetadata?.map(mapMetadataItemToInput),
     sku: variant?.sku || "",
     trackInventory: variant?.trackInventory,
     isPreorder: !!variant?.preorder || false,
@@ -198,12 +191,6 @@ function useProductVariantUpdateForm(
   const attributesWithNewFileValue = useFormset<null, File>([]);
   const stocks = useFormset(stockInput);
   const channels = useFormset(channelsInput);
-  const {
-    isMetadataModified,
-    isPrivateMetadataModified,
-    makeChangeHandler: makeMetadataChangeHandler,
-  } = useMetadataChangeTrigger();
-  const changeMetadata = makeMetadataChangeHandler(handleChange);
   const handleAttributeChangeWithName = (id: string, value: string) => {
     triggerChange();
     attributes.change(id, value === "" ? [] : [value]);
@@ -332,7 +319,6 @@ function useProductVariantUpdateForm(
   const disabled = data.isPreorder && data.hasPreorderEndDate && !!form.errors.preorderEndDateTime;
   const getSubmitData = async (): Promise<ProductVariantUpdateSubmitData> => ({
     ...formData,
-    ...getMetadata(formData, isMetadataModified, isPrivateMetadataModified),
     addStocks,
     attributes: mergeAttributes(
       attributes.data,
@@ -382,7 +368,6 @@ function useProductVariantUpdateForm(
       addStock: handleStockAdd,
       changeChannels: handleChannelChange,
       updateChannels: handleUpdateChannels,
-      changeMetadata,
       changeStock: handleStockChange,
       changePreorderEndDate: handlePreorderEndDateChange,
       changeMedia: handleMediaChange,

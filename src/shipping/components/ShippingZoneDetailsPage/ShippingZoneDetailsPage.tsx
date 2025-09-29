@@ -7,7 +7,6 @@ import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButto
 import CountryList from "@dashboard/components/CountryList";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
 import {
   ChannelFragment,
@@ -24,7 +23,6 @@ import { shippingZonesListPath } from "@dashboard/shipping/urls";
 import { TranslationsButton } from "@dashboard/translations/components/TranslationsButton/TranslationsButton";
 import { languageEntityUrl, TranslatableEntities } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { Option } from "@saleor/macaw-ui-next";
 import React from "react";
 import { defineMessages, useIntl } from "react-intl";
@@ -110,7 +108,6 @@ const ShippingZoneDetailsPage = ({
   const navigate = useNavigator();
   const initialForm = getInitialFormData(shippingZone);
   const warehouseChoices = warehouses.map(warehouseToChoice);
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
 
   const shippingZonesListBackLink = useBackLinkWithState({
     path: shippingZonesListPath,
@@ -119,8 +116,6 @@ const ShippingZoneDetailsPage = ({
   return (
     <Form initial={initialForm} onSubmit={onSubmit} confirmLeave disabled={disabled}>
       {({ change, data, isSaveDisabled, submit }) => {
-        const changeMetadata = makeMetadataChangeHandler(change);
-
         return (
           <DetailPageLayout>
             <TopNav href={shippingZonesListBackLink} title={shippingZone?.name}>
@@ -177,8 +172,6 @@ const ShippingZoneDetailsPage = ({
                 selectedChannelId={selectedChannelId}
                 testId="add-weight-rate"
               />
-              <CardSpacer />
-              <Metadata data={data} onChange={changeMetadata} />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>
               <ShippingZoneSettingsCard

@@ -376,18 +376,6 @@ export const STATIC_VOUCHER_OPTIONS: LeftOperand[] = [
 
 export const STATIC_COLLECTION_OPTIONS: LeftOperand[] = [
   {
-    value: "published",
-    label: "Is published",
-    type: "published",
-    slug: "published",
-  },
-  {
-    value: "metadata",
-    label: "Metadata",
-    type: "metadata",
-    slug: "metadata",
-  },
-  {
     value: "channel",
     label: "Channel",
     type: "channel",

@@ -70,26 +70,6 @@ export const OrderDraftListHeader = ({
           />
         </Box>
         <Box display="flex" alignItems="center" gap={2}>
-          <Tooltip>
-            <Tooltip.Trigger>
-              <Button
-                data-test-id="create-draft-order-button"
-                disabled={disabled || limitsReached || !hasAccessibleChannels}
-                onClick={onAdd}
-              >
-                <FormattedMessage id="LshEVn" defaultMessage="Create order" description="button" />
-              </Button>
-            </Tooltip.Trigger>
-            <Tooltip.Content>
-              {!hasAccessibleChannels && (
-                <FormattedMessage
-                  defaultMessage="You don't have access to any channels"
-                  id="grkY2V"
-                />
-              )}
-            </Tooltip.Content>
-          </Tooltip>
-
           {hasLimits(limits, "orders") && (
             <LimitsInfo
               text={intl.formatMessage(

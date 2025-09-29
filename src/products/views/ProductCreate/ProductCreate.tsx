@@ -14,8 +14,6 @@ import {
   useProductDeleteMutation,
   useProductTypeQuery,
   useProductVariantChannelListingUpdateMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
   useVariantCreateMutation,
 } from "@dashboard/graphql";
 import useChannels from "@dashboard/hooks/useChannels";
@@ -42,7 +40,6 @@ import { useTaxClassFetchMore } from "@dashboard/taxes/utils/useTaxClassFetchMor
 import { getProductErrorMessage } from "@dashboard/utils/errors";
 import useAttributeValueSearchHandler from "@dashboard/utils/handlers/attributeValueSearchHandler";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataCreateHandler from "@dashboard/utils/handlers/metadataCreateHandler";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import { warehouseAddPath } from "@dashboard/warehouses/urls";
 import React, { useMemo } from "react";
@@ -114,8 +111,6 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
     result: searchAttributeValuesOpts,
     reset: searchAttributeReset,
   } = useAttributeValueSearchHandler(DEFAULT_INITIAL_SEARCH_DATA);
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const { taxClasses, fetchMoreTaxClasses } = useTaxClassFetchMore();
   const { data: selectedProductType } = useProductTypeQuery({
     variables: {
@@ -192,21 +187,17 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
     },
   });
   const handleSubmit = async (data: ProductCreateData) => {
-    const errors = await createMetadataCreateHandler(
-      createHandler(
-        selectedProductType?.productType,
-        variables => uploadFile({ variables }),
-        variables => productCreate({ variables }),
-        variables => productVariantCreate({ variables }),
-        updateChannels,
-        updateVariantChannels,
-        deleteProduct,
-      ),
-      updateMetadata,
-      updatePrivateMetadata,
+    const errors = await createHandler(
+      selectedProductType?.productType,
+      variables => uploadFile({ variables }),
+      variables => productCreate({ variables }),
+      variables => productVariantCreate({ variables }),
+      updateChannels,
+      updateVariantChannels,
+      deleteProduct,
     )(data);
 
-    if (!errors?.length) {
+    if (!errors) {
       setProductCreateComplete(true);
     }
 

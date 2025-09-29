@@ -13,9 +13,7 @@ import { AttributeInput, Attributes } from "@dashboard/components/Attributes";
 import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
-import { SeoForm } from "@dashboard/components/SeoForm";
 import {
   PermissionEnum,
   ProductChannelListingErrorFragment,
@@ -45,7 +43,6 @@ import { FetchMoreProps, RelayToFlat } from "../../../types";
 import { ProductDetailsForm } from "../ProductDetailsForm";
 import { ProductShipping } from "../ProductShipping";
 import { ProductStocks } from "../ProductStocks";
-import ProductTaxes from "../ProductTaxes";
 import ProductCreateForm, {
   ProductCreateData,
   ProductCreateFormData,
@@ -287,23 +284,6 @@ export const ProductCreatePage = ({
                   />
                 </>
               )}
-              <SeoForm
-                allowEmptySlug={true}
-                helperText={intl.formatMessage({
-                  id: "LKoIB1",
-                  defaultMessage:
-                    "Add search engine title and description to make this product easier to find",
-                })}
-                title={data.seoTitle}
-                slug={data.slug}
-                slugPlaceholder={data.name}
-                titlePlaceholder={data.name}
-                description={data.seoDescription}
-                descriptionPlaceholder={data.seoTitle}
-                loading={loading}
-                onChange={change}
-              />
-              <Metadata data={data} onChange={handlers.changeMetadata} />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>
               <ProductOrganization
@@ -354,16 +334,6 @@ export const ProductCreatePage = ({
               ) : (
                 <CannotDefineChannelsAvailabilityCard />
               )}
-              <Box paddingBottom={52}>
-                <ProductTaxes
-                  value={data.taxClassId}
-                  disabled={loading}
-                  onChange={handlers.selectTaxClass}
-                  taxClassDisplayName={selectedTaxClass}
-                  taxClasses={taxClasses}
-                  onFetchMore={fetchMoreTaxClasses}
-                />
-              </Box>
             </DetailPageLayout.RightSidebar>
             <Savebar>
               <Savebar.Spacer />

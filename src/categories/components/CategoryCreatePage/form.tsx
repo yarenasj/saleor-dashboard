@@ -1,14 +1,12 @@
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
-import { MetadataFormData } from "@dashboard/components/Metadata";
 import useForm, { CommonUseFormResult, FormChange } from "@dashboard/hooks/useForm";
 import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { RichTextContext, RichTextContextValues } from "@dashboard/utils/richText/context";
 import useRichText from "@dashboard/utils/richText/useRichText";
 import { OutputData } from "@editorjs/editorjs";
 import React, { useEffect } from "react";
 
-export interface CategoryCreateFormData extends MetadataFormData {
+export interface CategoryCreateFormData {
   name: string;
   seoDescription: string;
   seoTitle: string;
@@ -33,9 +31,7 @@ export interface CategoryCreateFormProps {
 }
 
 const initialData: CategoryCreateFormData = {
-  metadata: [],
   name: "",
-  privateMetadata: [],
   seoDescription: "",
   seoTitle: "",
   slug: "",
@@ -63,8 +59,6 @@ function useCategoryCreateForm(
     initial: null,
     triggerChange,
   });
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
-  const changeMetadata = makeMetadataChangeHandler(handleChange);
   const data: CategoryCreateData = {
     ...formData,
     description: null,
@@ -82,9 +76,7 @@ function useCategoryCreateForm(
   return {
     change: handleChange,
     data,
-    handlers: {
-      changeMetadata,
-    },
+    handlers: {} as any,
     submit,
     isSaveDisabled: disabled,
     richText,

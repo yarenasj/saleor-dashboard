@@ -5,8 +5,6 @@ import { CardSpacer } from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
-import { MetadataFormData } from "@dashboard/components/Metadata/types";
 import RequirePermissions from "@dashboard/components/RequirePermissions";
 import { Savebar } from "@dashboard/components/Savebar";
 import { customerAddressesUrl, customerListPath } from "@dashboard/customers/urls";
@@ -16,8 +14,7 @@ import { SubmitPromise } from "@dashboard/hooks/useForm";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import { sectionNames } from "@dashboard/intl";
 import { orderListUrl } from "@dashboard/orders/urls";
-import { mapEdgesToItems, mapMetadataItemToInput } from "@dashboard/utils/maps";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
+import { mapEdgesToItems } from "@dashboard/utils/maps";
 import React from "react";
 import { useIntl } from "react-intl";
 
@@ -28,7 +25,7 @@ import CustomerInfo from "../CustomerInfo";
 import CustomerOrders from "../CustomerOrders";
 import CustomerStats from "../CustomerStats";
 
-export interface CustomerDetailsPageFormData extends MetadataFormData {
+export interface CustomerDetailsPageFormData {
   firstName: string;
   lastName: string;
   email: string;
@@ -62,13 +59,8 @@ const CustomerDetailsPage = ({
     firstName: customer?.firstName || "",
     isActive: customer?.isActive || false,
     lastName: customer?.lastName || "",
-    metadata: customer?.metadata.map(mapMetadataItemToInput),
     note: customer?.note || "",
-    privateMetadata: customer?.privateMetadata
-      ? customer?.privateMetadata.map(mapMetadataItemToInput)
-      : [],
   };
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
 
   const customerBackLink = useBackLinkWithState({
     path: customerListPath,
@@ -77,8 +69,6 @@ const CustomerDetailsPage = ({
   return (
     <Form confirmLeave initial={initialForm} onSubmit={onSubmit} disabled={disabled}>
       {({ change, data, isSaveDisabled, submit }) => {
-        const changeMetadata = makeMetadataChangeHandler(change);
-
         return (
           <DetailPageLayout>
             <TopNav href={customerBackLink} title={getUserName(customer, true)}></TopNav>
@@ -105,7 +95,6 @@ const CustomerDetailsPage = ({
                 />
                 <CardSpacer />
               </RequirePermissions>
-              <Metadata data={data} onChange={changeMetadata} />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>
               <CustomerAddresses

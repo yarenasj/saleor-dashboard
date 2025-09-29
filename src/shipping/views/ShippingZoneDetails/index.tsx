@@ -11,8 +11,6 @@ import {
   useDeleteShippingZoneMutation,
   useShippingZoneQuery,
   useShopCountriesQuery,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
   useUpdateShippingZoneMutation,
   useWarehouseCreateMutation,
 } from "@dashboard/graphql";
@@ -33,7 +31,6 @@ import ShippingZoneAddWarehouseDialog from "@dashboard/shipping/components/Shipp
 import ShippingZoneCountriesAssignDialog from "@dashboard/shipping/components/ShippingZoneCountriesAssignDialog";
 import { arrayDiff } from "@dashboard/utils/arrays";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { mapCountriesToCountriesCodes, mapEdgesToItems } from "@dashboard/utils/maps";
 import { diff } from "fast-array-diff";
 import React from "react";
@@ -130,8 +127,6 @@ const ShippingZoneDetails = ({ id, params }: ShippingZoneDetailsProps) => {
       }
     },
   });
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const getParsedUpdateInput = (
     submitData: ShippingZoneUpdateFormData,
   ): ShippingZoneUpdateInput => {
@@ -162,12 +157,6 @@ const ShippingZoneDetails = ({ id, params }: ShippingZoneDetailsProps) => {
         },
       }),
     );
-  const handleSubmit = createMetadataUpdateHandler(
-    data?.shippingZone,
-    updateData,
-    variables => updateMetadata({ variables }),
-    variables => updatePrivateMetadata({ variables }),
-  );
 
   if (data?.shippingZone === null) {
     return <NotFoundPage onBack={() => navigate(shippingZonesListUrl())} />;
@@ -194,7 +183,7 @@ const ShippingZoneDetails = ({ id, params }: ShippingZoneDetailsProps) => {
             id: rateId,
           })
         }
-        onSubmit={handleSubmit}
+        onSubmit={updateData}
         allChannels={availableChannels}
         onWarehouseAdd={() => openModal("add-warehouse")}
         onWeightRateAdd={() =>

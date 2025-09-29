@@ -37,23 +37,6 @@ export const CategoryProducts = ({
           values={{ categoryName: category?.name }}
         />
       </DashboardCard.Title>
-      <DashboardCard.Toolbar>
-        <InternalLink
-          to={productListUrl({
-            categories: [categoryId],
-          })}
-        >
-          <Button variant="secondary" data-test-id="view-products">
-            <FormattedMessage id="z8jo8h" defaultMessage="View products" description="button" />
-          </Button>
-        </InternalLink>
-
-        <InternalLink to={productAddUrl()}>
-          <Button variant="secondary" data-test-id="add-products">
-            <FormattedMessage id="x/pIZ9" defaultMessage="Add product" description="button" />
-          </Button>
-        </InternalLink>
-      </DashboardCard.Toolbar>
     </DashboardCard.Header>
 
     <CategoryProductListDatagrid

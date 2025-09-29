@@ -16,8 +16,6 @@ import {
   useProductAttributeAssignmentUpdateMutation,
   useProductTypeDetailsQuery,
   useProductTypeUpdateMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useBulkActions from "@dashboard/hooks/useBulkActions";
 import { useListSelectedItems } from "@dashboard/hooks/useListSelectedItems";
@@ -30,7 +28,6 @@ import useProductTypeOperations from "@dashboard/productTypes/hooks/useProductTy
 import useAvailableProductAttributeSearch from "@dashboard/searches/useAvailableProductAttributeSearch";
 import { useTaxClassFetchMore } from "@dashboard/taxes/utils/useTaxClassFetchMore";
 import { ReorderEvent } from "@dashboard/types";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -96,8 +93,6 @@ export const ProductTypeUpdate = ({ id, params }: ProductTypeUpdateProps) => {
         }
       },
     });
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const [selectedVariantAttributes, setSelectedVariantAttributes] = React.useState<string[]>([]);
   const handleProductTypeUpdate = async (formData: ProductTypeForm) => {
     const operations = formData.variantAttributes.map(variantAttribute => ({
@@ -200,12 +195,6 @@ export const ProductTypeUpdate = ({ id, params }: ProductTypeUpdateProps) => {
       onUnassignAttribute: handleAttributeUnassignSuccess,
       productType: data?.productType,
     });
-  const handleSubmit = createMetadataUpdateHandler(
-    data?.productType,
-    handleProductTypeUpdate,
-    variables => updateMetadata({ variables }),
-    variables => updatePrivateMetadata({ variables }),
-  );
   const handleProductTypeDelete = () => deleteProductType.mutate({ id });
   const handleProductTypeVariantsToggle = (hasVariants: boolean) =>
     updateProductType({
@@ -302,7 +291,7 @@ export const ProductTypeUpdate = ({ id, params }: ProductTypeUpdateProps) => {
           )
         }
         onHasVariantsToggle={handleProductTypeVariantsToggle}
-        onSubmit={handleSubmit}
+        onSubmit={handleProductTypeUpdate}
         productAttributeList={{
           isChecked: productAttributeListActions.isSelected,
           selected: productAttributeListActions.listElements.length,

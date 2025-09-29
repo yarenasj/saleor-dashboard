@@ -8,7 +8,6 @@ import { TaxClassesPageFormData } from "@dashboard/taxes/types";
 import { getTaxClassInitialFormData } from "@dashboard/taxes/utils/data";
 import { validateTaxClassFormData } from "@dashboard/taxes/utils/validation";
 import { TaxClassError } from "@dashboard/utils/errors/taxes";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import React, { useState } from "react";
 
 interface TaxClassesFormHandlers {
@@ -59,8 +58,6 @@ function useTaxClassesForm(
     triggerChange();
     formset.change(id, value);
   };
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
-  const changeMetadata = makeMetadataChangeHandler(handleChange);
 
   // Submit
 
@@ -101,7 +98,7 @@ function useTaxClassesForm(
   return {
     validationErrors,
     data: { ...data, updateTaxClassRates: formset.data },
-    handlers: { handleRateChange, changeMetadata },
+    handlers: { handleRateChange, changeMetadata: {} as any },
     change: handleChange,
     submit,
   };

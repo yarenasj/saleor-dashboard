@@ -38,17 +38,6 @@ export const CategorySubcategories = ({
             description="section header"
           />
         </DashboardCard.Title>
-        <DashboardCard.Toolbar>
-          <InternalLink to={categoryAddUrl(categoryId)}>
-            <Button variant="secondary" data-test-id="create-subcategory">
-              <FormattedMessage
-                id="UycVMp"
-                defaultMessage="Create subcategory"
-                description="button"
-              />
-            </Button>
-          </InternalLink>
-        </DashboardCard.Toolbar>
       </DashboardCard.Header>
 
       <CategoryListDatagrid

@@ -119,29 +119,6 @@ const OrderListPage = ({
           </Box>
 
           <Box display="flex" alignItems="center" gap={2}>
-            {!!onSettingsOpen && (
-              <TopNav.Menu
-                items={[
-                  {
-                    label: intl.formatMessage({
-                      id: "vEwjub",
-                      defaultMessage: "Open in GraphiQL",
-                      description: "button",
-                    }),
-                    onSelect: openPlaygroundURL,
-                  },
-                  {
-                    label: intl.formatMessage({
-                      id: "WbV1Xm",
-                      defaultMessage: "Order Settings",
-                      description: "button",
-                    }),
-                    onSelect: onSettingsOpen,
-                  },
-                ]}
-              />
-            )}
-
             <Tooltip>
               <Tooltip.Trigger>
                 <Button

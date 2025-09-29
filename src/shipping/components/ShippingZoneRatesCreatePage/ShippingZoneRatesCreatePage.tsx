@@ -32,7 +32,6 @@ import useRichText from "@dashboard/utils/richText/useRichText";
 import React, { FormEventHandler } from "react";
 import { useIntl } from "react-intl";
 
-import ShippingMethodTaxes from "../ShippingMethodTaxes";
 import ShippingZonePostalCodes from "../ShippingZonePostalCodes";
 import { ShippingZoneRateCommonFormData } from "../ShippingZoneRatesPage/types";
 
@@ -195,17 +194,6 @@ export const ShippingZoneRatesCreatePage = ({
               allChannelsCount={allChannelsCount}
               channelsList={data.channelListings}
               openModal={openChannelsModal}
-            />
-            <CardSpacer />
-            <ShippingMethodTaxes
-              value={formData.taxClassId}
-              taxClassDisplayName={taxClassDisplayName}
-              taxClasses={taxClasses}
-              disabled={false}
-              onChange={event =>
-                handleTaxClassChange(event, taxClasses, change, setTaxClassDisplayName)
-              }
-              onFetchMore={fetchMoreTaxClasses}
             />
           </DetailPageLayout.RightSidebar>
           <Savebar>

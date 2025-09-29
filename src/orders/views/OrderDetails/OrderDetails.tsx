@@ -1,6 +1,5 @@
 // @ts-strict-ignore
 import { useApolloClient } from "@apollo/client";
-import { MetadataIdSchema } from "@dashboard/components/Metadata";
 import NotFoundPage from "@dashboard/components/NotFoundPage";
 import { Task } from "@dashboard/containers/BackgroundTasks/types";
 import {
@@ -8,14 +7,11 @@ import {
   OrderDetailsWithMetadataDocument,
   OrderStatus,
   useOrderConfirmMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useBackgroundTask from "@dashboard/hooks/useBackgroundTask";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import useNotifier from "@dashboard/hooks/useNotifier";
 import { commonMessages } from "@dashboard/intl";
-import { createOrderMetadataIdSchema } from "@dashboard/orders/components/OrderDetailsPage/utils";
 import getOrderErrorMessage from "@dashboard/utils/errors/order";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
 import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
@@ -39,8 +35,6 @@ export const OrderDetails = ({ id, params }: OrderDetailsProps) => {
   const navigate = useNavigator();
   const { queue } = useBackgroundTask();
   const intl = useIntl();
-  const [updateMetadata, updateMetadataOpts] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata, updatePrivateMetadataOpts] = useUpdatePrivateMetadataMutation({});
   const notify = useNotifier();
   const apolloClient = useApolloClient();
   const [openModal, closeModal] = createDialogActionHandlers<OrderUrlDialog, OrderUrlQueryParams>(
@@ -71,33 +65,12 @@ export const OrderDetails = ({ id, params }: OrderDetailsProps) => {
 
   const isOrderUnconfirmed = order?.status === OrderStatus.UNCONFIRMED;
   const isOrderDraft = order?.status === OrderStatus.DRAFT;
-  const handleSubmit = async (data: MetadataIdSchema) => {
+  const handleSubmit = async (data: any) => {
     if (order?.status === OrderStatus.UNCONFIRMED) {
       await orderConfirm({ variables: { id: order?.id } });
     }
 
-    const initial = createOrderMetadataIdSchema(order);
-    const metadataPromises = Object.entries(initial).map(([id, metaEntry]) => {
-      const update = createMetadataUpdateHandler(
-        { ...metaEntry, id },
-        () => Promise.resolve([]),
-        variables => updateMetadata({ variables }),
-        variables => updatePrivateMetadata({ variables }),
-      );
-
-      return update(data[id]);
-    });
-    const result = await Promise.all(metadataPromises);
-    const errors = result.reduce((p, c) => p.concat(c), []);
-
-    if (errors.length === 0) {
-      notify({
-        status: "success",
-        text: intl.formatMessage(commonMessages.savedChanges),
-      });
-    }
-
-    return result;
+    return {};
   };
 
   return (
@@ -192,8 +165,6 @@ export const OrderDetails = ({ id, params }: OrderDetailsProps) => {
                   orderInvoiceSend={orderInvoiceSend}
                   orderTransactionAction={orderTransactionAction}
                   orderAddManualTransaction={orderAddManualTransaction}
-                  updateMetadataOpts={updateMetadataOpts}
-                  updatePrivateMetadataOpts={updatePrivateMetadataOpts}
                   openModal={openModal}
                   closeModal={closeModal}
                 />
@@ -239,8 +210,6 @@ export const OrderDetails = ({ id, params }: OrderDetailsProps) => {
                   orderFulfillmentCancel={orderFulfillmentCancel}
                   orderFulfillmentUpdateTracking={orderFulfillmentUpdateTracking}
                   orderInvoiceSend={orderInvoiceSend}
-                  updateMetadataOpts={updateMetadataOpts}
-                  updatePrivateMetadataOpts={updatePrivateMetadataOpts}
                   orderTransactionAction={orderTransactionAction}
                   orderAddManualTransaction={orderAddManualTransaction}
                   openModal={openModal}

@@ -7,8 +7,6 @@ import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
-import { MetadataFormData } from "@dashboard/components/Metadata/types";
 import { Savebar } from "@dashboard/components/Savebar";
 import { ListSettingsUpdate } from "@dashboard/components/TablePagination";
 import {
@@ -28,8 +26,7 @@ import { TranslationsButton } from "@dashboard/translations/components/Translati
 import { languageEntityUrl, TranslatableEntities } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
 import { ListSettings, ReorderAction } from "@dashboard/types";
-import { mapEdgesToItems, mapMetadataItemToInput } from "@dashboard/utils/maps";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
+import { mapEdgesToItems } from "@dashboard/utils/maps";
 import React from "react";
 import { useIntl } from "react-intl";
 import slugify from "slugify";
@@ -62,7 +59,7 @@ export interface AttributePageProps {
   children: (data: AttributePageFormData) => React.ReactNode;
 }
 
-export interface AttributePageFormData extends MetadataFormData {
+export interface AttributePageFormData {
   type?: AttributeTypeEnum;
   availableInGrid: boolean;
   filterableInDashboard: boolean;
@@ -101,7 +98,6 @@ const AttributePage = ({
   const { user } = useUser();
   const canTranslate = user && hasPermission(PermissionEnum.MANAGE_TRANSLATIONS, user);
   const navigate = useNavigator();
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
   const initialForm: AttributePageFormData = !attribute
     ? {
         availableInGrid: true,
@@ -109,9 +105,7 @@ const AttributePage = ({
         filterableInDashboard: true,
         filterableInStorefront: true,
         inputType: AttributeInputTypeEnum.DROPDOWN,
-        metadata: [],
         name: "",
-        privateMetadata: [],
         slug: "",
         storefrontSearchPosition: "",
         type: AttributeTypeEnum.PRODUCT_TYPE,
@@ -125,9 +119,7 @@ const AttributePage = ({
         filterableInDashboard: attribute.filterableInDashboard,
         filterableInStorefront: attribute.filterableInStorefront,
         inputType: attribute?.inputType ?? AttributeInputTypeEnum.DROPDOWN,
-        metadata: attribute.metadata.map(mapMetadataItemToInput),
         name: attribute?.name ?? "",
-        privateMetadata: attribute.privateMetadata.map(mapMetadataItemToInput),
         slug: attribute?.slug ?? "",
         storefrontSearchPosition: attribute.storefrontSearchPosition.toString(),
         type: attribute?.type ?? AttributeTypeEnum.PRODUCT_TYPE,
@@ -152,8 +144,6 @@ const AttributePage = ({
   return (
     <Form confirmLeave initial={initialForm} onSubmit={handleSubmit} disabled={disabled}>
       {({ change, set, data, isSaveDisabled, submit, errors, setError, clearErrors }) => {
-        const changeMetadata = makeMetadataChangeHandler(change);
-
         return (
           <>
             <DetailPageLayout>
@@ -214,8 +204,6 @@ const AttributePage = ({
                     />
                   </>
                 )}
-                <CardSpacer />
-                <Metadata data={data} isLoading={disabled} onChange={changeMetadata} />
               </DetailPageLayout.Content>
               <DetailPageLayout.RightSidebar>
                 <AttributeOrganization

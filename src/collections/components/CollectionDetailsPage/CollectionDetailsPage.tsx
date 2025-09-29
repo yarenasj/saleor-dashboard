@@ -7,9 +7,7 @@ import { TopNav } from "@dashboard/components/AppLayout/TopNav";
 import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
-import { SeoForm } from "@dashboard/components/SeoForm";
 import {
   CollectionChannelListingErrorFragment,
   CollectionDetailsQuery,
@@ -107,28 +105,11 @@ const CollectionDetailsPage = ({
               onImageUpload={onImageUpload}
               onChange={change}
             />
-            <Metadata data={data} onChange={handlers.changeMetadata} />
             <CollectionProducts
               disabled={disabled}
               collection={collection}
               currentChannels={currentChannels}
               {...collectionProductsProps}
-            />
-            <SeoForm
-              description={data.seoDescription}
-              disabled={disabled}
-              descriptionPlaceholder=""
-              helperText={intl.formatMessage({
-                id: "Rj8LxK",
-                defaultMessage:
-                  "Add search engine title and description to make this collection easier to find",
-              })}
-              errors={errors}
-              slug={data.slug}
-              slugPlaceholder={data.name}
-              title={data.seoTitle}
-              titlePlaceholder={collection?.name}
-              onChange={change}
             />
           </DetailPageLayout.Content>
           <DetailPageLayout.RightSidebar>

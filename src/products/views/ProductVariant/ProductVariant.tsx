@@ -22,8 +22,6 @@ import {
   useProductVariantDetailsQuery,
   useProductVariantPreorderDeactivateMutation,
   useProductVariantReorderMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
   useVariantDeleteMutation,
   useVariantMediaAssignMutation,
   useVariantMediaUnassignMutation,
@@ -47,7 +45,6 @@ import useProductSearch from "@dashboard/searches/useProductSearch";
 import useWarehouseSearch from "@dashboard/searches/useWarehouseSearch";
 import useAttributeValueSearchHandler from "@dashboard/utils/handlers/attributeValueSearchHandler";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import { warehouseAddPath } from "@dashboard/warehouses/urls";
 import React, { useEffect, useMemo, useState } from "react";
@@ -89,9 +86,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
     },
   });
   const productId = data?.productVariant?.product.id;
-
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const [openModal] = createDialogActionHandlers<
     ProductVariantEditUrlDialog,
     ProductVariantEditUrlQueryParams
@@ -218,12 +212,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
       ...channelErrors,
     ];
   };
-  const handleSubmit = createMetadataUpdateHandler(
-    data?.productVariant,
-    handleUpdate,
-    variables => updateMetadata({ variables }),
-    variables => updatePrivateMetadata({ variables }),
-  );
   const handleAssignAttributeReferenceClick = (attribute: AttributeInput) =>
     navigate(
       productVariantEditUrl(variantId, {
@@ -297,7 +285,7 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
         variant={variant}
         header={variant?.name || variant?.sku}
         onDelete={() => openModal("remove")}
-        onSubmit={handleSubmit}
+        onSubmit={handleUpdate}
         fetchMoreWarehouses={fetchMoreWarehouses}
         searchWarehousesResult={searchWarehousesResult}
         onWarehouseConfigure={() => navigate(warehouseAddPath)}

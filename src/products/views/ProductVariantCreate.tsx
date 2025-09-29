@@ -13,8 +13,6 @@ import {
   useProductVariantChannelListingUpdateMutation,
   useProductVariantCreateDataQuery,
   useProductVariantReorderMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
   useVariantCreateMutation,
 } from "@dashboard/graphql";
 import useNavigator from "@dashboard/hooks/useNavigator";
@@ -26,7 +24,6 @@ import usePageSearch from "@dashboard/searches/usePageSearch";
 import useProductSearch from "@dashboard/searches/useProductSearch";
 import useWarehouseSearch from "@dashboard/searches/useWarehouseSearch";
 import useAttributeValueSearchHandler from "@dashboard/utils/handlers/attributeValueSearchHandler";
-import createMetadataCreateHandler from "@dashboard/utils/handlers/metadataCreateHandler";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import { warehouseAddPath } from "@dashboard/warehouses/urls";
 import React from "react";
@@ -96,8 +93,6 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
     },
   });
   const [updateChannels] = useProductVariantChannelListingUpdateMutation({});
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const [reorderProductVariants, reorderProductVariantsOpts] = useProductVariantReorderMutation({});
   const handleVariantReorder = createVariantReorderHandler(product, reorderProductVariants);
   const handleCreate = async (formData: ProductVariantCreateData) => {
@@ -169,11 +164,6 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
 
     return { id, errors: updateChannelsErrors };
   };
-  const handleSubmit = createMetadataCreateHandler(
-    handleCreate,
-    updateMetadata,
-    updatePrivateMetadata,
-  );
   const handleVariantClick = (id: string) => navigate(productVariantEditUrl(id));
   const handleAssignAttributeReferenceClick = (attribute: AttributeInput) =>
     navigate(
@@ -258,7 +248,7 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
         searchWarehousesResult={searchWarehousesResult}
         product={data?.product}
         attributeValues={attributeValues}
-        onSubmit={handleSubmit}
+        onSubmit={handleCreate}
         onVariantClick={handleVariantClick}
         onWarehouseConfigure={() => navigate(warehouseAddPath)}
         onVariantReorder={handleVariantReorder}

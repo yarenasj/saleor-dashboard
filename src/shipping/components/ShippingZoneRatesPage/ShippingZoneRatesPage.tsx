@@ -5,7 +5,6 @@ import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailability
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { WithFormId } from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
 import {
   PermissionEnum,
@@ -22,7 +21,6 @@ import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import { useStateUpdate } from "@dashboard/hooks/useStateUpdate";
 import { validatePrice } from "@dashboard/products/utils/validation";
-import { handleTaxClassChange } from "@dashboard/productTypes/handlers";
 import OrderValue from "@dashboard/shipping/components/OrderValue";
 import OrderWeight from "@dashboard/shipping/components/OrderWeight";
 import PricingCard from "@dashboard/shipping/components/PricingCard";
@@ -31,12 +29,10 @@ import ShippingRateInfo from "@dashboard/shipping/components/ShippingRateInfo";
 import { createChannelsChangeHandler } from "@dashboard/shipping/handlers";
 import { FetchMoreProps, ListActions, ListProps } from "@dashboard/types";
 import { mapEdgesToItems, mapMetadataItemToInput } from "@dashboard/utils/maps";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { RichTextContext } from "@dashboard/utils/richText/context";
 import useRichText from "@dashboard/utils/richText/useRichText";
 import React, { FormEventHandler } from "react";
 
-import ShippingMethodTaxes from "../ShippingMethodTaxes";
 import ShippingZonePostalCodes from "../ShippingZonePostalCodes";
 import { ShippingZoneRateUpdateFormData } from "./types";
 
@@ -130,7 +126,6 @@ export const ShippingZoneRatesPage = ({
     loading: !rate,
     triggerChange,
   });
-  const { makeChangeHandler: makeMetadataChangeHandler } = useMetadataChangeTrigger();
   const data: ShippingZoneRateUpdateFormData = {
     ...formData,
     description: null,
@@ -151,7 +146,6 @@ export const ShippingZoneRatesPage = ({
     triggerChange,
   );
   const isValid = !formData.channelListings?.some(channel => validatePrice(channel.price));
-  const changeMetadata = makeMetadataChangeHandler(change);
   const isSaveDisabled = disabled || !isValid;
 
   setIsSubmitDisabled(isSaveDisabled);
@@ -206,8 +200,6 @@ export const ShippingZoneRatesPage = ({
               disabled={disabled}
               {...listProps}
             />
-            <CardSpacer />
-            <Metadata data={data} onChange={changeMetadata} />
           </DetailPageLayout.Content>
           <DetailPageLayout.RightSidebar>
             <ChannelsAvailabilityCard
@@ -218,17 +210,6 @@ export const ShippingZoneRatesPage = ({
                 name: channel.name,
               }))}
               openModal={openChannelsModal}
-            />
-            <CardSpacer />
-            <ShippingMethodTaxes
-              value={formData.taxClassId}
-              taxClassDisplayName={taxClassDisplayName}
-              taxClasses={taxClasses}
-              disabled={false}
-              onChange={event =>
-                handleTaxClassChange(event, taxClasses, change, setTaxClassDisplayName)
-              }
-              onFetchMore={fetchMoreTaxClasses}
             />
           </DetailPageLayout.RightSidebar>
           <Savebar>

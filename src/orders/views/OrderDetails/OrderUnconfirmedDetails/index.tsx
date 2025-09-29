@@ -23,7 +23,6 @@ import { OrderCustomerAddressesEditDialogOutput } from "@dashboard/orders/compon
 import OrderFulfillmentApproveDialog from "@dashboard/orders/components/OrderFulfillmentApproveDialog";
 import OrderInvoiceEmailSendDialog from "@dashboard/orders/components/OrderInvoiceEmailSendDialog";
 import { OrderManualTransactionDialog } from "@dashboard/orders/components/OrderManualTransactionDialog";
-import { OrderMetadataDialog } from "@dashboard/orders/components/OrderMetadataDialog";
 import { OrderRefundDialog } from "@dashboard/orders/components/OrderRefundDialog/OrderRefundDialog";
 import { OrderTransactionActionDialog } from "@dashboard/orders/components/OrderTransactionActionDialog/OrderTransactionActionDialog";
 import { isAnyAddressEditModalOpen } from "@dashboard/orders/utils/data";
@@ -93,8 +92,6 @@ interface OrderUnconfirmedDetailsProps {
     CreateManualTransactionCaptureMutationVariables
   >;
   orderInvoiceSend: any;
-  updateMetadataOpts: any;
-  updatePrivateMetadataOpts: any;
   openModal: any;
   closeModal: any;
 }
@@ -120,8 +117,6 @@ export const OrderUnconfirmedDetails = ({
   orderFulfillmentCancel,
   orderFulfillmentUpdateTracking,
   orderInvoiceSend,
-  updateMetadataOpts,
-  updatePrivateMetadataOpts,
   orderTransactionAction,
   orderAddManualTransaction,
   openModal,
@@ -185,7 +180,7 @@ export const OrderUnconfirmedDetails = ({
         <OrderLineDiscountProvider order={order}>
           <OrderDetailsPage
             onOrderReturn={() => navigate(orderReturnUrl(id))}
-            loading={updateMetadataOpts.loading || updatePrivateMetadataOpts.loading}
+            loading={false}
             errors={errors}
             onNoteAdd={variables =>
               extractMutationErrors(
@@ -223,16 +218,7 @@ export const OrderUnconfirmedDetails = ({
             onOrderLineRemove={id => orderLineDelete.mutate({ id })}
             onShippingMethodEdit={() => openModal("edit-shipping")}
             onShowMetadata={id => openModal("view-metadata", { id })}
-            saveButtonBarState={getMutationState(
-              updateMetadataOpts.called || updatePrivateMetadataOpts.called,
-              updateMetadataOpts.loading || updatePrivateMetadataOpts.loading,
-              [
-                ...(updateMetadataOpts.data?.deleteMetadata.errors || []),
-                ...(updateMetadataOpts.data?.updateMetadata.errors || []),
-                ...(updatePrivateMetadataOpts.data?.deletePrivateMetadata.errors || []),
-                ...(updatePrivateMetadataOpts.data?.updatePrivateMetadata.errors || []),
-              ],
-            )}
+            saveButtonBarState={"success"}
             shippingMethods={data?.order?.shippingMethods || []}
             onOrderCancel={() => openModal("cancel")}
             onOrderFulfill={() => navigate(orderFulfillUrl(id))}
@@ -369,12 +355,6 @@ export const OrderUnconfirmedDetails = ({
             })
             .finally(() => closeModal())
         }
-      />
-      <OrderMetadataDialog
-        open={params.action === "view-metadata"}
-        onClose={closeModal}
-        lineId={params.id}
-        orderId={id}
       />
 
       <OrderPaymentVoidDialog

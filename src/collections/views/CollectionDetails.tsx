@@ -12,8 +12,6 @@ import {
   useCollectionDetailsQuery,
   useCollectionUpdateMutation,
   useRemoveCollectionMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useChannels from "@dashboard/hooks/useChannels";
 import useLocalStorage from "@dashboard/hooks/useLocalStorage";
@@ -22,7 +20,6 @@ import useNotifier from "@dashboard/hooks/useNotifier";
 import { commonMessages, errorMessages } from "@dashboard/intl";
 import { arrayDiff } from "@dashboard/utils/arrays";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { getParsedDataForJsonStringField } from "@dashboard/utils/richText/misc";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -51,8 +48,6 @@ export const CollectionDetails = ({ id, params }: CollectionDetailsProps) => {
     CollectionUrlDialog,
     CollectionUrlQueryParams
   >(navigate, params => collectionUrl(id, params), params);
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const [updateChannels, updateChannelsOpts] = useCollectionChannelListingUpdateMutation({});
   const { availableChannels } = useAppChannel(false);
   const handleCollectionUpdate = (data: CollectionUpdateMutation) => {
@@ -163,12 +158,6 @@ export const CollectionDetails = ({ id, params }: CollectionDetailsProps) => {
 
     return getMutationErrors(result);
   };
-  const handleSubmit = createMetadataUpdateHandler(
-    data?.collection,
-    handleUpdate,
-    variables => updateMetadata({ variables }),
-    variables => updatePrivateMetadata({ variables }),
-  );
 
   const formTransitionState = getMutationState(
     updateCollectionOpts.called,
@@ -218,7 +207,7 @@ export const CollectionDetails = ({ id, params }: CollectionDetailsProps) => {
             },
           })
         }
-        onSubmit={handleSubmit}
+        onSubmit={handleUpdate}
         saveButtonBarState={formTransitionState}
         currentChannels={currentChannels}
         channelsCount={availableChannels.length}

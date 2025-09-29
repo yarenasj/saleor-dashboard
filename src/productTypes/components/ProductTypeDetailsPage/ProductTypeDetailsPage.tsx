@@ -4,8 +4,6 @@ import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { Metadata } from "@dashboard/components/Metadata/Metadata";
-import { MetadataFormData } from "@dashboard/components/Metadata/types";
 import { Savebar } from "@dashboard/components/Savebar";
 import {
   ProductAttributeType,
@@ -22,8 +20,6 @@ import { maybe } from "@dashboard/misc";
 import { handleTaxClassChange } from "@dashboard/productTypes/handlers";
 import { productTypeListPath } from "@dashboard/productTypes/urls";
 import { FetchMoreProps, ListActions, ReorderEvent, UserError } from "@dashboard/types";
-import { mapMetadataItemToInput } from "@dashboard/utils/maps";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { Box, Text, Toggle } from "@saleor/macaw-ui-next";
 import React from "react";
 import { FormattedMessage } from "react-intl";
@@ -39,7 +35,7 @@ interface ChoiceType {
   value: string;
 }
 
-export interface ProductTypeForm extends MetadataFormData {
+export interface ProductTypeForm {
   name: string;
   kind: ProductTypeKindEnum;
   hasVariants: boolean;
@@ -95,11 +91,6 @@ const ProductTypeDetailsPage = ({
   const productTypeListBackLink = useBackLinkWithState({
     path: productTypeListPath,
   });
-  const {
-    isMetadataModified,
-    isPrivateMetadataModified,
-    makeChangeHandler: makeMetadataChangeHandler,
-  } = useMetadataChangeTrigger();
   const [taxClassDisplayName, setTaxClassDisplayName] = useStateFromProps(
     productType?.taxClass?.name ?? "",
   );
@@ -110,10 +101,8 @@ const ProductTypeDetailsPage = ({
       maybe(() => productType.isShippingRequired) !== undefined
         ? productType.isShippingRequired
         : false,
-    metadata: productType?.metadata?.map(mapMetadataItemToInput),
     name: maybe(() => productType.name) !== undefined ? productType.name : "",
     kind: productType?.kind || ProductTypeKindEnum.NORMAL,
-    privateMetadata: productType?.privateMetadata?.map(mapMetadataItemToInput),
     productAttributes:
       maybe(() => productType.productAttributes) !== undefined
         ? productType.productAttributes.map(attribute => ({
@@ -132,21 +121,14 @@ const ProductTypeDetailsPage = ({
     weight: maybe(() => productType.weight.value),
   };
   const handleSubmit = (data: ProductTypeForm) => {
-    const metadata = isMetadataModified ? data.metadata : undefined;
-    const privateMetadata = isPrivateMetadataModified ? data.privateMetadata : undefined;
-
     return onSubmit({
       ...data,
-      metadata,
-      privateMetadata,
     });
   };
 
   return (
     <Form initial={formInitialData} onSubmit={handleSubmit} confirmLeave disabled={disabled}>
       {({ change, data, isSaveDisabled, submit }) => {
-        const changeMetadata = makeMetadataChangeHandler(change);
-
         return (
           <DetailPageLayout>
             <TopNav href={productTypeListBackLink} title={pageTitle} />
@@ -219,8 +201,6 @@ const ProductTypeDetailsPage = ({
                   />
                 </>
               )}
-              <CardSpacer />
-              <Metadata data={data} onChange={changeMetadata} />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>
               <ProductTypeShipping

@@ -1,14 +1,8 @@
 import { WindowTitle } from "@dashboard/components/WindowTitle";
-import {
-  CategoryCreateMutation,
-  useCategoryCreateMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
-} from "@dashboard/graphql";
+import { CategoryCreateMutation, useCategoryCreateMutation } from "@dashboard/graphql";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import useNotifier from "@dashboard/hooks/useNotifier";
 import { getMutationErrors } from "@dashboard/misc";
-import createMetadataCreateHandler from "@dashboard/utils/handlers/metadataCreateHandler";
 import { getParsedDataForJsonStringField } from "@dashboard/utils/richText/misc";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -25,8 +19,6 @@ export const CategoryCreateView = ({ parentId }: CategoryCreateViewProps) => {
   const navigate = useNavigator();
   const notify = useNotifier();
   const intl = useIntl();
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const handleSuccess = (data: CategoryCreateMutation) => {
     if (data.categoryCreate?.errors.length === 0) {
       notify({
@@ -64,11 +56,6 @@ export const CategoryCreateView = ({ parentId }: CategoryCreateViewProps) => {
       errors: getMutationErrors(result),
     };
   };
-  const handleSubmit = createMetadataCreateHandler(
-    handleCreate,
-    updateMetadata,
-    updatePrivateMetadata,
-  );
 
   return (
     <>
@@ -84,7 +71,7 @@ export const CategoryCreateView = ({ parentId }: CategoryCreateViewProps) => {
         errors={createCategoryResult.data?.categoryCreate?.errors || []}
         disabled={createCategoryResult.loading}
         backUrl={parentId ? categoryUrl(parentId) : categoryListUrl()}
-        onSubmit={handleSubmit}
+        onSubmit={handleCreate}
       />
     </>
   );

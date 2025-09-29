@@ -23,15 +23,12 @@ import {
   useProductVariantBulkCreateMutation,
   useProductVariantBulkDeleteMutation,
   useProductVariantBulkUpdateMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useNotifier from "@dashboard/hooks/useNotifier";
 import { commonMessages } from "@dashboard/intl";
 import { getMutationErrors } from "@dashboard/misc";
 import { ProductUpdateSubmitData } from "@dashboard/products/components/ProductUpdatePage/types";
 import { getProductErrorMessage } from "@dashboard/utils/errors";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { useState } from "react";
 import { useIntl } from "react-intl";
 
@@ -76,8 +73,6 @@ export function useProductUpdateHandler(
   const [variantListErrors, setVariantListErrors] = useState<ProductVariantListError[]>([]);
   const [called, setCalled] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const [updateVariants] = useProductVariantBulkUpdateMutation();
   const [createVariants] = useProductVariantBulkCreateMutation();
   const [deleteVariants] = useProductVariantBulkDeleteMutation();
@@ -194,12 +189,7 @@ export function useProductUpdateHandler(
     setCalled(true);
     setLoading(true);
 
-    const errors = await createMetadataUpdateHandler(
-      product,
-      sendMutations,
-      variables => updateMetadata({ variables }),
-      variables => updatePrivateMetadata({ variables }),
-    )(data);
+    const errors = await sendMutations(data);
 
     setLoading(false);
 

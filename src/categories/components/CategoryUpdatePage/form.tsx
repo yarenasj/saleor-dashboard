@@ -1,17 +1,14 @@
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
-import { MetadataFormData } from "@dashboard/components/Metadata";
 import { CategoryDetailsFragment } from "@dashboard/graphql";
 import useForm, { CommonUseFormResult, FormChange } from "@dashboard/hooks/useForm";
 import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
 import { mapMetadataItemToInput } from "@dashboard/utils/maps";
-import getMetadata from "@dashboard/utils/metadata/getMetadata";
-import useMetadataChangeTrigger from "@dashboard/utils/metadata/useMetadataChangeTrigger";
 import { RichTextContext, RichTextContextValues } from "@dashboard/utils/richText/context";
 import useRichText from "@dashboard/utils/richText/useRichText";
 import { OutputData } from "@editorjs/editorjs";
 import React, { useEffect } from "react";
 
-export interface CategoryUpdateFormData extends MetadataFormData {
+export interface CategoryUpdateFormData {
   backgroundImageAlt: string;
   name: string;
   slug: string;
@@ -71,12 +68,6 @@ function useCategoryUpdateForm(
     loading: !category,
     triggerChange,
   });
-  const {
-    isMetadataModified,
-    isPrivateMetadataModified,
-    makeChangeHandler: makeMetadataChangeHandler,
-  } = useMetadataChangeTrigger();
-  const changeMetadata = makeMetadataChangeHandler(handleChange);
   const data = {
     ...formData,
     description: null,
@@ -90,7 +81,6 @@ function useCategoryUpdateForm(
   const getSubmitData = async (): Promise<CategoryUpdateData> =>
     ({
       ...(await getData()),
-      ...getMetadata(data, isMetadataModified, isPrivateMetadataModified),
     }) as CategoryUpdateData;
   const submit = async () => handleFormSubmit(await getSubmitData());
 
@@ -100,9 +90,7 @@ function useCategoryUpdateForm(
   return {
     change: handleChange,
     data,
-    handlers: {
-      changeMetadata,
-    },
+    handlers: {} as any,
     submit,
     isSaveDisabled: disabled,
     richText,

@@ -26,7 +26,6 @@ import {
   OrderCustomerChangeData,
 } from "@dashboard/orders/components/OrderCustomerChangeDialog/form";
 import OrderCustomerChangeDialog from "@dashboard/orders/components/OrderCustomerChangeDialog/OrderCustomerChangeDialog";
-import { OrderMetadataDialog } from "@dashboard/orders/components/OrderMetadataDialog";
 import { getVariantSearchAddress, isAnyAddressEditModalOpen } from "@dashboard/orders/utils/data";
 import { OrderDiscountProvider } from "@dashboard/products/components/OrderDiscountProviders/OrderDiscountProvider";
 import { OrderLineDiscountProvider } from "@dashboard/products/components/OrderDiscountProviders/OrderLineDiscountProvider";
@@ -298,12 +297,6 @@ export const OrderDraftDetails = ({
         open={params.action === "customer-change"}
         onClose={closeModal}
         onConfirm={handleCustomerChangeAction}
-      />
-      <OrderMetadataDialog
-        open={params.action === "view-metadata"}
-        onClose={closeModal}
-        lineId={params.id}
-        orderId={id}
       />
       <OrderAddressFields
         action={params?.action}

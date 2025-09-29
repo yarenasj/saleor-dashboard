@@ -7,8 +7,6 @@ import {
   useAttributeValueDeleteMutation,
   useAttributeValueReorderMutation,
   useAttributeValueUpdateMutation,
-  useUpdateMetadataMutation,
-  useUpdatePrivateMetadataMutation,
 } from "@dashboard/graphql";
 import useListSettings from "@dashboard/hooks/useListSettings";
 import useLocalPaginator, { useLocalPaginationState } from "@dashboard/hooks/useLocalPaginator";
@@ -19,7 +17,6 @@ import { extractMutationErrors, getStringOrPlaceholder } from "@dashboard/misc";
 import { ListViews, ReorderEvent } from "@dashboard/types";
 import getAttributeErrorMessage from "@dashboard/utils/errors/attribute";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
-import createMetadataUpdateHandler from "@dashboard/utils/handlers/metadataUpdateHandler";
 import { move } from "@dashboard/utils/lists";
 import omit from "lodash/omit";
 import React from "react";
@@ -45,8 +42,6 @@ const AttributeDetails = ({ id, params }: AttributeDetailsProps) => {
   const navigate = useNavigator();
   const notify = useNotifier();
   const intl = useIntl();
-  const [updateMetadata] = useUpdateMetadataMutation({});
-  const [updatePrivateMetadata] = useUpdatePrivateMetadataMutation({});
   const [openModal, closeModal] = createDialogActionHandlers<
     AttributeUrlDialog,
     AttributeUrlQueryParams
@@ -194,12 +189,6 @@ const AttributeDetails = ({ id, params }: AttributeDetailsProps) => {
         },
       }),
     );
-  const handleSubmit = createMetadataUpdateHandler(
-    data?.attribute!,
-    handleUpdate,
-    variables => updateMetadata({ variables }),
-    variables => updatePrivateMetadata({ variables }),
-  );
 
   return (
     <AttributePage
@@ -207,7 +196,7 @@ const AttributeDetails = ({ id, params }: AttributeDetailsProps) => {
       disabled={loading}
       errors={attributeUpdateOpts.data?.attributeUpdate?.errors || []}
       onDelete={() => openModal("remove")}
-      onSubmit={handleSubmit}
+      onSubmit={handleUpdate}
       onValueAdd={() => openModal("add-value")}
       onValueDelete={id =>
         openModal("remove-value", {
