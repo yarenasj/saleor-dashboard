@@ -1,9 +1,7 @@
 // @ts-strict-ignore
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
-import { useFlag } from "@dashboard/featureFlags";
 import { UserFragment } from "@dashboard/graphql";
-import useNavigator from "@dashboard/hooks/useNavigator";
 import { sectionNames } from "@dashboard/intl";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -42,9 +40,6 @@ export const ConfigurationPage = (props: ConfigurationPageProps) => {
     <VersionInfo dashboardVersion={dashboardVersion} coreVersion={coreVersion} />
   );
   const intl = useIntl();
-
-  const { enabled: isExtensionsEnabled } = useFlag("extensions");
-  const navigate = useNavigator();
 
   return (
     <DetailPageLayout gridTemplateColumns={1} withSavebar={false}>

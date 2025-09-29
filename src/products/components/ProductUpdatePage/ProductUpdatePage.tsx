@@ -51,7 +51,7 @@ import { TranslationsButton } from "@dashboard/translations/components/Translati
 import { productUrl as createTranslateProductUrl } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
 import { FetchMoreProps, RelayToFlat } from "@dashboard/types";
-import { Box, Divider, Option } from "@saleor/macaw-ui-next";
+import { Box, Option } from "@saleor/macaw-ui-next";
 import React from "react";
 import { useIntl } from "react-intl";
 

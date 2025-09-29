@@ -1,4 +1,4 @@
-import { GiftCardDetailsQuery, OrderEventFragment } from "@dashboard/graphql";
+import { OrderEventFragment } from "@dashboard/graphql";
 import { getUserInitials, getUserName } from "@dashboard/misc";
 import { Box, Button, EditIcon, Text } from "@saleor/macaw-ui-next";
 import React, { useState } from "react";
@@ -9,9 +9,7 @@ import { DateTime } from "../Date";
 import { UserAvatar } from "../UserAvatar";
 import { TimelineNoteEdit } from "./TimelineNoteEdit";
 
-type TimelineAppType =
-  | NonNullable<GiftCardDetailsQuery["giftCard"]>["events"][0]["app"]
-  | OrderEventFragment["app"];
+type TimelineAppType = OrderEventFragment["app"];
 
 interface TimelineNoteProps {
   date: string;

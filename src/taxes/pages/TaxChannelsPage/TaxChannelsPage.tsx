@@ -19,18 +19,15 @@ import useNavigator from "@dashboard/hooks/useNavigator";
 import TaxCountryDialog from "@dashboard/taxes/components/TaxCountryDialog";
 import TaxPageTitle from "@dashboard/taxes/components/TaxPageTitle";
 import { taxesMessages } from "@dashboard/taxes/messages";
-import { isLastElement } from "@dashboard/taxes/utils/utils";
 import { Card, CardContent, Divider } from "@material-ui/core";
 import { List, ListHeader, ListItem, ListItemCell, PageTab, PageTabs } from "@saleor/macaw-ui";
-import { Box, Button, Skeleton } from "@saleor/macaw-ui-next";
+import { Box, Button } from "@saleor/macaw-ui-next";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import { getSelectedTaxStrategy, getTaxAppId, getTaxCalculationStrategy } from "./helpers";
 import { useStyles } from "./styles";
 import TaxChannelsMenu from "./TaxChannelsMenu";
-import TaxCountryExceptionListItem from "./TaxCountryExceptionListItem";
-import TaxSettingsCard from "./TaxSettingsCard";
 
 interface TaxChannelsPageProps {
   taxConfigurations: TaxConfigurationFragment[] | undefined;
@@ -122,20 +119,8 @@ export const TaxChannelsPage = (props: TaxChannelsPageProps) => {
 
   return (
     <Form initial={initialForm} onSubmit={handleSubmit} mergeData={false}>
-      {({ data, change, submit, set, triggerChange }) => {
+      {({ data, submit, set, triggerChange }) => {
         const countryExceptions = data.updateCountriesConfiguration;
-        const handleExceptionChange = (event, index) => {
-          const { name, value } = event.target;
-          const currentExceptions = [...data.updateCountriesConfiguration];
-          const exceptionToChange = {
-            ...data.updateCountriesConfiguration[index],
-            [name]: value,
-          };
-
-          currentExceptions[index] = exceptionToChange;
-          triggerChange();
-          set({ updateCountriesConfiguration: currentExceptions });
-        };
         const handleCountryChange = (country: CountryFragment) => {
           closeDialog();
 

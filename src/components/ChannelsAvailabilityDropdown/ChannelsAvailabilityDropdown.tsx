@@ -7,7 +7,7 @@ import { DashboardCard } from "../Card";
 import ChannelsAvailabilityMenuContent from "../ChannelsAvailabilityMenuContent";
 import { Pill } from "../Pill";
 import { messages } from "./messages";
-import { CollectionChannels, getDropdownColor, mapChannelsToPills } from "./utils";
+import { CollectionChannels, getDropdownColor } from "./utils";
 
 export interface ChannelsAvailabilityDropdownProps {
   channels: CollectionChannels[] | null;
@@ -44,7 +44,7 @@ export const ChannelsAvailabilityDropdown = ({ channels }: ChannelsAvailabilityD
       </div>
       <Popper anchorEl={anchor.current} open={isPopupOpen} placement={"left"}>
         <DashboardCard boxShadow="defaultModal">
-          <ChannelsAvailabilityMenuContent pills={mapChannelsToPills(channels)} />
+          <ChannelsAvailabilityMenuContent />
         </DashboardCard>
       </Popper>
     </div>

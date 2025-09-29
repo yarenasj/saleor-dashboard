@@ -5,7 +5,6 @@ import useRouter from "use-react-router";
 
 import { InitialAttributesAPIState } from "../API/initialState/attributes/useInitialAttributesState";
 import { InitialCollectionAPIState } from "../API/initialState/collections/useInitialCollectionsState";
-import { InitialGiftCardsAPIState } from "../API/initialState/giftCards/useInitialGiftCardsState";
 import { InitialOrderAPIState } from "../API/initialState/orders/useInitialOrderState";
 import { InitialPageAPIState } from "../API/initialState/page/useInitialPageState";
 import { InitialProductAPIState } from "../API/initialState/product/useProductInitialAPIState";
@@ -21,7 +20,6 @@ import {
   CollectionFetchingParams,
   FetchingParams,
   getEmptyFetchingPrams,
-  GiftCardsFetchingParams,
   OrderFetchingParams,
   PageFetchingParams,
   ProductTypesFetchingParams,
@@ -74,11 +72,6 @@ export const useUrlValueProvider = (
           break;
         case "page":
           (initialState as InitialPageAPIState).fetchQueries(fetchingParams as PageFetchingParams);
-          break;
-        case "gift-cards":
-          (initialState as InitialGiftCardsAPIState).fetchQueries(
-            fetchingParams as GiftCardsFetchingParams,
-          );
           break;
         case "collection":
           (initialState as InitialCollectionAPIState).fetchQueries(

@@ -20,7 +20,7 @@ import useNavigator from "@dashboard/hooks/useNavigator";
 import OrderChannelSectionCard from "@dashboard/orders/components/OrderChannelSectionCard";
 import { orderDraftListUrl } from "@dashboard/orders/urls";
 import { FetchMoreProps, RelayToFlat } from "@dashboard/types";
-import { Box, Divider, Skeleton, Text } from "@saleor/macaw-ui-next";
+import { Box, Skeleton, Text } from "@saleor/macaw-ui-next";
 import React from "react";
 import { useIntl } from "react-intl";
 

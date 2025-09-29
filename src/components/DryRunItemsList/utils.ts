@@ -1,8 +1,5 @@
 // @ts-strict-ignore
 import {
-  AppsListDocument,
-  AppsListQuery,
-  AppsListQueryVariables,
   AttributeListDocument,
   AttributeListQuery,
   AttributeListQueryVariables,
@@ -18,9 +15,6 @@ import {
   CustomerAddressesQueryVariables,
   CustomerDetailsQuery,
   CustomerDetailsQueryVariables,
-  GiftCardListDocument,
-  GiftCardListQuery,
-  GiftCardListQueryVariables,
   ListCustomersDocument,
   ListCustomersQuery,
   ListCustomersQueryVariables,
@@ -60,13 +54,10 @@ const DefaultVariables = {
 export type TData =
   | ProductListQuery
   | OrderListQuery
-  | GiftCardListQuery
   | CustomerAddressesQuery
-  | AppsListQuery
   | AttributeListQuery
   | CategoryDetailsQuery
   | CheckoutListQuery
-  | GiftCardListQuery
   | CollectionListQuery
   | CustomerDetailsQuery
   | OrderFulfillDataQuery
@@ -83,14 +74,11 @@ export type TData =
 export type TVariables =
   | ProductListQueryVariables
   | OrderListQueryVariables
-  | GiftCardListQueryVariables
   | CustomerAddressesQueryVariables
-  | AppsListQueryVariables
   | AttributeListQueryVariables
   | CategoryDetailsQueryVariables
   | ListCustomersQueryVariables
   | CheckoutListQueryVariables
-  | GiftCardListQueryVariables
   | CollectionListQueryVariables
   | CustomerDetailsQueryVariables
   | OrderFulfillDataQueryVariables
@@ -111,11 +99,6 @@ interface Document {
 }
 
 export const DocumentMap: Record<string, Document> = {
-  APP: {
-    document: AppsListDocument,
-    variables: DefaultVariables,
-    displayedAttribute: "name",
-  },
   ATTRIBUTE: {
     document: AttributeListDocument,
     variables: DefaultVariables,
@@ -126,11 +109,6 @@ export const DocumentMap: Record<string, Document> = {
     variables: DefaultVariables,
     collection: "categories",
     displayedAttribute: "name",
-  },
-  GIFT_CARD: {
-    document: GiftCardListDocument,
-    variables: DefaultVariables,
-    displayedAttribute: "last4CodeChars",
   },
   CHECKOUT: {
     document: CheckoutListDocument,

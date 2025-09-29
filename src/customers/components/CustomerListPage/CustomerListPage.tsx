@@ -3,7 +3,6 @@ import { useUserPermissions } from "@dashboard/auth/hooks/useUserPermissions";
 import { ListFilters } from "@dashboard/components/AppLayout/ListFilters";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
 import { BulkDeleteButton } from "@dashboard/components/BulkDeleteButton";
-import { ButtonGroupWithDropdown } from "@dashboard/components/ButtonGroupWithDropdown";
 import { FilterPresetsSelect } from "@dashboard/components/FilterPresetsSelect";
 import { Customers } from "@dashboard/customers/types";
 import { customerAddUrl, CustomerListUrlSortField, customerUrl } from "@dashboard/customers/urls";

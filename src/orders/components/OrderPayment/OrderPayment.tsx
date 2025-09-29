@@ -11,7 +11,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { OrderPaymentStatusPill } from "../OrderPaymentSummaryCard/components/OrderPaymentStatusPill";
 import { orderPaymentMessages, paymentButtonMessages } from "./messages";
 import { useStyles } from "./styles";
-import { extractRefundedAmount, getDiscountAmount, obtainUsedGifrcards } from "./utils";
+import { extractRefundedAmount, getDiscountAmount } from "./utils";
 
 interface OrderPaymentProps {
   order: OrderDetailsFragment;
@@ -30,7 +30,6 @@ const OrderPayment = (props: OrderPaymentProps) => {
   const canRefund = (order?.actions ?? []).includes(OrderAction.REFUND);
   const canMarkAsPaid = (order?.actions ?? []).includes(OrderAction.MARK_AS_PAID);
   const refundedAmount = extractRefundedAmount(order);
-  const usedGiftcards = obtainUsedGifrcards(order);
 
   const getDeliveryMethodName = (order: OrderDetailsFragment) => {
     if (

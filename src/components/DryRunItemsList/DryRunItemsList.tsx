@@ -1,6 +1,5 @@
 // @ts-strict-ignore
 
-import { useStyles } from "@dashboard/custom-apps/components/WebhookEvents/styles";
 import { useQuery } from "@dashboard/hooks/graphql";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
 import { Radio } from "@material-ui/core";
@@ -29,7 +28,7 @@ export interface DryRunItemsListProps {
 
 const DryRunItemsList = ({ object, objectId, setObjectId }: DryRunItemsListProps) => {
   const intl = useIntl();
-  const classes = useStyles({});
+  const classes = {} as any;
   const { checkbox } = useListWidths();
   const objectDocument = DocumentMap[object];
   const objectCollection = objectDocument.collection ?? camelCase(`${object.toLowerCase()}s`);

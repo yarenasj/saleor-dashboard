@@ -156,30 +156,6 @@ export class CollectionHandler implements Handler {
   };
 }
 
-export class CurrencyHandler implements Handler {
-  constructor(
-    public client: ApolloClient<unknown>,
-    public query: string,
-  ) {}
-
-  fetch = async () => {
-    const { data } = await this.client.query<any, any>({
-      query: {} as any,
-      variables: {},
-    });
-
-    return data.shop.channelCurrencies
-      .map(currency => ({
-        label: currency,
-        value: currency,
-        slug: currency,
-      }))
-      .filter(({ label }) => {
-        return label.toLowerCase().includes(this.query.toLowerCase());
-      });
-  };
-}
-
 export class CategoryHandler implements Handler {
   constructor(
     public client: ApolloClient<unknown>,

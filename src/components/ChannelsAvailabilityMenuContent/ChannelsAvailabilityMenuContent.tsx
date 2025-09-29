@@ -18,9 +18,7 @@ export interface Pill {
   label: MessageDescriptor;
 }
 
-export const ChannelsAvailabilityMenuContent = ({
-  pills,
-}: ChannelsAvailabilityMenuContentProps) => {
+export const ChannelsAvailabilityMenuContent = () => {
   const intl = useIntl();
   const classes = useStyles({});
 

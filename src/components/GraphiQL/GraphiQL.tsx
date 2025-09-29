@@ -1,5 +1,4 @@
 // @ts-strict-ignore
-import { WebhookFormData } from "@dashboard/custom-apps/components/WebhookDetailsPage";
 import {
   CopyIcon,
   GraphiQLProvider,
@@ -68,7 +67,7 @@ export function GraphiQL({
   visiblePlugin,
   defaultHeaders,
   ...props
-}: GraphiQLProps & { data: WebhookFormData }) {
+}: GraphiQLProps & { data: any }) {
   // Ensure props are correct
   if (typeof fetcher !== "function") {
     throw new TypeError(

@@ -2,8 +2,6 @@ import { InitialAttributesStateResponse } from "./API/initialState/attributes/In
 import { InitialAttributesAPIState } from "./API/initialState/attributes/useInitialAttributesState";
 import { InitialCollectionStateResponse } from "./API/initialState/collections/InitialCollectionState";
 import { InitialCollectionAPIState } from "./API/initialState/collections/useInitialCollectionsState";
-import { InitialGiftCardsStateResponse } from "./API/initialState/giftCards/InitialGiftCardsState";
-import { InitialGiftCardsAPIState } from "./API/initialState/giftCards/useInitialGiftCardsState";
 import { InitialOrderStateResponse } from "./API/initialState/orders/InitialOrderState";
 import { InitialOrderAPIState } from "./API/initialState/orders/useInitialOrderState";
 import { InitialPageStateResponse } from "./API/initialState/page/InitialPageState";
@@ -24,7 +22,6 @@ export type InitialResponseType =
   | InitialVouchersStateResponse
   | InitialPageStateResponse
   | InitialProductTypesStateResponse
-  | InitialGiftCardsStateResponse
   | InitialStaffMembersStateResponse
   | InitialAttributesStateResponse;
 
@@ -33,7 +30,6 @@ export type InitialAPIState =
   | InitialOrderAPIState
   | InitialVoucherAPIState
   | InitialPageAPIState
-  | InitialGiftCardsAPIState
   | InitialCollectionAPIState
   | InitialProductTypesAPIState
   | InitialStaffMembersAPIState

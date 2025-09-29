@@ -5,11 +5,10 @@ import { makeStyles } from "@saleor/macaw-ui";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
-import { obtainUsedGifrcards } from "../OrderPayment/utils";
 import { orderSummaryMessages } from "./messages";
 import SummaryLine from "./SummaryLine";
 import { SummaryList } from "./SummaryList";
-import { extractOrderGiftCardUsedAmount, getDeliveryMethodName, getTaxTypeText } from "./utils";
+import { getDeliveryMethodName, getTaxTypeText } from "./utils";
 
 interface OrderPaymentProps {
   order: OrderDetailsFragment;
@@ -33,8 +32,6 @@ const useStyles = makeStyles(
 const OrderSummaryCard = ({ order }: OrderPaymentProps) => {
   const classes = useStyles();
   const intl = useIntl();
-  const giftCardAmount = extractOrderGiftCardUsedAmount(order);
-  const usedGiftcards = obtainUsedGifrcards(order);
 
   return (
     <DashboardCard data-test-id="OrderSummaryCard">

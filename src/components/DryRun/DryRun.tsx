@@ -1,7 +1,6 @@
 // @ts-strict-ignore
 import Grid from "@dashboard/components/Grid";
 import { DashboardModal } from "@dashboard/components/Modal";
-import { useStyles } from "@dashboard/custom-apps/components/WebhookEvents/styles";
 import { useTriggerWebhookDryRunMutation, WebhookEventTypeSyncEnum } from "@dashboard/graphql";
 import { capitalize } from "@material-ui/core";
 import {
@@ -32,7 +31,7 @@ interface DryRunProps {
 
 const DryRun = ({ setResult, showDialog, setShowDialog, query, syncEvents }: DryRunProps) => {
   const intl = useIntl();
-  const classes = useStyles({});
+  const classes = {} as any;
   const [objectId, setObjectId] = useState<string | null>(null);
   const [triggerWebhookDryRun] = useTriggerWebhookDryRunMutation();
   const availableObjects = Object.keys(DocumentMap).map(object =>

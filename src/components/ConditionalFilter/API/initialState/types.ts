@@ -8,7 +8,6 @@ import {
   _SearchPageTypesOperandsQuery,
   _SearchProductOperandsQuery,
   _SearchProductTypesOperandsQuery,
-  ChannelCurrenciesQuery,
 } from "@dashboard/graphql";
 
 export type InitialProductAPIResponse = ApolloQueryResult<
@@ -25,7 +24,7 @@ export type InitialVoucherAPIResponse = ApolloQueryResult<_GetChannelOperandsQue
 export type InitialPageAPIResponse = ApolloQueryResult<_SearchPageTypesOperandsQuery>;
 
 export type InitialGiftCardsAPIResponse = ApolloQueryResult<
-  _SearchProductOperandsQuery | _SearchCustomersOperandsQuery | ChannelCurrenciesQuery
+  _SearchProductOperandsQuery | _SearchCustomersOperandsQuery
 >;
 
 export type InitialCollectionAPIResponse = ApolloQueryResult<_GetChannelOperandsQuery>;

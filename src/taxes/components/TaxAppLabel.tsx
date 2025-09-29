@@ -1,4 +1,3 @@
-import { AppAvatar } from "@dashboard/apps/components/AppAvatar/AppAvatar";
 import { Box, Text } from "@saleor/macaw-ui-next";
 import moment from "moment";
 import React from "react";
@@ -11,12 +10,9 @@ interface TaxAppLabelProps {
   id: string;
 }
 
-export const TaxAppLabel = ({ name, logoUrl, created }: TaxAppLabelProps) => {
-  const logo = logoUrl ? { source: logoUrl } : undefined;
-
+export const TaxAppLabel = ({ name, created }: TaxAppLabelProps) => {
   return (
     <Box display="flex" alignItems="center" gap={1}>
-      <AppAvatar logo={logo} size={4} />
       {name && (
         <Text>
           <FormattedMessage

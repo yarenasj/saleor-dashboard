@@ -4,7 +4,6 @@ import { hasPermission } from "@dashboard/auth/misc";
 import { ChannelCollectionData } from "@dashboard/channels/utils";
 import { collectionListPath, CollectionUrlQueryParams } from "@dashboard/collections/urls";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
-import CardSpacer from "@dashboard/components/CardSpacer";
 import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
@@ -23,7 +22,6 @@ import useNavigator from "@dashboard/hooks/useNavigator";
 import { TranslationsButton } from "@dashboard/translations/components/TranslationsButton/TranslationsButton";
 import { languageEntityUrl, TranslatableEntities } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
-import { Box, Divider } from "@saleor/macaw-ui-next";
 import React from "react";
 import { useIntl } from "react-intl";
 
