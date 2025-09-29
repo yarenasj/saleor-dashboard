@@ -162,21 +162,6 @@ export const ProductListPage = (props: ProductListPageProps) => {
                 )}
               </Text>
             )}
-            <TopNav.Menu
-              dataTestId="menu"
-              items={[
-                {
-                  label: intl.formatMessage({
-                    id: "7FL+WZ",
-                    defaultMessage: "Export Products",
-                    description: "export products to csv file, button",
-                  }),
-                  onSelect: onExport,
-                  testId: "export",
-                },
-              ]}
-            />
-
             <Button data-test-id="add-product" onClick={onAdd}>
               <FormattedMessage id="JFmOfi" defaultMessage="Create Product" description="button" />
             </Button>

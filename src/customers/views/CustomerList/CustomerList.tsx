@@ -2,7 +2,6 @@ import ActionDialog from "@dashboard/components/ActionDialog";
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter";
 import { createCustomerQueryVariables } from "@dashboard/components/ConditionalFilter/queryVariables";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
 import { useFlag } from "@dashboard/featureFlags";
 import { useBulkRemoveCustomersMutation, useListCustomersQuery } from "@dashboard/graphql";
@@ -59,7 +58,6 @@ export const CustomerList = ({ params }: CustomerListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     setPresetIdToDelete,
     getPresetNameToDelete,
@@ -201,12 +199,6 @@ export const CustomerList = ({ params }: CustomerListProps) => {
           }}
         />
       </ActionDialog>
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
-      />
       <DeleteFilterTabDialog
         open={params.action === "delete-search"}
         confirmButtonState="default"

@@ -11,7 +11,6 @@ export const ProductVariantsHeader = ({
   addRowOnDatagrid,
   isAnimationOpenFinished,
   isFullscreenOpen,
-  toggleFullscreen,
   productId,
   productName,
 }: DatagridRenderHeaderProps & { productId: string; productName: string }) => {
@@ -36,17 +35,6 @@ export const ProductVariantsHeader = ({
 
   return (
     <DatagridHeader title={headerTitle}>
-      <DatagridHeader.ButtonFullScreen isOpen={isFullscreenOpen} onToggle={toggleFullscreen}>
-        {isFullscreenOpen ? (
-          <FormattedMessage id="QjPJ78" defaultMessage="Close" description="close full-screen" />
-        ) : (
-          <FormattedMessage
-            id="9OZ/fr"
-            defaultMessage="Bulk edit"
-            description="open full-screen mode with bulk edit"
-          />
-        )}
-      </DatagridHeader.ButtonFullScreen>
       <DatagridHeader.ButtonAddRow onAddRow={handleAddNewRow}>
         <FormattedMessage defaultMessage="Add variant" id="3C3Nj5" description="button" />
       </DatagridHeader.ButtonAddRow>

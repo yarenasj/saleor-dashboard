@@ -235,54 +235,12 @@ export const CONSTRAINTS = {
 export const STATIC_PRODUCT_OPTIONS: LeftOperand[] = [
   { value: "price", label: "Price", type: "price", slug: "price" },
   { value: "category", label: "Category", type: "category", slug: "category" },
-  {
-    value: "collection",
-    label: "Collection",
-    type: "collection",
-    slug: "collection",
-  },
   { value: "channel", label: "Channel", type: "channel", slug: "channel" },
   {
     value: "productType",
     label: "ProductType",
     type: "productType",
     slug: "productType",
-  },
-  {
-    value: "isAvailable",
-    label: "IsAvailable",
-    type: "isAvailable",
-    slug: "isAvailable",
-  },
-  {
-    value: "isPublished",
-    label: "IsPublished",
-    type: "isPublished",
-    slug: "isPublished",
-  },
-  {
-    value: "isVisibleInListing",
-    label: "VisibleInListing",
-    type: "isVisibleInListing",
-    slug: "isVisibleInListing",
-  },
-  {
-    value: "hasCategory",
-    label: "HasCategory",
-    type: "hasCategory",
-    slug: "hasCategory",
-  },
-  {
-    value: "giftCard",
-    label: "IsGiftcard",
-    type: "giftCard",
-    slug: "giftCard",
-  },
-  {
-    value: "attribute",
-    label: "Attribute",
-    type: "attribute",
-    slug: "attribute",
   },
 ];
 

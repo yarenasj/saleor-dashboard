@@ -3,7 +3,6 @@ import ActionDialog from "@dashboard/components/ActionDialog";
 import useAppChannel from "@dashboard/components/AppLayout/AppChannelContext";
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter/context";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { useShopLimitsQuery } from "@dashboard/components/Shop/queries";
 import {
   DEFAULT_INITIAL_PAGINATION_DATA,
@@ -124,7 +123,6 @@ export const ProductList = ({ params }: ProductListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     getPresetNameToDelete,
     presets,
@@ -376,12 +374,6 @@ export const ProductList = ({ params }: ProductListProps) => {
             },
           });
         }}
-      />
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
       />
       <DeleteFilterTabDialog
         open={params.action === "delete-search"}

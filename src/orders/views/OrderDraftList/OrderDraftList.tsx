@@ -6,7 +6,6 @@ import useAppChannel from "@dashboard/components/AppLayout/AppChannelContext";
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter";
 import { createDraftOrderQueryVariables } from "@dashboard/components/ConditionalFilter/queryVariables";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { useShopLimitsQuery } from "@dashboard/components/Shop/queries";
 import { useFlag } from "@dashboard/featureFlags";
 import { useOrderDraftCreateMutation, useOrderDraftListQuery } from "@dashboard/graphql";
@@ -106,7 +105,6 @@ export const OrderDraftList = ({ params }: OrderDraftListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     setPresetIdToDelete,
     getPresetNameToDelete,
@@ -227,12 +225,6 @@ export const OrderDraftList = ({ params }: OrderDraftListProps) => {
           }}
         />
       </ActionDialog>
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
-      />
       <DeleteFilterTabDialog
         open={params.action === "delete-search"}
         confirmButtonState="default"

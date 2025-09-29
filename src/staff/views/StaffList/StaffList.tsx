@@ -1,7 +1,6 @@
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter";
 import { createStaffMembersQueryVariables } from "@dashboard/components/ConditionalFilter/queryVariables";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { useShopLimitsQuery } from "@dashboard/components/Shop/queries";
 import { DEFAULT_INITIAL_SEARCH_DATA } from "@dashboard/config";
 import { useFlag } from "@dashboard/featureFlags";
@@ -104,7 +103,6 @@ export const StaffList = ({ params }: StaffListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     selectedPreset,
     presets,
@@ -189,13 +187,6 @@ export const StaffList = ({ params }: StaffListProps) => {
           onFetchMore: loadMorePermissionGroups,
         }}
         onSearchChange={searchPermissionGroups}
-      />
-
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
       />
 
       <DeleteFilterTabDialog

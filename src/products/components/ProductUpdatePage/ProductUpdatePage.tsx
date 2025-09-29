@@ -297,16 +297,6 @@ export const ProductUpdatePage = ({
                   }
                 />
               )}
-              <TopNav.Menu
-                items={[
-                  {
-                    label: intl.formatMessage(messages.openGraphiQL),
-                    onSelect: openPlaygroundURL,
-                    testId: "graphiql-redirect",
-                  },
-                ]}
-                dataTestId="menu"
-              />
             </TopNav>
 
             <DetailPageLayout.Content>

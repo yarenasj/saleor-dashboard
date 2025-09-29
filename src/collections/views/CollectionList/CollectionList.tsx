@@ -4,7 +4,6 @@ import useAppChannel from "@dashboard/components/AppLayout/AppChannelContext";
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter";
 import { createCollectionsQueryVariables } from "@dashboard/components/ConditionalFilter/queryVariables";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { useFlag } from "@dashboard/featureFlags";
 import { useCollectionBulkDeleteMutation, useCollectionListQuery } from "@dashboard/graphql";
 import { useFilterPresets } from "@dashboard/hooks/useFilterPresets";
@@ -76,7 +75,6 @@ export const CollectionList = ({ params }: CollectionListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     setPresetIdToDelete,
     getPresetNameToDelete,
@@ -240,12 +238,6 @@ export const CollectionList = ({ params }: CollectionListProps) => {
           }}
         />
       </ActionDialog>
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
-      />
       <DeleteFilterTabDialog
         open={params.action === "delete-search"}
         confirmButtonState="default"

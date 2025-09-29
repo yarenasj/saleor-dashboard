@@ -173,26 +173,6 @@ export const FilterPresetsSelect = ({
           <FormattedMessage {...commonMessages.update} />
         </Button>
       )}
-      {showSaveButton && (
-        <Tooltip>
-          <Tooltip.Trigger>
-            <Button
-              data-test-id="add-preset-button"
-              className={sprinkles({
-                marginLeft: 3,
-              })}
-              icon={<PlusIcon />}
-              onClick={onSave}
-              variant="secondary"
-              size="small"
-            />
-          </Tooltip.Trigger>
-          <Tooltip.Content>
-            <Tooltip.Arrow />
-            {intl.formatMessage(messages.savePreset)}
-          </Tooltip.Content>
-        </Tooltip>
-      )}
     </Box>
   );
 };

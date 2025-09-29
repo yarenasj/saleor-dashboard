@@ -7,7 +7,6 @@ import {
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter";
 import { createAttributesQueryVariables } from "@dashboard/components/ConditionalFilter/queryVariables";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { useFlag } from "@dashboard/featureFlags";
 import { useAttributeBulkDeleteMutation, useAttributeListQuery } from "@dashboard/graphql";
 import { useFilterPresets } from "@dashboard/hooks/useFilterPresets";
@@ -83,7 +82,6 @@ const AttributeList = ({ params }: AttributeListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     selectedPreset,
     presets,
@@ -187,13 +185,6 @@ const AttributeList = ({ params }: AttributeListProps) => {
         }}
         onClose={closeModal}
         quantity={selectedRowIds.length}
-      />
-
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
       />
 
       <DeleteFilterTabDialog

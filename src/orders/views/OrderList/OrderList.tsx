@@ -4,7 +4,6 @@ import ChannelPickerDialog from "@dashboard/channels/components/ChannelPickerDia
 import useAppChannel from "@dashboard/components/AppLayout/AppChannelContext";
 import { useConditionalFilterContext } from "@dashboard/components/ConditionalFilter";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { useShopLimitsQuery } from "@dashboard/components/Shop/queries";
 import { useOrderDraftCreateMutation, useOrderListQuery } from "@dashboard/graphql";
 import { useFilterHandlers } from "@dashboard/hooks/useFilterHandlers";
@@ -50,7 +49,6 @@ export const OrderList = ({ params }: OrderListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     getPresetNameToDelete,
     presets,
@@ -148,12 +146,6 @@ export const OrderList = ({ params }: OrderListProps) => {
         onSettingsOpen={() => navigate(orderSettingsPath)}
         params={params}
         hasPresetsChanged={hasPresetsChanged()}
-      />
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
       />
       <DeleteFilterTabDialog
         open={params.action === "delete-search"}

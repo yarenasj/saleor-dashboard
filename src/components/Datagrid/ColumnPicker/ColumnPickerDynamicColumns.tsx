@@ -1,34 +1,18 @@
-import { Box, Button, PlusIcon, RemoveIcon, Text } from "@saleor/macaw-ui-next";
+import { Box, Button, RemoveIcon, Text } from "@saleor/macaw-ui-next";
 import React from "react";
-import { FormattedMessage } from "react-intl";
 
 import { AvailableColumn } from "../types";
-import messages from "./messages";
 
 export interface ColumnPickerDynamicColumnsProps {
   dynamicColumns?: AvailableColumn[] | null | undefined;
-  setExpanded: (value: React.SetStateAction<boolean>) => void;
   onToggle: (id: string) => void;
 }
 
 export const ColumnPickerDynamicColumns = ({
   dynamicColumns,
-  setExpanded,
   onToggle,
 }: ColumnPickerDynamicColumnsProps) => (
   <Box data-test-id="dynamic-col-container">
-    <Box display="flex" justifyContent="space-between" alignItems="center" marginTop={3}>
-      <Text size={1} color="default2">
-        <FormattedMessage {...messages.custom} />
-      </Text>
-      <Button
-        variant="secondary"
-        size="small"
-        icon={<PlusIcon size="small" />}
-        onClick={() => setExpanded(true)}
-        data-test-id="open-dynamic-search"
-      />
-    </Box>
     {dynamicColumns
       ?.filter(column => !!column.metaGroup)
       .map(column => (

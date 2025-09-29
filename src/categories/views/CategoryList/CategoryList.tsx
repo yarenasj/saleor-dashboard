@@ -1,6 +1,5 @@
 import ActionDialog from "@dashboard/components/ActionDialog";
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import {
   CategoryBulkDeleteMutation,
   useCategoryBulkDeleteMutation,
@@ -54,7 +53,6 @@ export const CategoryList = ({ params }: CategoryListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     getPresetNameToDelete,
     presets,
@@ -207,13 +205,6 @@ export const CategoryList = ({ params }: CategoryListProps) => {
           </Box>
         </Box>
       </ActionDialog>
-
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
-      />
 
       <DeleteFilterTabDialog
         open={params.action === "delete-search"}

@@ -1,9 +1,5 @@
-import { SaveFilterTabDialogFormData } from "@dashboard/components/SaveFilterTabDialog";
 import useNavigator from "@dashboard/hooks/useNavigator";
-import {
-  getActiveTabIndexAfterTabDelete,
-  getNextUniqueTabName,
-} from "@dashboard/products/views/ProductList/utils";
+import { getActiveTabIndexAfterTabDelete } from "@dashboard/products/views/ProductList/utils";
 import { GetFilterTabsOutput, StorageUtils } from "@dashboard/utils/filters";
 import { prepareQs } from "@dashboard/utils/filters/qs";
 import { stringify } from "qs";
@@ -16,7 +12,6 @@ export interface UseFilterPresets {
   selectedPreset: number | undefined;
   onPresetChange: (index: number) => void;
   onPresetDelete: () => void;
-  onPresetSave: (data: SaveFilterTabDialogFormData) => void;
   onPresetUpdate: (tabName: string) => void;
   getPresetNameToDelete: () => string;
   hasPresetsChanged: () => boolean;
@@ -75,18 +70,6 @@ export const useFilterPresets = <T extends { activeTab?: string; action?: string
       );
     }
   };
-  const onPresetSave = (data: SaveFilterTabDialogFormData) => {
-    const { parsedQs } = prepareQs(location.search);
-
-    storageUtils.saveFilterTab(
-      getNextUniqueTabName(
-        data.name,
-        presets.map(tab => tab.name),
-      ),
-      stringify(parsedQs),
-    );
-    onPresetChange(presets.length + 1);
-  };
   const onPresetUpdate = (tabName: string) => {
     const { parsedQs } = prepareQs(location.search);
 
@@ -123,7 +106,6 @@ export const useFilterPresets = <T extends { activeTab?: string; action?: string
     selectedPreset,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     hasPresetsChanged,
   };

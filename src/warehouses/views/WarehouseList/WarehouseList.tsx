@@ -1,5 +1,4 @@
 import DeleteFilterTabDialog from "@dashboard/components/DeleteFilterTabDialog";
-import SaveFilterTabDialog from "@dashboard/components/SaveFilterTabDialog";
 import { useShopLimitsQuery } from "@dashboard/components/Shop/queries";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
 import { useWarehouseDeleteMutation, useWarehouseListQuery } from "@dashboard/graphql";
@@ -104,7 +103,6 @@ const WarehouseList = ({ params }: WarehouseListProps) => {
     hasPresetsChanged,
     onPresetChange,
     onPresetDelete,
-    onPresetSave,
     onPresetUpdate,
     setPresetIdToDelete,
     getPresetNameToDelete,
@@ -159,12 +157,6 @@ const WarehouseList = ({ params }: WarehouseListProps) => {
           }
         />
       )}
-      <SaveFilterTabDialog
-        open={params.action === "save-search"}
-        confirmButtonState="default"
-        onClose={closeModal}
-        onSubmit={onPresetSave}
-      />
       <DeleteFilterTabDialog
         open={params.action === "delete-search"}
         confirmButtonState="default"
