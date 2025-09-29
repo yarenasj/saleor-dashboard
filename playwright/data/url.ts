@@ -2,7 +2,6 @@ export const URL_LIST = {
   addProduct: "products/add",
   addPageType: "models/add?page-type-id=",
   apps: "apps/",
-  extensions: "extensions/installed",
   attributes: "attributes/",
   addAttributes: "attributes/add",
   categories: "categories/",

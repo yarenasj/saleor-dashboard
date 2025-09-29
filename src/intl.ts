@@ -441,11 +441,6 @@ export const sectionNames = defineMessages({
     defaultMessage: "Apps",
     description: "apps section name",
   },
-  appExtensions: {
-    id: "Y7UlMR",
-    defaultMessage: "Apps",
-    description: "app extensions subsection",
-  },
   attributes: {
     id: "l2oVCF",
     defaultMessage: "Attributes",
@@ -600,21 +595,6 @@ export const sectionNames = defineMessages({
     id: "BFR6CF",
     defaultMessage: "Webhooks & Events",
     description: "webhooks and events section name",
-  },
-  extensions: {
-    id: "fkoxZY",
-    defaultMessage: "Extensions",
-    description: "extensions section name",
-  },
-  exploreExtensions: {
-    id: "033/zW",
-    defaultMessage: "Explore",
-    description: "explore extensions section name",
-  },
-  installedExtensions: {
-    id: "RiQ0v1",
-    defaultMessage: "Installed",
-    description: "installed extensions section name",
   },
 });
 

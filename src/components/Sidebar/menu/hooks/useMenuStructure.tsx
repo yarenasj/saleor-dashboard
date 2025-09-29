@@ -1,6 +1,3 @@
-import { SidebarAppAlert } from "@dashboard/apps/components/AppAlerts/SidebarAppAlert";
-import { useAppsAlert } from "@dashboard/apps/components/AppAlerts/useAppsAlert";
-import { AppPaths } from "@dashboard/apps/urls";
 import { useUser } from "@dashboard/auth";
 import { categoryListUrl } from "@dashboard/categories/urls";
 import { collectionListUrl } from "@dashboard/collections/urls";
@@ -8,107 +5,26 @@ import { configurationMenuUrl } from "@dashboard/configuration";
 import { getConfigMenuItemsPermissions } from "@dashboard/configuration/utils";
 import { customerListUrl } from "@dashboard/customers/urls";
 import { saleListUrl, voucherListUrl } from "@dashboard/discounts/urls";
-import { extensionMountPoints } from "@dashboard/extensions/extensionMountPoints";
-import { useExtensions } from "@dashboard/extensions/hooks/useExtensions";
-import {
-  extensionsAppSection,
-  extensionsCustomSection,
-  ExtensionsPaths,
-  extensionsPluginSection,
-} from "@dashboard/extensions/urls";
-import { useFlag } from "@dashboard/featureFlags";
-import { giftCardListUrl } from "@dashboard/giftCards/urls";
 import { PermissionEnum } from "@dashboard/graphql";
 import { ConfigurationIcon } from "@dashboard/icons/Configuration";
 import { CustomersIcon } from "@dashboard/icons/Customers";
 import { DiscountsIcon } from "@dashboard/icons/Discounts";
 import { HomeIcon } from "@dashboard/icons/Home";
-import { MarketplaceIcon } from "@dashboard/icons/Marketplace";
 import { OrdersIcon } from "@dashboard/icons/Orders";
 import { ProductsIcon } from "@dashboard/icons/Products";
-import { TranslationsIcon } from "@dashboard/icons/Translations";
 import { commonMessages, sectionNames } from "@dashboard/intl";
 import { orderDraftListUrl, orderListUrl } from "@dashboard/orders/urls";
 import { productListUrl } from "@dashboard/products/urls";
 import { SearchShortcut } from "@dashboard/search/SearchShortcut";
-import { languageListUrl } from "@dashboard/translations/urls";
 import { Box, SearchIcon } from "@saleor/macaw-ui-next";
-import isEmpty from "lodash/isEmpty";
 import React from "react";
 import { useIntl } from "react-intl";
 
 import { SidebarMenuItem } from "../types";
-import { mapToExtensionsItems } from "../utils";
 
 export function useMenuStructure() {
-  const { enabled: hasAppAlertsFeatureFlag } = useFlag("app_alerts");
-  const { handleAppsListItemClick, hasNewFailedAttempts } = useAppsAlert(hasAppAlertsFeatureFlag);
-
-  const extensions = useExtensions(extensionMountPoints.NAVIGATION_SIDEBAR);
   const intl = useIntl();
   const { user } = useUser();
-  const { enabled: showExtensions } = useFlag("extensions");
-
-  const appExtensionsHeaderItem: SidebarMenuItem = {
-    id: "extensions",
-    label: intl.formatMessage(sectionNames.appExtensions),
-    type: "divider",
-    paddingY: 1.5,
-  };
-  const getAppSection = (): SidebarMenuItem => ({
-    icon: renderIcon(<MarketplaceIcon />),
-    label: intl.formatMessage(sectionNames.apps),
-    permissions: [],
-    id: "apps",
-    url: AppPaths.appListPath,
-    type: "item",
-    endAdornment: hasAppAlertsFeatureFlag ? (
-      <SidebarAppAlert hasNewFailedAttempts={hasNewFailedAttempts} />
-    ) : null,
-    onClick: () => handleAppsListItemClick(new Date().toISOString()),
-  });
-
-  const getExtensionsSection = (): SidebarMenuItem => ({
-    icon: renderIcon(<MarketplaceIcon />),
-    label: intl.formatMessage(sectionNames.extensions),
-    permissions: [],
-    id: "installed-extensions",
-    url: ExtensionsPaths.installedExtensions,
-    type: "itemGroup",
-    endAdornment: hasAppAlertsFeatureFlag ? (
-      <SidebarAppAlert hasNewFailedAttempts={hasNewFailedAttempts} />
-    ) : null,
-    onClick: () => handleAppsListItemClick(new Date().toISOString()),
-    children: [
-      {
-        label: (
-          <Box display="flex" alignItems="center" gap={3}>
-            {intl.formatMessage(sectionNames.installedExtensions)}
-            {hasAppAlertsFeatureFlag && (
-              <SidebarAppAlert hasNewFailedAttempts={hasNewFailedAttempts} small />
-            )}
-          </Box>
-        ),
-        id: "installed-extensions",
-        url: ExtensionsPaths.installedExtensions,
-        matchUrls: [
-          ExtensionsPaths.installedExtensions,
-          extensionsCustomSection,
-          extensionsAppSection,
-          extensionsPluginSection,
-        ],
-        permissions: [],
-        type: "item",
-      },
-      {
-        label: intl.formatMessage(sectionNames.exploreExtensions),
-        id: "explore-extensions",
-        url: ExtensionsPaths.exploreExtensions,
-        permissions: [],
-        type: "item",
-      },
-    ],
-  });
 
   const menuItems: SidebarMenuItem[] = [
     {
@@ -159,23 +75,11 @@ export function useMenuStructure() {
           permissions: [PermissionEnum.MANAGE_PRODUCTS],
           type: "item",
         },
-        {
-          label: intl.formatMessage(sectionNames.giftCards),
-          id: "giftCards",
-          url: giftCardListUrl(),
-          permissions: [PermissionEnum.MANAGE_GIFT_CARD],
-          type: "item",
-        },
-        ...mapToExtensionsItems(
-          extensions.NAVIGATION_CATALOG,
-          appExtensionsHeaderItem,
-          showExtensions,
-        ),
       ],
       icon: renderIcon(<ProductsIcon />),
       url: productListUrl(),
       label: intl.formatMessage(sectionNames.catalog),
-      permissions: [PermissionEnum.MANAGE_GIFT_CARD, PermissionEnum.MANAGE_PRODUCTS],
+      permissions: [PermissionEnum.MANAGE_PRODUCTS],
       id: "products",
       type: "itemGroup",
     },
@@ -195,11 +99,6 @@ export function useMenuStructure() {
           url: orderDraftListUrl(),
           type: "item",
         },
-        ...mapToExtensionsItems(
-          extensions.NAVIGATION_ORDERS,
-          appExtensionsHeaderItem,
-          showExtensions,
-        ),
       ],
       icon: renderIcon(<OrdersIcon />),
       label: intl.formatMessage(sectionNames.fulfillment),
@@ -209,28 +108,21 @@ export function useMenuStructure() {
       type: "itemGroup",
     },
     {
-      children: !isEmpty(extensions.NAVIGATION_CUSTOMERS)
-        ? [
-            {
-              label: intl.formatMessage(sectionNames.customers),
-              permissions: [PermissionEnum.MANAGE_USERS],
-              id: "customers",
-              url: customerListUrl(),
-              type: "item",
-            },
-            ...mapToExtensionsItems(
-              extensions.NAVIGATION_CUSTOMERS,
-              appExtensionsHeaderItem,
-              showExtensions,
-            ),
-          ]
-        : undefined,
+      children: [
+        {
+          label: intl.formatMessage(sectionNames.customers),
+          permissions: [PermissionEnum.MANAGE_USERS],
+          id: "customers",
+          url: customerListUrl(),
+          type: "item",
+        },
+      ],
       icon: renderIcon(<CustomersIcon />),
       label: intl.formatMessage(sectionNames.customers),
       permissions: [PermissionEnum.MANAGE_USERS],
       id: "customers",
       url: customerListUrl(),
-      type: !isEmpty(extensions.NAVIGATION_CUSTOMERS) ? "itemGroup" : "item",
+      type: "itemGroup",
     },
     {
       children: [
@@ -246,11 +138,6 @@ export function useMenuStructure() {
           url: voucherListUrl(),
           type: "item",
         },
-        ...mapToExtensionsItems(
-          extensions.NAVIGATION_DISCOUNTS,
-          appExtensionsHeaderItem,
-          showExtensions,
-        ),
       ],
       icon: renderIcon(<DiscountsIcon />),
       label: intl.formatMessage(commonMessages.discounts),
@@ -259,24 +146,6 @@ export function useMenuStructure() {
       id: "discounts",
       type: "itemGroup",
     },
-    {
-      children: !isEmpty(extensions.NAVIGATION_TRANSLATIONS)
-        ? [
-            ...mapToExtensionsItems(
-              extensions.NAVIGATION_TRANSLATIONS,
-              appExtensionsHeaderItem,
-              showExtensions,
-            ),
-          ]
-        : undefined,
-      icon: renderIcon(<TranslationsIcon />),
-      label: intl.formatMessage(sectionNames.translations),
-      permissions: [PermissionEnum.MANAGE_TRANSLATIONS],
-      id: "translations",
-      url: languageListUrl,
-      type: !isEmpty(extensions.NAVIGATION_TRANSLATIONS) ? "itemGroup" : "item",
-    },
-    showExtensions ? getExtensionsSection() : getAppSection(),
     {
       icon: renderIcon(<ConfigurationIcon />),
       label: intl.formatMessage(sectionNames.configuration),

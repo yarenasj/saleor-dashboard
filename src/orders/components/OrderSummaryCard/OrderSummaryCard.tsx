@@ -6,7 +6,6 @@ import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import { obtainUsedGifrcards } from "../OrderPayment/utils";
-import { OrderUsedGiftCards } from "../OrderUsedGiftCards";
 import { orderSummaryMessages } from "./messages";
 import SummaryLine from "./SummaryLine";
 import { SummaryList } from "./SummaryList";
@@ -68,17 +67,6 @@ const OrderSummaryCard = ({ order }: OrderPaymentProps) => {
               money={discount.amount}
             />
           ))}
-          {/* TODO: Remove when gift cards are not treated as discounts */}
-          {giftCardAmount && giftCardAmount > 0 && usedGiftcards && (
-            <SummaryLine
-              text={<OrderUsedGiftCards giftCards={usedGiftcards} />}
-              negative
-              money={{
-                amount: giftCardAmount,
-                currency: order?.total?.gross?.currency,
-              }}
-            />
-          )}
           <SummaryLine
             bold
             text={<FormattedMessage {...orderSummaryMessages.total} />}

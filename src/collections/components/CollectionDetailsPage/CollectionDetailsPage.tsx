@@ -1,5 +1,4 @@
 // @ts-strict-ignore
-import { AppWidgets } from "@dashboard/apps/components/AppWidgets/AppWidgets";
 import { useUser } from "@dashboard/auth";
 import { hasPermission } from "@dashboard/auth/misc";
 import { ChannelCollectionData } from "@dashboard/channels/utils";
@@ -12,9 +11,6 @@ import { DetailPageLayout } from "@dashboard/components/Layouts";
 import { Metadata } from "@dashboard/components/Metadata/Metadata";
 import { Savebar } from "@dashboard/components/Savebar";
 import { SeoForm } from "@dashboard/components/SeoForm";
-import { extensionMountPoints } from "@dashboard/extensions/extensionMountPoints";
-import { getExtensionsItemsForCollectionDetails } from "@dashboard/extensions/getExtensionsItems";
-import { useExtensions } from "@dashboard/extensions/hooks/useExtensions";
 import {
   CollectionChannelListingErrorFragment,
   CollectionDetailsQuery,
@@ -79,14 +75,6 @@ const CollectionDetailsPage = ({
     path: collectionListPath,
   });
 
-  const { COLLECTION_DETAILS_MORE_ACTIONS, COLLECTION_DETAILS_WIDGETS } = useExtensions(
-    extensionMountPoints.COLLECTION_DETAILS,
-  );
-  const extensionMenuItems = getExtensionsItemsForCollectionDetails(
-    COLLECTION_DETAILS_MORE_ACTIONS,
-    collection?.id,
-  );
-
   return (
     <CollectionUpdateForm
       collection={collection}
@@ -110,11 +98,6 @@ const CollectionDetailsPage = ({
                   )
                 }
               />
-            )}
-            {extensionMenuItems.length > 0 && (
-              <Box marginLeft={3}>
-                <TopNav.Menu items={[...extensionMenuItems]} dataTestId="menu" />
-              </Box>
             )}
           </TopNav>
           <DetailPageLayout.Content>
@@ -175,16 +158,6 @@ const CollectionDetailsPage = ({
                 openModal={openChannelsModal}
               />
             </div>
-            {COLLECTION_DETAILS_WIDGETS.length > 0 && collection?.id && (
-              <>
-                <CardSpacer />
-                <Divider />
-                <AppWidgets
-                  extensions={COLLECTION_DETAILS_WIDGETS}
-                  params={{ collectionId: collection.id }}
-                />
-              </>
-            )}
           </DetailPageLayout.RightSidebar>
           <Savebar>
             <Savebar.DeleteButton onClick={onCollectionRemove} />

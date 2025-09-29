@@ -10,12 +10,6 @@ import { useConditionalFilterContext } from "@dashboard/components/ConditionalFi
 import { useDevModeContext } from "@dashboard/components/DevModePanel/hooks";
 import { FilterPresetsSelect } from "@dashboard/components/FilterPresetsSelect";
 import { ListPageLayout } from "@dashboard/components/Layouts";
-import { extensionMountPoints } from "@dashboard/extensions/extensionMountPoints";
-import {
-  getExtensionItemsForOverviewCreate,
-  getExtensionsItemsForOrderOverviewActions,
-} from "@dashboard/extensions/getExtensionsItems";
-import { useExtensions } from "@dashboard/extensions/hooks/useExtensions";
 import { OrderListQuery, RefreshLimitsQuery } from "@dashboard/graphql";
 import { sectionNames } from "@dashboard/intl";
 import { orderMessages } from "@dashboard/orders/messages";
@@ -75,11 +69,6 @@ const OrderListPage = ({
   const hasAccessibleChannels = userAccessibleChannels.length > 0;
   const limitsReached = isLimitReached(limits, "orders");
   const [isFilterPresetOpen, setFilterPresetOpen] = useState(false);
-  const { ORDER_OVERVIEW_CREATE, ORDER_OVERVIEW_MORE_ACTIONS } = useExtensions(
-    extensionMountPoints.ORDER_LIST,
-  );
-  const extensionMenuItems = getExtensionsItemsForOrderOverviewActions(ORDER_OVERVIEW_MORE_ACTIONS);
-  const extensionCreateButtonItems = getExtensionItemsForOverviewCreate(ORDER_OVERVIEW_CREATE);
   const context = useDevModeContext();
   const { valueProvider } = useConditionalFilterContext();
 
@@ -150,39 +139,23 @@ const OrderListPage = ({
                     }),
                     onSelect: onSettingsOpen,
                   },
-                  ...extensionMenuItems,
                 ]}
               />
             )}
 
             <Tooltip>
               <Tooltip.Trigger>
-                {extensionCreateButtonItems.length > 0 ? (
-                  <ButtonGroupWithDropdown
-                    onClick={onAdd}
-                    testId={"create-order-button"}
-                    options={extensionCreateButtonItems}
-                    disabled={limitsReached || !hasAccessibleChannels}
-                  >
-                    <FormattedMessage
-                      id="LshEVn"
-                      defaultMessage="Create order"
-                      description="button"
-                    />
-                  </ButtonGroupWithDropdown>
-                ) : (
-                  <Button
-                    data-test-id="create-order-button"
-                    onClick={onAdd}
-                    disabled={limitsReached || !hasAccessibleChannels}
-                  >
-                    <FormattedMessage
-                      id="LshEVn"
-                      defaultMessage="Create order"
-                      description="button"
-                    />
-                  </Button>
-                )}
+                <Button
+                  data-test-id="create-order-button"
+                  onClick={onAdd}
+                  disabled={limitsReached || !hasAccessibleChannels}
+                >
+                  <FormattedMessage
+                    id="LshEVn"
+                    defaultMessage="Create order"
+                    description="button"
+                  />
+                </Button>
               </Tooltip.Trigger>
               <Tooltip.Content>
                 {!hasAccessibleChannels && (

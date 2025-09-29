@@ -2,7 +2,6 @@ import React, { FC, ReactNode } from "react";
 
 import { useInitialAttributesState } from "../API/initialState/attributes/useInitialAttributesState";
 import { useInitialCollectionState } from "../API/initialState/collections/useInitialCollectionsState";
-import { useInitialGiftCardsState } from "../API/initialState/giftCards/useInitialGiftCardsState";
 import { useInitialOrderState } from "../API/initialState/orders/useInitialOrderState";
 import { useInitialPageState } from "../API/initialState/page/useInitialPageState";
 import { useProductInitialAPIState } from "../API/initialState/product/useProductInitialAPIState";
@@ -14,7 +13,6 @@ import { useCollectionFilterAPIProvider } from "../API/providers/CollectionFilte
 import { useCustomerAPIProvider } from "../API/providers/CustomerFilterAPIProvider";
 import { useDiscountFilterAPIProvider } from "../API/providers/DiscountFiltersAPIProvider";
 import { useDraftOrderFilterAPIProvider } from "../API/providers/DraftOrderFilterAPIProvider";
-import { useGiftCardsFiltersAPIProvider } from "../API/providers/GiftCardsFilterAPIProvider";
 import { useOrderFilterAPIProvider } from "../API/providers/OrderFilterAPIProvider";
 import { usePageAPIProvider } from "../API/providers/PageFilterAPIProvider";
 import { useProductFilterAPIProvider } from "../API/providers/ProductFilterAPIProvider";
@@ -181,32 +179,6 @@ export const ConditionalDraftOrderFilterProvider: FC<{
 
   const valueProvider = useUrlValueProvider(locationSearch, "draft-order");
   const leftOperandsProvider = useFilterLeftOperandsProvider(STATIC_DRAFT_ORDER_OPTIONS);
-  const containerState = useContainerState(valueProvider);
-  const filterWindow = useFilterWindow();
-
-  return (
-    <ConditionalFilterContext.Provider
-      value={{
-        apiProvider,
-        valueProvider,
-        leftOperandsProvider,
-        containerState,
-        filterWindow,
-      }}
-    >
-      {children}
-    </ConditionalFilterContext.Provider>
-  );
-};
-
-export const ConditionalGiftCardsFilterProver: FC<{
-  locationSearch: string;
-  children: ReactNode;
-}> = ({ children, locationSearch }) => {
-  const initialState = useInitialGiftCardsState();
-  const apiProvider = useGiftCardsFiltersAPIProvider();
-  const valueProvider = useUrlValueProvider(locationSearch, "gift-cards", initialState);
-  const leftOperandsProvider = useFilterLeftOperandsProvider(STATIC_GIFT_CARDS_OPTIONS);
   const containerState = useContainerState(valueProvider);
   const filterWindow = useFilterWindow();
 

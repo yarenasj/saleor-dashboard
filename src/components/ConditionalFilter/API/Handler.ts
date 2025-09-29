@@ -37,9 +37,6 @@ import {
   _GetProductVariantChoicesDocument,
   _GetProductVariantChoicesQuery,
   _GetProductVariantChoicesQueryVariables,
-  ChannelCurrenciesDocument,
-  ChannelCurrenciesQuery,
-  ChannelCurrenciesQueryVariables,
 } from "@dashboard/graphql";
 import { IntlShape } from "react-intl";
 
@@ -166,11 +163,8 @@ export class CurrencyHandler implements Handler {
   ) {}
 
   fetch = async () => {
-    const { data } = await this.client.query<
-      ChannelCurrenciesQuery,
-      ChannelCurrenciesQueryVariables
-    >({
-      query: ChannelCurrenciesDocument,
+    const { data } = await this.client.query<any, any>({
+      query: {} as any,
       variables: {},
     });
 

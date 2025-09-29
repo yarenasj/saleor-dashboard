@@ -1,15 +1,11 @@
 // @ts-strict-ignore
 import { FetchResult } from "@apollo/client";
-import { AppWidgets } from "@dashboard/apps/components/AppWidgets/AppWidgets";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
 import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { DateTime } from "@dashboard/components/Date";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
 import { Savebar } from "@dashboard/components/Savebar";
-import { extensionMountPoints } from "@dashboard/extensions/extensionMountPoints";
-import { getExtensionsItemsForDraftOrderDetails } from "@dashboard/extensions/getExtensionsItems";
-import { useExtensions } from "@dashboard/extensions/hooks/useExtensions";
 import {
   ChannelUsabilityDataQuery,
   OrderDetailsFragment,
@@ -95,14 +91,6 @@ const OrderDraftPage = (props: OrderDraftPageProps) => {
     path: draftOrderListUrl,
   });
 
-  const { DRAFT_ORDER_DETAILS_MORE_ACTIONS, DRAFT_ORDER_DETAILS_WIDGETS } = useExtensions(
-    extensionMountPoints.DRAFT_ORDER_DETAILS,
-  );
-  const extensionMenuItems = getExtensionsItemsForDraftOrderDetails(
-    DRAFT_ORDER_DETAILS_MORE_ACTIONS,
-    order?.id,
-  );
-
   return (
     <DetailPageLayout>
       <TopNav
@@ -132,7 +120,6 @@ const OrderDraftPage = (props: OrderDraftPageProps) => {
               }),
               onSelect: onDraftRemove,
             },
-            ...extensionMenuItems,
           ]}
           dataTestId="menu"
         />
@@ -176,13 +163,6 @@ const OrderDraftPage = (props: OrderDraftPageProps) => {
           onProfileView={onProfileView}
           onShippingAddressEdit={onShippingAddressEdit}
         />
-        {DRAFT_ORDER_DETAILS_WIDGETS.length > 0 && order.id && (
-          <>
-            <CardSpacer />
-            <Divider />
-            <AppWidgets extensions={DRAFT_ORDER_DETAILS_WIDGETS} params={{ orderId: order.id }} />
-          </>
-        )}
       </DetailPageLayout.RightSidebar>
       <Savebar>
         <Savebar.Spacer />

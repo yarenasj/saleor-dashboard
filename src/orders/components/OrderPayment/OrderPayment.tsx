@@ -9,15 +9,9 @@ import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import { OrderPaymentStatusPill } from "../OrderPaymentSummaryCard/components/OrderPaymentStatusPill";
-import { OrderUsedGiftCards } from "../OrderUsedGiftCards";
 import { orderPaymentMessages, paymentButtonMessages } from "./messages";
 import { useStyles } from "./styles";
-import {
-  extractOrderGiftCardUsedAmount,
-  extractRefundedAmount,
-  getDiscountAmount,
-  obtainUsedGifrcards,
-} from "./utils";
+import { extractRefundedAmount, getDiscountAmount, obtainUsedGifrcards } from "./utils";
 
 interface OrderPaymentProps {
   order: OrderDetailsFragment;
@@ -36,7 +30,6 @@ const OrderPayment = (props: OrderPaymentProps) => {
   const canRefund = (order?.actions ?? []).includes(OrderAction.REFUND);
   const canMarkAsPaid = (order?.actions ?? []).includes(OrderAction.MARK_AS_PAID);
   const refundedAmount = extractRefundedAmount(order);
-  const usedGiftCardAmount = extractOrderGiftCardUsedAmount(order);
   const usedGiftcards = obtainUsedGifrcards(order);
 
   const getDeliveryMethodName = (order: OrderDetailsFragment) => {
@@ -190,19 +183,6 @@ const OrderPayment = (props: OrderPaymentProps) => {
       <Divider />
       <DashboardCard.Content className={classes.payments}>
         <div className={classes.root}>
-          {!!usedGiftCardAmount && usedGiftcards && (
-            <div>
-              <OrderUsedGiftCards giftCards={usedGiftcards} />
-              <div className={classes.leftmostRightAlignedElement}>
-                <Money
-                  money={{
-                    amount: usedGiftCardAmount,
-                    currency: order?.total?.gross?.currency,
-                  }}
-                />
-              </div>
-            </div>
-          )}
           <div>
             <FormattedMessage {...orderPaymentMessages.preauthorized} />
             <div className={classes.leftmostRightAlignedElement}>

@@ -1,5 +1,4 @@
 // @ts-strict-ignore
-import { AppWidgets } from "@dashboard/apps/components/AppWidgets/AppWidgets";
 import { useUser } from "@dashboard/auth";
 import { hasPermission } from "@dashboard/auth/misc";
 import { ChannelVoucherData } from "@dashboard/channels/utils";
@@ -21,9 +20,6 @@ import {
 import { itemsQuantityMessages } from "@dashboard/discounts/translations";
 import { DiscountTypeEnum, RequirementsPicker } from "@dashboard/discounts/types";
 import { voucherListPath } from "@dashboard/discounts/urls";
-import { extensionMountPoints } from "@dashboard/extensions/extensionMountPoints";
-import { getExtensionsItemsForVoucherDetails } from "@dashboard/extensions/getExtensionsItems";
-import { useExtensions } from "@dashboard/extensions/hooks/useExtensions";
 import {
   DiscountErrorFragment,
   DiscountValueTypeEnum,
@@ -237,14 +233,6 @@ const VoucherDetailsPage = ({
     path: voucherListPath,
   });
 
-  const { VOUCHER_DETAILS_MORE_ACTIONS, VOUCHER_DETAILS_WIDGETS } = useExtensions(
-    extensionMountPoints.VOUCHER_DETAILS,
-  );
-  const extensionMenuItems = getExtensionsItemsForVoucherDetails(
-    VOUCHER_DETAILS_MORE_ACTIONS,
-    voucher?.id,
-  );
-
   return (
     <Form confirmLeave initial={initialForm} onSubmit={onSubmit}>
       {({ change, data, submit, triggerChange, set }) => {
@@ -273,11 +261,6 @@ const VoucherDetailsPage = ({
                     )
                   }
                 />
-              )}
-              {extensionMenuItems.length > 0 && (
-                <Box marginLeft={3}>
-                  <TopNav.Menu items={[...extensionMenuItems]} dataTestId="menu" />
-                </Box>
               )}
             </TopNav>
             <DetailPageLayout.Content>
@@ -469,16 +452,6 @@ const VoucherDetailsPage = ({
                 disabled={disabled}
                 openModal={openChannelsModal}
               />
-              {VOUCHER_DETAILS_WIDGETS.length > 0 && voucher?.id && (
-                <>
-                  <CardSpacer />
-                  <Divider />
-                  <AppWidgets
-                    extensions={VOUCHER_DETAILS_WIDGETS}
-                    params={{ voucherId: voucher?.id }}
-                  />
-                </>
-              )}
             </DetailPageLayout.RightSidebar>
             <Savebar>
               <Savebar.DeleteButton onClick={onRemove} />

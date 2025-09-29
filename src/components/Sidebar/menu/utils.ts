@@ -1,36 +1,8 @@
 // @ts-strict-ignore
-import { AppUrls } from "@dashboard/apps/urls";
-import { Extension } from "@dashboard/extensions/types";
-import { ExtensionsUrls } from "@dashboard/extensions/urls";
-import { AppExtensionMountEnum } from "@dashboard/graphql";
 import { orderDraftListUrl, orderListUrl } from "@dashboard/orders/urls";
 import { matchPath } from "react-router";
 
 import { SidebarMenuItem } from "./types";
-
-// TODO: Remove newExtensionsFlag once "extensions" feature flag is removed
-export const mapToExtensionsItems = (
-  extensions: Extension[],
-  header: SidebarMenuItem,
-  newExtensionsFlag: boolean,
-) => {
-  const items: SidebarMenuItem[] = extensions.map(({ label, id, app, url, permissions, open }) => ({
-    id: `extension-${id}`,
-    label,
-    url: newExtensionsFlag
-      ? ExtensionsUrls.resolveDashboardUrlFromAppCompleteUrl(url, app.appUrl, app.id)
-      : AppUrls.resolveDashboardUrlFromAppCompleteUrl(url, app.appUrl, app.id),
-    permissions,
-    onClick: open,
-    type: "item",
-  }));
-
-  if (items.length) {
-    items.unshift(header);
-  }
-
-  return items;
-};
 
 export function isMenuActive(location: string, menuItem: SidebarMenuItem) {
   const menuUrlsToCheck = [...(menuItem.matchUrls || []), menuItem.url]
@@ -70,16 +42,3 @@ const getPureUrl = (url: string) => {
   return url;
 };
 const isMenuItemExtension = (menuItem: SidebarMenuItem) => menuItem.id.startsWith("extension-");
-
-export const getMenuItemExtension = (
-  extensions: Record<AppExtensionMountEnum, Extension[]>,
-  id: string,
-) => {
-  const extensionsList = Object.values(extensions).reduce(
-    (list, extensions) => list.concat(extensions),
-    [],
-  );
-  const extension = extensionsList.find(extension => id === `extension-${extension.id}`);
-
-  return extension;
-};

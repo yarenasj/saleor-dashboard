@@ -11,12 +11,6 @@ import { FilterPresetsSelect } from "@dashboard/components/FilterPresetsSelect";
 import { ListPageLayout } from "@dashboard/components/Layouts";
 import LimitReachedAlert from "@dashboard/components/LimitReachedAlert";
 import { ProductListColumns } from "@dashboard/config";
-import { extensionMountPoints } from "@dashboard/extensions/extensionMountPoints";
-import {
-  getExtensionItemsForOverviewCreate,
-  getExtensionsItemsForProductOverviewActions,
-} from "@dashboard/extensions/getExtensionsItems";
-import { useExtensions } from "@dashboard/extensions/hooks/useExtensions";
 import {
   Exact,
   GridAttributesQuery,
@@ -115,14 +109,6 @@ export const ProductListPage = (props: ProductListPageProps) => {
   const navigate = useNavigator();
   const [isFilterPresetOpen, setFilterPresetOpen] = useState(false);
   const limitReached = isLimitReached(limits, "productVariants");
-  const { PRODUCT_OVERVIEW_CREATE, PRODUCT_OVERVIEW_MORE_ACTIONS } = useExtensions(
-    extensionMountPoints.PRODUCT_LIST,
-  );
-  const extensionMenuItems = getExtensionsItemsForProductOverviewActions(
-    PRODUCT_OVERVIEW_MORE_ACTIONS,
-    selectedProductIds,
-  );
-  const extensionCreateButtonItems = getExtensionItemsForOverviewCreate(PRODUCT_OVERVIEW_CREATE);
   const [storedProductListViewType, setProductListViewType] = useLocalStorage<ProductListViewType>(
     "productListViewType",
     DEFAULT_PRODUCT_LIST_VIEW_TYPE,
@@ -189,30 +175,12 @@ export const ProductListPage = (props: ProductListPageProps) => {
                   onSelect: onExport,
                   testId: "export",
                 },
-                ...extensionMenuItems,
               ]}
             />
-            {extensionCreateButtonItems.length > 0 ? (
-              <ButtonGroupWithDropdown
-                onClick={onAdd}
-                testId={"add-product"}
-                options={extensionCreateButtonItems}
-              >
-                <FormattedMessage
-                  id="JFmOfi"
-                  defaultMessage="Create Product"
-                  description="button"
-                />
-              </ButtonGroupWithDropdown>
-            ) : (
-              <Button data-test-id="add-product" onClick={onAdd}>
-                <FormattedMessage
-                  id="JFmOfi"
-                  defaultMessage="Create Product"
-                  description="button"
-                />
-              </Button>
-            )}
+
+            <Button data-test-id="add-product" onClick={onAdd}>
+              <FormattedMessage id="JFmOfi" defaultMessage="Create Product" description="button" />
+            </Button>
           </Box>
         </Box>
       </TopNav>

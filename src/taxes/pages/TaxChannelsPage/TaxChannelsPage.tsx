@@ -31,7 +31,6 @@ import { useStyles } from "./styles";
 import TaxChannelsMenu from "./TaxChannelsMenu";
 import TaxCountryExceptionListItem from "./TaxCountryExceptionListItem";
 import TaxSettingsCard from "./TaxSettingsCard";
-import { useTaxStrategyChoices } from "./useTaxStrategyChoices";
 
 interface TaxChannelsPageProps {
   taxConfigurations: TaxConfigurationFragment[] | undefined;
@@ -78,7 +77,6 @@ export const TaxChannelsPage = (props: TaxChannelsPageProps) => {
   const intl = useIntl();
   const classes = useStyles();
   const navigate = useNavigator();
-  const { taxStrategyChoices, loading } = useTaxStrategyChoices();
   const currentTaxConfiguration = taxConfigurations?.find(
     taxConfigurations => taxConfigurations.id === selectedConfigurationId,
   );
@@ -188,12 +186,6 @@ export const TaxChannelsPage = (props: TaxChannelsPageProps) => {
                     />
                   </div>
                   <div>
-                    <TaxSettingsCard
-                      values={data}
-                      strategyChoices={taxStrategyChoices}
-                      onChange={change}
-                      strategyChoicesLoading={loading}
-                    />
                     <VerticalSpacer spacing={3} />
                     <Card>
                       <CardTitle
@@ -233,31 +225,6 @@ export const TaxChannelsPage = (props: TaxChannelsPageProps) => {
                             </ListItem>
                           </ListHeader>
                           <Divider />
-                          {countryExceptions?.map((country, countryIndex) => (
-                            <TaxCountryExceptionListItem
-                              divider={!isLastElement(countryExceptions, countryIndex)}
-                              strategyChoices={taxStrategyChoices}
-                              country={country}
-                              key={country.country.code}
-                              strategyChoicesLoading={loading}
-                              onDelete={() => {
-                                const currentRemovals = data.removeCountriesConfiguration;
-                                const currentExceptions = [...data.updateCountriesConfiguration];
-
-                                set({
-                                  removeCountriesConfiguration: [
-                                    ...currentRemovals,
-                                    country.country.code as CountryCode,
-                                  ],
-                                  updateCountriesConfiguration: currentExceptions.filter(
-                                    exception => exception.country.code !== country.country.code,
-                                  ),
-                                });
-                                triggerChange();
-                              }}
-                              onChange={event => handleExceptionChange(event, countryIndex)}
-                            />
-                          )) ?? <Skeleton />}
                         </List>
                       )}
                     </Card>

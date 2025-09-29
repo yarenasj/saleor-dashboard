@@ -73,16 +73,6 @@ export const SearchForm = ({
               <FormattedMessage id="X7jl6w" defaultMessage="Orders" />
             </SwitchItem>
           )}
-          {hasPermission(PermissionEnum.MANAGE_PAGES) && (
-            <SwitchItem id="models" value="models">
-              <FormattedMessage id="blWvag" defaultMessage="Models" />
-            </SwitchItem>
-          )}
-          {hasPermission(PermissionEnum.MANAGE_PAGE_TYPES_AND_ATTRIBUTES) && (
-            <SwitchItem id="model-types" value="model-types">
-              <FormattedMessage id="GgvbdW" defaultMessage="Model types" />
-            </SwitchItem>
-          )}
         </Switch>
       </Box>
     </Box>
