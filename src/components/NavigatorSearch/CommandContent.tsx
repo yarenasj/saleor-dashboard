@@ -4,7 +4,6 @@ import { Box, Text } from "@saleor/macaw-ui-next";
 import React, { useState } from "react";
 import { FormattedMessage } from "react-intl";
 
-import { getShortcutLeadingKey } from "../Sidebar/shortcuts/utils";
 import { Actions } from "./Actions";
 import NavigatorSearchInput from "./NavigatorSearchInput";
 import { ResourcesTable } from "./ResourcesTable";
@@ -74,17 +73,6 @@ export const CommandContent = () => {
               <Text size={2} fontWeight="medium" color="default1">
                 <FormattedMessage id="pdJlXC" defaultMessage="See all global search results" />
               </Text>
-              <Box
-                borderColor="default1"
-                borderStyle="solid"
-                borderWidth={1}
-                paddingX={0.5}
-                borderRadius={2}
-                fontSize={1}
-                boxShadow="defaultFocused"
-              >
-                {getShortcutLeadingKey()} + ↩︎
-              </Box>
             </Box>
           </Link>
           <ResourcesTable

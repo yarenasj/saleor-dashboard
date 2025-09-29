@@ -1,7 +1,6 @@
 import { Box, List } from "@saleor/macaw-ui-next";
 import React from "react";
 
-import { Shortcusts } from "../shortcuts";
 import { useMenuStructure } from "./hooks/useMenuStructure";
 import { MenuItem } from "./Item";
 
@@ -22,8 +21,6 @@ export const Menu = () => {
           <MenuItem menuItem={menuItem} key={menuItem.id} />
         ))}
       </List>
-
-      <Shortcusts />
     </Box>
   );
 };

@@ -4,15 +4,13 @@ import { collectionListUrl } from "@dashboard/collections/urls";
 import { configurationMenuUrl } from "@dashboard/configuration";
 import { getConfigMenuItemsPermissions } from "@dashboard/configuration/utils";
 import { customerListUrl } from "@dashboard/customers/urls";
-import { saleListUrl, voucherListUrl } from "@dashboard/discounts/urls";
 import { PermissionEnum } from "@dashboard/graphql";
 import { ConfigurationIcon } from "@dashboard/icons/Configuration";
 import { CustomersIcon } from "@dashboard/icons/Customers";
-import { DiscountsIcon } from "@dashboard/icons/Discounts";
 import { HomeIcon } from "@dashboard/icons/Home";
 import { OrdersIcon } from "@dashboard/icons/Orders";
 import { ProductsIcon } from "@dashboard/icons/Products";
-import { commonMessages, sectionNames } from "@dashboard/intl";
+import { sectionNames } from "@dashboard/intl";
 import { orderDraftListUrl, orderListUrl } from "@dashboard/orders/urls";
 import { productListUrl } from "@dashboard/products/urls";
 import { SearchShortcut } from "@dashboard/search/SearchShortcut";
@@ -122,28 +120,6 @@ export function useMenuStructure() {
       permissions: [PermissionEnum.MANAGE_USERS],
       id: "customers",
       url: customerListUrl(),
-      type: "itemGroup",
-    },
-    {
-      children: [
-        {
-          label: intl.formatMessage(sectionNames.promotions),
-          id: "promotions",
-          url: saleListUrl(),
-          type: "item",
-        },
-        {
-          label: intl.formatMessage(sectionNames.vouchers),
-          id: "vouchers",
-          url: voucherListUrl(),
-          type: "item",
-        },
-      ],
-      icon: renderIcon(<DiscountsIcon />),
-      label: intl.formatMessage(commonMessages.discounts),
-      permissions: [PermissionEnum.MANAGE_DISCOUNTS],
-      url: saleListUrl(),
-      id: "discounts",
       type: "itemGroup",
     },
     {

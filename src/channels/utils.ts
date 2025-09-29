@@ -1,9 +1,4 @@
 import {
-  ChannelSaleFormData,
-  SaleDetailsPageFormData,
-} from "@dashboard/discounts/components/SaleDetailsPage";
-import { RequirementsPicker } from "@dashboard/discounts/types";
-import {
   ChannelDetailsFragment,
   ChannelFragment,
   CollectionDetailsFragment,
@@ -270,7 +265,7 @@ export const createChannelsDataFromVoucher = (voucherData?: VoucherDetailsFragme
     name: option.channel.name,
   })) || [];
 
-export const createChannelsDataFromSale = (saleData?: SaleDetailsFragment): ChannelSaleFormData[] =>
+export const createChannelsDataFromSale = (saleData?: SaleDetailsFragment): any[] =>
   saleData?.channelListings?.map(option => ({
     currency: option.channel.currencyCode || "",
     discountValue: option.discountValue.toString() || "",
@@ -374,9 +369,7 @@ export const createSortedChannelsDataFromVoucher = (data?: VoucherDetailsFragmen
     channel.name.localeCompare(nextChannel.name),
   );
 
-export const createSortedChannelsDataFromSale = (
-  data?: SaleDetailsFragment,
-): ChannelSaleFormData[] =>
+export const createSortedChannelsDataFromSale = (data?: SaleDetailsFragment): any[] =>
   createChannelsDataFromSale(data)?.sort((channel, nextChannel) =>
     channel.name.localeCompare(nextChannel.name),
   );
@@ -394,15 +387,12 @@ export const getChannelsCurrencyChoices = (
       )
     : [];
 
-export const validateSalePrice = (data: SaleDetailsPageFormData, channel: ChannelSaleFormData) =>
+export const validateSalePrice = (data: any, channel: any) =>
   validatePrice(data.type === SaleType.PERCENTAGE ? channel.percentageValue : channel.fixedValue);
 
-export const validateVoucherPrice = (
-  requirementsPicker: RequirementsPicker,
-  channel: ChannelVoucherData,
-) =>
+export const validateVoucherPrice = (requirementsPicker: any, channel: ChannelVoucherData) =>
   validatePrice(channel.discountValue) ||
-  (requirementsPicker === RequirementsPicker.ORDER && validatePrice(channel.minSpent));
+  (requirementsPicker === "order" && validatePrice(channel.minSpent));
 
 type BareChannel = { id: string };
 type BareChannelListing = { channel: BareChannel };
