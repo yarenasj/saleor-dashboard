@@ -1,15 +1,8 @@
 // @ts-strict-ignore
 import { QueryResult } from "@apollo/client";
-import {
-  getReferenceAttributeEntityTypeFromAttribute,
-  mergeAttributeValues,
-} from "@dashboard/attributes/utils/data";
 import CannotDefineChannelsAvailabilityCard from "@dashboard/channels/components/CannotDefineChannelsAvailabilityCard/CannotDefineChannelsAvailabilityCard";
 import { ChannelData } from "@dashboard/channels/utils";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
-import AssignAttributeValueDialog from "@dashboard/components/AssignAttributeValueDialog";
-import { Container } from "@dashboard/components/AssignContainerDialog";
-import { AttributeInput, Attributes } from "@dashboard/components/Attributes";
 import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
@@ -26,7 +19,6 @@ import {
   SearchProductsQuery,
   SearchProductTypesQuery,
   SearchWarehousesQuery,
-  TaxClassBaseFragment,
 } from "@dashboard/graphql";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import useStateFromProps from "@dashboard/hooks/useStateFromProps";
@@ -35,7 +27,7 @@ import { ProductVariantPrice } from "@dashboard/products/components/ProductVaria
 import { ProductCreateUrlQueryParams, productListUrl } from "@dashboard/products/urls";
 import { getChoices } from "@dashboard/products/utils/data";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
-import { Box, Option } from "@saleor/macaw-ui-next";
+import { Option } from "@saleor/macaw-ui-next";
 import React from "react";
 import { useIntl } from "react-intl";
 
@@ -43,11 +35,7 @@ import { FetchMoreProps, RelayToFlat } from "../../../types";
 import { ProductDetailsForm } from "../ProductDetailsForm";
 import { ProductShipping } from "../ProductShipping";
 import { ProductStocks } from "../ProductStocks";
-import ProductCreateForm, {
-  ProductCreateData,
-  ProductCreateFormData,
-  ProductCreateHandlers,
-} from "./form";
+import ProductCreateForm, { ProductCreateData, ProductCreateFormData } from "./form";
 
 interface ProductCreatePageProps {
   errors: ProductErrorWithAttributesFragment[];
@@ -71,8 +59,6 @@ interface ProductCreatePageProps {
   header: string;
   saveButtonBarState: ConfirmButtonTransitionState;
   weightUnit: string;
-  taxClasses: TaxClassBaseFragment[];
-  fetchMoreTaxClasses: FetchMoreProps;
   selectedProductType?: ProductTypeQuery["productType"];
   fetchCategories: (data: string) => void;
   fetchCollections: (data: string) => void;
@@ -82,7 +68,6 @@ interface ProductCreatePageProps {
   openChannelsModal: () => void;
   onChannelsChange: (data: ChannelData[]) => void;
   assignReferencesAttributeId?: string;
-  onAssignReferencesClick: (attribute: AttributeInput) => void;
   fetchReferencePages?: (data: string) => void;
   fetchReferenceProducts?: (data: string) => void;
   fetchMoreReferencePages?: FetchMoreProps;
@@ -102,7 +87,6 @@ export const ProductCreatePage = ({
   loading,
   categories: categoryChoiceList,
   collections: collectionChoiceList,
-  attributeValues,
   errors: apiErrors,
   fetchCategories,
   fetchCollections,
@@ -117,8 +101,6 @@ export const ProductCreatePage = ({
   referenceCategories = [],
   referenceCollections = [],
   saveButtonBarState,
-  taxClasses,
-  fetchMoreTaxClasses,
   selectedProductType,
   fetchProductTypes,
   weightUnit,
@@ -127,56 +109,22 @@ export const ProductCreatePage = ({
   onWarehouseConfigure,
   openChannelsModal,
   assignReferencesAttributeId,
-  onAssignReferencesClick,
   fetchReferencePages,
   fetchMoreReferencePages,
   fetchReferenceProducts,
   fetchMoreReferenceProducts,
-  fetchAttributeValues,
-  fetchMoreAttributeValues,
-  onCloseDialog,
   onSelectProductType,
-  onAttributeSelectBlur,
   fetchMoreWarehouses,
   searchWarehousesResult,
 }: ProductCreatePageProps) => {
   const intl = useIntl();
   const navigate = useNavigator();
-  const closeDialog = () => {
-    onCloseDialog({ "product-type-id": selectedProductType.id });
-  };
   // Display values
   const [selectedCategory, setSelectedCategory] = useStateFromProps(initial?.category || "");
   const [selectedCollections, setSelectedCollections] = useStateFromProps<Option[]>([]);
-  const [selectedTaxClass, setSelectedTaxClass] = useStateFromProps(initial?.taxClassId ?? "");
   const categories = getChoices(categoryChoiceList);
   const collections = getChoices(collectionChoiceList);
   const productTypes = getChoices(productTypeChoiceList);
-  const taxClassChoices =
-    taxClasses?.map(taxClass => ({
-      label: taxClass.name,
-      value: taxClass.id,
-    })) ?? [];
-  const canOpenAssignReferencesAttributeDialog = !!assignReferencesAttributeId;
-  const handleAssignReferenceAttribute = (
-    attributeValues: Container[],
-    data: ProductCreateData,
-    handlers: ProductCreateHandlers,
-  ) => {
-    handlers.selectAttributeReference(
-      assignReferencesAttributeId,
-      mergeAttributeValues(
-        assignReferencesAttributeId,
-        attributeValues.map(({ id }) => id),
-        data.attributes,
-      ),
-    );
-    handlers.selectAttributeReferenceMetadata(
-      assignReferencesAttributeId,
-      attributeValues.map(({ id, name }) => ({ value: id, label: name })),
-    );
-    closeDialog();
-  };
 
   return (
     <ProductCreateForm
@@ -194,9 +142,7 @@ export const ProductCreatePage = ({
       selectedCollections={selectedCollections}
       setSelectedCategory={setSelectedCategory}
       setSelectedCollections={setSelectedCollections}
-      setSelectedTaxClass={setSelectedTaxClass}
       setChannels={onChannelsChange}
-      taxClasses={taxClassChoices}
       currentChannels={currentChannels}
       fetchReferencePages={fetchReferencePages}
       fetchMoreReferencePages={fetchMoreReferencePages}
@@ -205,22 +151,10 @@ export const ProductCreatePage = ({
       assignReferencesAttributeId={assignReferencesAttributeId}
       loading={loading}
     >
-      {({
-        change,
-        data,
-        validationErrors,
-        handlers,
-        submit,
-        isSaveDisabled,
-        attributeRichTextGetters,
-      }) => {
+      {({ change, data, validationErrors, handlers, submit, isSaveDisabled }) => {
         // Comparing explicitly to false because `hasVariants` can be undefined
         const isSimpleProduct = !data.productType?.hasVariants;
         const errors = [...apiErrors, ...validationErrors];
-        const entityType = getReferenceAttributeEntityTypeFromAttribute(
-          assignReferencesAttributeId,
-          data.attributes,
-        );
 
         return (
           <DetailPageLayout>
@@ -232,25 +166,6 @@ export const ProductCreatePage = ({
                 errors={errors}
                 onChange={change}
               />
-              {data.attributes.length > 0 && (
-                <Attributes
-                  attributes={data.attributes}
-                  attributeValues={attributeValues}
-                  loading={loading}
-                  disabled={loading}
-                  errors={errors}
-                  onChange={handlers.selectAttribute}
-                  onMultiChange={handlers.selectAttributeMultiple}
-                  onFileChange={handlers.selectAttributeFile}
-                  onReferencesRemove={handlers.selectAttributeReference}
-                  onReferencesAddClick={onAssignReferencesClick}
-                  onReferencesReorder={handlers.reorderAttributeValue}
-                  fetchAttributeValues={fetchAttributeValues}
-                  fetchMoreAttributeValues={fetchMoreAttributeValues}
-                  onAttributeSelectBlur={onAttributeSelectBlur}
-                  richTextGetters={attributeRichTextGetters}
-                />
-              )}
               {isSimpleProduct && (
                 <>
                   <ProductShipping
@@ -344,26 +259,6 @@ export const ProductCreatePage = ({
                 disabled={isSaveDisabled}
               />
             </Savebar>
-            {canOpenAssignReferencesAttributeDialog && entityType && (
-              <AssignAttributeValueDialog
-                entityType={entityType}
-                confirmButtonState={"default"}
-                products={referenceProducts}
-                pages={referencePages}
-                collections={referenceCollections}
-                categories={referenceCategories}
-                attribute={data.attributes.find(({ id }) => id === assignReferencesAttributeId)}
-                hasMore={handlers.fetchMoreReferences?.hasMore}
-                open={canOpenAssignReferencesAttributeDialog}
-                onFetch={handlers.fetchReferences}
-                onFetchMore={handlers.fetchMoreReferences?.onFetchMore}
-                loading={handlers.fetchMoreReferences?.loading}
-                onClose={closeDialog}
-                onSubmit={attributeValues =>
-                  handleAssignReferenceAttribute(attributeValues, data, handlers)
-                }
-              />
-            )}
           </DetailPageLayout>
         );
       }}

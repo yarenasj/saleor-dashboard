@@ -14,19 +14,16 @@ import {
   ShippingErrorFragment,
   ShippingMethodTypeEnum,
   ShippingMethodTypeFragment,
-  TaxClassBaseFragment,
 } from "@dashboard/graphql";
 import useForm, { SubmitPromise } from "@dashboard/hooks/useForm";
 import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import { validatePrice } from "@dashboard/products/utils/validation";
-import { handleTaxClassChange } from "@dashboard/productTypes/handlers";
 import OrderValue from "@dashboard/shipping/components/OrderValue";
 import OrderWeight from "@dashboard/shipping/components/OrderWeight";
 import PricingCard from "@dashboard/shipping/components/PricingCard";
 import ShippingRateInfo from "@dashboard/shipping/components/ShippingRateInfo";
 import { createChannelsChangeHandler } from "@dashboard/shipping/handlers";
-import { FetchMoreProps } from "@dashboard/types";
 import { RichTextContext } from "@dashboard/utils/richText/context";
 import useRichText from "@dashboard/utils/richText/useRichText";
 import React, { FormEventHandler } from "react";
@@ -52,8 +49,6 @@ export interface ShippingZoneRatesCreatePageProps extends WithFormId {
   onChannelsChange: (data: ChannelShippingData[]) => void;
   openChannelsModal: () => void;
   variant: ShippingMethodTypeEnum;
-  taxClasses: TaxClassBaseFragment[];
-  fetchMoreTaxClasses: FetchMoreProps;
 }
 
 export const ShippingZoneRatesCreatePage = ({
@@ -74,8 +69,6 @@ export const ShippingZoneRatesCreatePage = ({
   variant,
   postalCodes,
   formId,
-  taxClasses,
-  fetchMoreTaxClasses,
 }: ShippingZoneRatesCreatePageProps) => {
   const intl = useIntl();
   const navigate = useNavigator();
@@ -92,7 +85,6 @@ export const ShippingZoneRatesCreatePage = ({
     type: null,
     taxClassId: "",
   };
-  const [taxClassDisplayName, setTaxClassDisplayName] = React.useState("");
   const {
     change,
     data: formData,

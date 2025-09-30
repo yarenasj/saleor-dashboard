@@ -1,14 +1,12 @@
 // @ts-strict-ignore
 import { ChannelData, createSortedChannelsData } from "@dashboard/channels/utils";
 import useAppChannel from "@dashboard/components/AppLayout/AppChannelContext";
-import { AttributeInput } from "@dashboard/components/Attributes";
 import ChannelsAvailabilityDialog from "@dashboard/components/ChannelsAvailabilityDialog";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
 import { DEFAULT_INITIAL_SEARCH_DATA, VALUES_PAGINATE_BY } from "@dashboard/config";
 import {
   ProductChannelListingErrorFragment,
   ProductErrorWithAttributesFragment,
-  useFileUploadMutation,
   useProductChannelListingUpdateMutation,
   useProductCreateMutation,
   useProductDeleteMutation,
@@ -36,7 +34,6 @@ import usePageSearch from "@dashboard/searches/usePageSearch";
 import useProductSearch from "@dashboard/searches/useProductSearch";
 import useProductTypeSearch from "@dashboard/searches/useProductTypeSearch";
 import useWarehouseSearch from "@dashboard/searches/useWarehouseSearch";
-import { useTaxClassFetchMore } from "@dashboard/taxes/utils/useTaxClassFetchMore";
 import { getProductErrorMessage } from "@dashboard/utils/errors";
 import useAttributeValueSearchHandler from "@dashboard/utils/handlers/attributeValueSearchHandler";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
@@ -111,7 +108,6 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
     result: searchAttributeValuesOpts,
     reset: searchAttributeReset,
   } = useAttributeValueSearchHandler(DEFAULT_INITIAL_SEARCH_DATA);
-  const { taxClasses, fetchMoreTaxClasses } = useTaxClassFetchMore();
   const { data: selectedProductType } = useProductTypeQuery({
     variables: {
       id: selectedProductTypeId,
@@ -166,7 +162,6 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
     });
     navigate(productUrl(productId));
   };
-  const [uploadFile, uploadFileOpts] = useFileUploadMutation({});
   const [updateChannels, updateChannelsOpts] = useProductChannelListingUpdateMutation({});
   const [updateVariantChannels, updateVariantChannelsOpts] =
     useProductVariantChannelListingUpdateMutation({});
@@ -189,7 +184,6 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
   const handleSubmit = async (data: ProductCreateData) => {
     const errors = await createHandler(
       selectedProductType?.productType,
-      variables => uploadFile({ variables }),
       variables => productCreate({ variables }),
       variables => productVariantCreate({ variables }),
       updateChannels,
@@ -203,14 +197,6 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
 
     return errors;
   };
-  const handleAssignAttributeReferenceClick = (attribute: AttributeInput) =>
-    navigate(
-      productAddUrl({
-        ...params,
-        action: "assign-attribute-value",
-        id: attribute.id,
-      }),
-    );
 
   React.useEffect(() => {
     const productId = productCreateOpts.data?.productCreate?.product?.id;
@@ -251,7 +237,6 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
     onFetchMore: loadMoreAttributeValues,
   };
   const loading =
-    uploadFileOpts.loading ||
     productCreateOpts.loading ||
     productVariantCreateOpts.loading ||
     updateChannelsOpts.loading ||
@@ -316,13 +301,10 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
         fetchMoreCategories={fetchMoreCategories}
         fetchMoreCollections={fetchMoreCollections}
         fetchMoreProductTypes={fetchMoreProductTypes}
-        taxClasses={taxClasses ?? []}
-        fetchMoreTaxClasses={fetchMoreTaxClasses}
         weightUnit={shop?.defaultWeightUnit}
         openChannelsModal={handleChannelsModalOpen}
         onChannelsChange={setCurrentChannels}
         assignReferencesAttributeId={params.action === "assign-attribute-value" && params.id}
-        onAssignReferencesClick={handleAssignAttributeReferenceClick}
         referencePages={mapEdgesToItems(searchPagesOpts?.data?.search) || []}
         referenceProducts={mapEdgesToItems(searchProductsOpts?.data?.search) || []}
         referenceCategories={mapEdgesToItems(searchCategoryOpts?.data?.search) || []}

@@ -110,6 +110,7 @@ const ProductTypeListPage = ({
               defaultMessage: "Search product types...",
               description: "Product types search input placeholder",
             })}
+            disableFilters={true}
           />
         ) : (
           <ListFilters
@@ -122,6 +123,7 @@ const ProductTypeListPage = ({
             })}
             onFilterChange={onFilterChange}
             filterStructure={filterStructure}
+            disableFilters={true}
           />
         )}
 

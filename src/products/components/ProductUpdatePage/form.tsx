@@ -1,21 +1,5 @@
 // @ts-strict-ignore
 import {
-  getAttributesDisplayData,
-  getRichTextAttributesFromMap,
-  getRichTextDataFromAttributes,
-  mergeAttributes,
-} from "@dashboard/attributes/utils/data";
-import {
-  createAttributeChangeHandler,
-  createAttributeFileChangeHandler,
-  createAttributeMultiChangeHandler,
-  createAttributeReferenceChangeHandler,
-  createAttributeReferenceMetadataHandler,
-  createAttributeValueReorderHandler,
-  createFetchMoreReferencesHandler,
-  createFetchReferencesHandler,
-} from "@dashboard/attributes/utils/handlers";
-import {
   DatagridChangeOpts,
   DatagridChangeStateContext,
   useDatagridChangeState,
@@ -23,18 +7,13 @@ import {
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
 import { ProductFragment } from "@dashboard/graphql";
 import useForm from "@dashboard/hooks/useForm";
-import useFormset from "@dashboard/hooks/useFormset";
 import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
 import useLocale from "@dashboard/hooks/useLocale";
-import {
-  getAttributeInputFromProduct,
-  getProductUpdatePageFormData,
-} from "@dashboard/products/utils/data";
+import { getProductUpdatePageFormData } from "@dashboard/products/utils/data";
 import { PRODUCT_UPDATE_FORM_ID } from "@dashboard/products/views/ProductUpdate/consts";
 import createMultiselectChangeHandler from "@dashboard/utils/handlers/multiselectChangeHandler";
 import createSingleAutocompleteSelectHandler from "@dashboard/utils/handlers/singleAutocompleteSelectChangeHandler";
 import { RichTextContext } from "@dashboard/utils/richText/context";
-import { useMultipleRichText } from "@dashboard/utils/richText/useMultipleRichText";
 import useRichText from "@dashboard/utils/richText/useRichText";
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
@@ -86,13 +65,6 @@ export function useProductUpdateForm(
     },
     [locale, product, triggerChange],
   );
-  const attributes = useFormset(getAttributeInputFromProduct(product));
-  const { getters: attributeRichTextGetters, getValues: getAttributeRichTextValues } =
-    useMultipleRichText({
-      initial: getRichTextDataFromAttributes(attributes.data),
-      triggerChange,
-    });
-  const attributesWithNewFileValue = useFormset<null, File>([]);
   const richText = useRichText({
     initial: product?.description,
     loading: !product,
@@ -116,69 +88,13 @@ export function useProductUpdateForm(
     opts.setSelectedCategory,
     opts.categories,
   );
-  const handleAttributeChange = createAttributeChangeHandler(attributes, triggerChange);
-  const handleAttributeMultiChange = createAttributeMultiChangeHandler(
-    attributes.change,
-    attributes.data,
-    triggerChange,
-  );
-  const handleAttributeReferenceChange = createAttributeReferenceChangeHandler(
-    attributes.change,
-    triggerChange,
-  );
-  const handleAttributeMetadataChange = createAttributeReferenceMetadataHandler(
-    attributes.setMetadata,
-    triggerChange,
-  );
-  const handleFetchReferences = createFetchReferencesHandler(
-    attributes.data,
-    opts.assignReferencesAttributeId,
-    opts.fetchReferencePages,
-    opts.fetchReferenceProducts,
-  );
-  const handleFetchMoreReferences = createFetchMoreReferencesHandler(
-    attributes.data,
-    opts.assignReferencesAttributeId,
-    opts.fetchMoreReferencePages,
-    opts.fetchMoreReferenceProducts,
-  );
-  const handleAttributeFileChange = createAttributeFileChangeHandler(
-    attributes.change,
-    attributesWithNewFileValue.data,
-    attributesWithNewFileValue.add,
-    attributesWithNewFileValue.change,
-    triggerChange,
-  );
-  const handleAttributeValueReorder = createAttributeValueReorderHandler(
-    attributes.change,
-    attributes.data,
-    triggerChange,
-  );
-  const handleTaxClassSelect = createSingleAutocompleteSelectHandler(
-    handleChange,
-    opts.setSelectedTaxClass,
-    opts.taxClasses,
-  );
   const data: ProductUpdateData = {
     ...formData,
-    attributes: getAttributesDisplayData(
-      attributes.data,
-      attributesWithNewFileValue.data,
-      opts.referencePages,
-      opts.referenceProducts,
-      opts.referenceCollections,
-      opts.referenceCategories,
-    ),
     channels,
     description: null,
   };
   const getSubmitData = async (): Promise<ProductUpdateSubmitData> => ({
     ...form.changedData,
-    attributes: mergeAttributes(
-      attributes.data,
-      getRichTextAttributesFromMap(attributes.data, await getAttributeRichTextValues()),
-    ),
-    attributesWithNewFileValue: attributesWithNewFileValue.data,
     channels: {
       ...channels,
       updateChannels: channels.updateChannels.filter(listing =>
@@ -189,13 +105,7 @@ export function useProductUpdateForm(
     variants: variants.current,
   });
   const handleSubmit = async (data: ProductUpdateSubmitData) => {
-    const errors = await onSubmit(data);
-
-    if (!errors?.length) {
-      attributesWithNewFileValue.set([]);
-    }
-
-    return errors;
+    return await onSubmit(data);
   };
   const handleFormSubmit = useHandleFormSubmit({
     formId: form.formId,
@@ -270,23 +180,13 @@ export function useProductUpdateForm(
       changeChannels: handleChannelChange,
       changeMetadata: {} as any,
       changeVariants: handleVariantChange,
-      fetchMoreReferences: handleFetchMoreReferences,
-      fetchReferences: handleFetchReferences,
-      reorderAttributeValue: handleAttributeValueReorder,
-      selectAttribute: handleAttributeChange,
-      selectAttributeFile: handleAttributeFileChange,
-      selectAttributeMultiple: handleAttributeMultiChange,
-      selectAttributeReference: handleAttributeReferenceChange,
-      selectAttributeReferenceMetadata: handleAttributeMetadataChange,
       selectCategory: handleCategorySelect,
       selectCollection: handleCollectionSelect,
-      selectTaxClass: handleTaxClassSelect,
       updateChannelList: handleChannelListUpdate,
     },
     submit,
     isSaveDisabled,
     richText,
-    attributeRichTextGetters,
   };
 }
 

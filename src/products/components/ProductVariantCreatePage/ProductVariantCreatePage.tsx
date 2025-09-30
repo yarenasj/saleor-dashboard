@@ -1,17 +1,6 @@
 // @ts-strict-ignore
 import { QueryResult } from "@apollo/client";
-import {
-  getReferenceAttributeEntityTypeFromAttribute,
-  mergeAttributeValues,
-} from "@dashboard/attributes/utils/data";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
-import AssignAttributeValueDialog from "@dashboard/components/AssignAttributeValueDialog";
-import { Container } from "@dashboard/components/AssignContainerDialog";
-import {
-  AttributeInput,
-  Attributes,
-  VariantAttributeScope,
-} from "@dashboard/components/Attributes";
 import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Grid from "@dashboard/components/Grid";
@@ -44,10 +33,7 @@ import ProductVariantCheckoutSettings from "../ProductVariantCheckoutSettings/Pr
 import ProductVariantName from "../ProductVariantName";
 import ProductVariantNavigation from "../ProductVariantNavigation";
 import { ProductVariantPrice } from "../ProductVariantPrice";
-import ProductVariantCreateForm, {
-  ProductVariantCreateData,
-  ProductVariantCreateHandlers,
-} from "./form";
+import ProductVariantCreateForm, { ProductVariantCreateData } from "./form";
 
 const messages = defineMessages({
   attributesHeader: {
@@ -97,7 +83,6 @@ interface ProductVariantCreatePageProps {
   onVariantReorder: ReorderAction;
   onWarehouseConfigure: () => void;
   assignReferencesAttributeId?: string;
-  onAssignReferencesClick: (attribute: AttributeInput) => void;
   fetchReferencePages?: (data: string) => void;
   fetchReferenceProducts?: (data: string) => void;
   fetchAttributeValues: (query: string, attributeId: string) => void;
@@ -121,48 +106,20 @@ const ProductVariantCreatePage = ({
   weightUnit,
   referencePages = [],
   referenceProducts = [],
-  referenceCategories = [],
-  referenceCollections = [],
-  attributeValues,
   onSubmit,
   onVariantReorder,
   onWarehouseConfigure,
   assignReferencesAttributeId,
-  onAssignReferencesClick,
   fetchReferencePages,
   fetchReferenceProducts,
-  fetchAttributeValues,
   fetchMoreReferencePages,
   fetchMoreReferenceProducts,
-  fetchMoreAttributeValues,
-  onCloseDialog,
-  onAttributeSelectBlur,
   fetchMoreWarehouses,
   searchWarehousesResult,
 }: ProductVariantCreatePageProps) => {
   const intl = useIntl();
   const navigate = useNavigator();
   const { isOpen: isManageChannelsModalOpen, toggle: toggleManageChannels } = useManageChannels();
-  const canOpenAssignReferencesAttributeDialog = !!assignReferencesAttributeId;
-  const handleAssignReferenceAttribute = (
-    attributeValues: Container[],
-    data: ProductVariantCreateData,
-    handlers: ProductVariantCreateHandlers,
-  ) => {
-    handlers.selectAttributeReference(
-      assignReferencesAttributeId,
-      mergeAttributeValues(
-        assignReferencesAttributeId,
-        attributeValues.map(({ id }) => id),
-        data.attributes,
-      ),
-    );
-    handlers.selectAttributeReferenceMetadata(
-      assignReferencesAttributeId,
-      attributeValues.map(({ id, name }) => ({ value: id, label: name })),
-    );
-    onCloseDialog();
-  };
 
   return (
     <ProductVariantCreateForm
@@ -177,15 +134,7 @@ const ProductVariantCreatePage = ({
       assignReferencesAttributeId={assignReferencesAttributeId}
       disabled={disabled}
     >
-      {({
-        change,
-        data,
-        validationErrors,
-        handlers,
-        submit,
-        isSaveDisabled,
-        attributeRichTextGetters,
-      }) => {
+      {({ change, data, validationErrors, handlers, submit, isSaveDisabled }) => {
         const errors = [...apiErrors, ...validationErrors];
 
         return (
@@ -211,51 +160,6 @@ const ProductVariantCreatePage = ({
                     listings={data.channelListings}
                     product={product}
                     onManageClick={toggleManageChannels}
-                  />
-                  <Attributes
-                    title={intl.formatMessage(messages.attributesHeader)}
-                    attributes={data.attributes.filter(
-                      attribute =>
-                        attribute.data.variantAttributeScope ===
-                        VariantAttributeScope.NOT_VARIANT_SELECTION,
-                    )}
-                    attributeValues={attributeValues}
-                    loading={disabled}
-                    disabled={disabled}
-                    errors={errors}
-                    onChange={handlers.selectAttribute}
-                    onMultiChange={handlers.selectAttributeMultiple}
-                    onFileChange={handlers.selectAttributeFile}
-                    onReferencesRemove={handlers.selectAttributeReference}
-                    onReferencesAddClick={onAssignReferencesClick}
-                    onReferencesReorder={handlers.reorderAttributeValue}
-                    fetchAttributeValues={fetchAttributeValues}
-                    fetchMoreAttributeValues={fetchMoreAttributeValues}
-                    onAttributeSelectBlur={onAttributeSelectBlur}
-                    richTextGetters={attributeRichTextGetters}
-                  />
-                  <CardSpacer />
-                  <Attributes
-                    title={intl.formatMessage(messages.attributesSelectionHeader)}
-                    attributes={data.attributes.filter(
-                      attribute =>
-                        attribute.data.variantAttributeScope ===
-                        VariantAttributeScope.VARIANT_SELECTION,
-                    )}
-                    attributeValues={attributeValues}
-                    loading={disabled}
-                    disabled={disabled}
-                    errors={errors}
-                    onChange={handlers.selectAttribute}
-                    onMultiChange={handlers.selectAttributeMultiple}
-                    onFileChange={handlers.selectAttributeFile}
-                    onReferencesRemove={handlers.selectAttributeReference}
-                    onReferencesAddClick={onAssignReferencesClick}
-                    onReferencesReorder={handlers.reorderAttributeValue}
-                    fetchAttributeValues={fetchAttributeValues}
-                    fetchMoreAttributeValues={fetchMoreAttributeValues}
-                    onAttributeSelectBlur={onAttributeSelectBlur}
-                    richTextGetters={attributeRichTextGetters}
                   />
                   <CardSpacer />
                   <ProductVariantCheckoutSettings
@@ -313,29 +217,6 @@ const ProductVariantCreatePage = ({
                   {intl.formatMessage(messages.saveVariant)}
                 </Savebar.ConfirmButton>
               </Savebar>
-              {canOpenAssignReferencesAttributeDialog && (
-                <AssignAttributeValueDialog
-                  entityType={getReferenceAttributeEntityTypeFromAttribute(
-                    assignReferencesAttributeId,
-                    data.attributes,
-                  )}
-                  confirmButtonState={"default"}
-                  products={referenceProducts}
-                  pages={referencePages}
-                  collections={referenceCollections}
-                  categories={referenceCategories}
-                  attribute={data.attributes.find(({ id }) => id === assignReferencesAttributeId)}
-                  hasMore={handlers.fetchMoreReferences?.hasMore}
-                  open={canOpenAssignReferencesAttributeDialog}
-                  onFetch={handlers.fetchReferences}
-                  onFetchMore={handlers.fetchMoreReferences?.onFetchMore}
-                  loading={handlers.fetchMoreReferences?.loading}
-                  onClose={onCloseDialog}
-                  onSubmit={attributeValues =>
-                    handleAssignReferenceAttribute(attributeValues, data, handlers)
-                  }
-                />
-              )}
               {product && (
                 <VariantChannelsDialog
                   channelListings={product.channelListings}

@@ -1,10 +1,4 @@
 // @ts-strict-ignore
-import { getAttributesAfterFileAttributesUpdate } from "@dashboard/attributes/utils/data";
-import {
-  handleUploadMultipleFiles,
-  prepareAttributesInput,
-} from "@dashboard/attributes/utils/handlers";
-import { AttributeInput } from "@dashboard/components/Attributes";
 import NotFoundPage from "@dashboard/components/NotFoundPage";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
 import { DEFAULT_INITIAL_SEARCH_DATA } from "@dashboard/config";
@@ -96,25 +90,9 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
   const [reorderProductVariants, reorderProductVariantsOpts] = useProductVariantReorderMutation({});
   const handleVariantReorder = createVariantReorderHandler(product, reorderProductVariants);
   const handleCreate = async (formData: ProductVariantCreateData) => {
-    const uploadFilesResult = await handleUploadMultipleFiles(
-      formData.attributesWithNewFileValue,
-      variables => uploadFile({ variables }),
-    );
-    const updatedFileAttributes = getAttributesAfterFileAttributesUpdate(
-      formData.attributesWithNewFileValue,
-      uploadFilesResult,
-    );
-
     const variantCreateResult = await variantCreate({
       variables: {
         input: {
-          attributes: prepareAttributesInput({
-            attributes: formData.attributes.filter(
-              attribute => attribute.value?.length && attribute.value[0] !== "",
-            ),
-            prevAttributes: null,
-            updatedFileAttributes,
-          }),
           product: productId,
           sku: formData.sku,
           name: formData.variantName,
@@ -165,14 +143,6 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
     return { id, errors: updateChannelsErrors };
   };
   const handleVariantClick = (id: string) => navigate(productVariantEditUrl(id));
-  const handleAssignAttributeReferenceClick = (attribute: AttributeInput) =>
-    navigate(
-      productVariantAddUrl(productId, {
-        ...params,
-        action: "assign-attribute-value",
-        id: attribute.id,
-      }),
-    );
   const {
     loadMore: loadMorePages,
     search: searchPages,
@@ -255,7 +225,6 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
         saveButtonBarState={variantCreateResult.status}
         weightUnit={shop?.defaultWeightUnit}
         assignReferencesAttributeId={params.action === "assign-attribute-value" && params.id}
-        onAssignReferencesClick={handleAssignAttributeReferenceClick}
         referencePages={mapEdgesToItems(searchPagesOpts?.data?.search) || []}
         referenceProducts={mapEdgesToItems(searchProductsOpts?.data?.search) || []}
         referenceCategories={mapEdgesToItems(searchCategoriesOpts?.data?.search) || []}

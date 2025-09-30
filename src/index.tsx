@@ -16,8 +16,6 @@ import TagManager from "react-gtm-module";
 import { useIntl } from "react-intl";
 import { Switch } from "react-router-dom";
 
-import AttributeSection from "./attributes";
-import { attributeSection } from "./attributes/urls";
 import Auth from "./auth";
 import AuthProvider from "./auth/AuthProvider";
 import LoginLoading from "./auth/components/LoginLoading/LoginLoading";
@@ -60,7 +58,6 @@ import errorTracker from "./services/errorTracking";
 import ShippingSection from "./shipping";
 import SiteSettingsSection from "./siteSettings";
 import StaffSection from "./staff";
-import TaxesSection from "./taxes";
 import { paletteOverrides, themeOverrides } from "./themeOverrides";
 import TranslationsSection from "./translations";
 import WarehouseSection from "./warehouses";
@@ -220,7 +217,6 @@ const Routes = () => {
                 path="/site-settings"
                 component={SiteSettingsSection}
               />
-              <SectionRoute path="/taxes" component={TaxesSection} />
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_SHIPPING]}
                 path="/shipping"
@@ -230,15 +226,6 @@ const Routes = () => {
                 permissions={[PermissionEnum.MANAGE_TRANSLATIONS]}
                 path="/translations"
                 component={TranslationsSection}
-              />
-              <SectionRoute
-                permissions={[
-                  PermissionEnum.MANAGE_PRODUCT_TYPES_AND_ATTRIBUTES,
-                  PermissionEnum.MANAGE_PAGE_TYPES_AND_ATTRIBUTES,
-                ]}
-                path={attributeSection}
-                component={AttributeSection}
-                matchPermission="any"
               />
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_PRODUCTS]}

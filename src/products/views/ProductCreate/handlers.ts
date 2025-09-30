@@ -1,18 +1,8 @@
 // @ts-strict-ignore
 import { FetchResult } from "@apollo/client";
-import {
-  getAttributesAfterFileAttributesUpdate,
-  mergeFileUploadErrors,
-} from "@dashboard/attributes/utils/data";
-import {
-  handleUploadMultipleFiles,
-  prepareAttributesInput,
-} from "@dashboard/attributes/utils/handlers";
 import { ChannelData } from "@dashboard/channels/utils";
 import {
   AttributeErrorFragment,
-  FileUploadMutation,
-  FileUploadMutationVariables,
   ProductChannelListingErrorFragment,
   ProductChannelListingUpdateMutation,
   ProductChannelListingUpdateMutationVariables,
@@ -62,7 +52,6 @@ const getSimpleProductVariables = (formData: ProductCreateData, productId: strin
 
 export function createHandler(
   productType: ProductTypeQuery["productType"],
-  uploadFile: (variables: FileUploadMutationVariables) => Promise<FetchResult<FileUploadMutation>>,
   productCreate: (
     variables: ProductCreateMutationVariables,
   ) => Promise<FetchResult<ProductCreateMutation>>,
@@ -87,24 +76,8 @@ export function createHandler(
       | ProductChannelListingErrorFragment
     > = [];
 
-    const uploadFilesResult = await handleUploadMultipleFiles(
-      formData.attributesWithNewFileValue,
-      uploadFile,
-    );
-
-    errors = [...errors, ...mergeFileUploadErrors(uploadFilesResult)];
-
-    const updatedFileAttributes = getAttributesAfterFileAttributesUpdate(
-      formData.attributesWithNewFileValue,
-      uploadFilesResult,
-    );
     const productVariables: ProductCreateMutationVariables = {
       input: {
-        attributes: prepareAttributesInput({
-          attributes: formData.attributes,
-          prevAttributes: null,
-          updatedFileAttributes,
-        }),
         category: formData.category,
         collections: formData.collections.map(collection => collection.value),
         description: getParsedDataForJsonStringField(formData.description),
@@ -116,7 +89,6 @@ export function createHandler(
           title: formData.seoTitle,
         },
         slug: formData.slug,
-        taxClass: formData.taxClassId,
         weight: weight(formData.weight),
       },
     };

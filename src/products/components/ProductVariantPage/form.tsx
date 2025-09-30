@@ -1,25 +1,8 @@
 // @ts-strict-ignore
 import {
-  getAttributesDisplayData,
-  getRichTextAttributesFromMap,
-  getRichTextDataFromAttributes,
-  mergeAttributes,
-  RichTextProps,
-} from "@dashboard/attributes/utils/data";
-import {
-  createAttributeFileChangeHandler,
-  createAttributeMultiChangeHandler,
-  createAttributeReferenceChangeHandler,
-  createAttributeReferenceMetadataHandler,
-  createAttributeValueReorderHandler,
-  createFetchMoreReferencesHandler,
-  createFetchReferencesHandler,
-} from "@dashboard/attributes/utils/handlers";
-import {
   ChannelPriceAndPreorderData,
   IChannelPriceAndPreorderArgs,
 } from "@dashboard/channels/utils";
-import { AttributeInput } from "@dashboard/components/Attributes";
 import { useExitFormDialog } from "@dashboard/components/Form/useExitFormDialog";
 import {
   ProductErrorWithAttributesFragment,
@@ -35,27 +18,18 @@ import useForm, {
   FormErrors,
   SubmitPromise,
 } from "@dashboard/hooks/useForm";
-import useFormset, {
-  FormsetChange,
-  FormsetData,
-  FormsetMetadataChange,
-} from "@dashboard/hooks/useFormset";
+import useFormset, { FormsetChange, FormsetData } from "@dashboard/hooks/useFormset";
 import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
 import { errorMessages } from "@dashboard/intl";
-import {
-  AttributeValuesMetadata,
-  getAttributeInputFromVariant,
-  getStockInputFromVariant,
-} from "@dashboard/products/utils/data";
+import { getStockInputFromVariant } from "@dashboard/products/utils/data";
 import {
   createMediaChangeHandler,
   createPreorderEndDateChangeHandler,
   getChannelsInput,
 } from "@dashboard/products/utils/handlers";
 import { validateProductVariant } from "@dashboard/products/utils/validation";
-import { FetchMoreProps, RelayToFlat, ReorderEvent } from "@dashboard/types";
+import { FetchMoreProps, RelayToFlat } from "@dashboard/types";
 import { arrayDiff } from "@dashboard/utils/arrays";
-import { useMultipleRichText } from "@dashboard/utils/richText/useMultipleRichText";
 import React, { useEffect, useState } from "react";
 import { useIntl } from "react-intl";
 
@@ -80,12 +54,9 @@ export interface ProductVariantUpdateFormData {
 }
 export interface ProductVariantUpdateData extends ProductVariantUpdateFormData {
   channelListings: FormsetData<ChannelPriceAndPreorderData, IChannelPriceAndPreorderArgs>;
-  attributes: AttributeInput[];
   stocks: ProductStockInput[];
 }
 export interface ProductVariantUpdateSubmitData extends ProductVariantUpdateFormData {
-  attributes: AttributeInput[];
-  attributesWithNewFileValue: FormsetData<null, File>;
   addStocks: ProductStockInput[];
   channelListings: FormsetData<ChannelPriceAndPreorderData, IChannelPriceAndPreorderArgs>;
   updateStocks: ProductStockInput[];
@@ -106,26 +77,16 @@ export interface UseProductVariantUpdateFormOpts {
 }
 
 export interface ProductVariantUpdateHandlers
-  extends Record<
-      "changeStock" | "selectAttribute" | "selectAttributeMultiple" | "changeChannels",
-      FormsetChange
-    >,
-    Record<"selectAttributeReference", FormsetChange<string[]>>,
-    Record<"selectAttributeFile", FormsetChange<File>>,
-    Record<"reorderAttributeValue", FormsetChange<ReorderEvent>>,
+  extends Record<"changeStock" | "changeChannels", FormsetChange>,
     Record<"addStock", (id: string, label: string) => void>,
     Record<"deleteStock", (id: string) => void> {
   changePreorderEndDate: FormChange;
   changeMedia: (ids: string[]) => void;
   updateChannels: (selectedChannelsIds: string[]) => void;
-  fetchReferences: (value: string) => void;
-  fetchMoreReferences: FetchMoreProps;
-  selectAttributeReferenceMetadata: FormsetMetadataChange<AttributeValuesMetadata[]>;
 }
 
 export interface UseProductVariantUpdateFormResult
-  extends CommonUseFormResultWithHandlers<ProductVariantUpdateData, ProductVariantUpdateHandlers>,
-    Omit<RichTextProps, "richText"> {
+  extends CommonUseFormResultWithHandlers<ProductVariantUpdateData, ProductVariantUpdateHandlers> {
   formErrors: FormErrors<ProductVariantUpdateData>;
   validationErrors: ProductErrorWithAttributesFragment[];
   disabled: boolean;
@@ -145,7 +106,6 @@ function useProductVariantUpdateForm(
   opts: UseProductVariantUpdateFormOpts,
 ): UseProductVariantUpdateFormResult {
   const intl = useIntl();
-  const attributeInput = getAttributeInputFromVariant(variant);
   const stockInput = getStockInputFromVariant(variant);
   const [validationErrors, setValidationErrors] = useState<ProductErrorWithAttributesFragment[]>(
     [],
@@ -182,57 +142,8 @@ function useProductVariantUpdateForm(
   const { setExitDialogSubmitRef } = useExitFormDialog({
     formId,
   });
-  const attributes = useFormset(attributeInput);
-  const { getters: attributeRichTextGetters, getValues: getAttributeRichTextValues } =
-    useMultipleRichText({
-      initial: getRichTextDataFromAttributes(attributes.data),
-      triggerChange,
-    });
-  const attributesWithNewFileValue = useFormset<null, File>([]);
   const stocks = useFormset(stockInput);
   const channels = useFormset(channelsInput);
-  const handleAttributeChangeWithName = (id: string, value: string) => {
-    triggerChange();
-    attributes.change(id, value === "" ? [] : [value]);
-    handleChange({ target: { value, name: "name" } });
-  };
-  const handleAttributeMultiChange = createAttributeMultiChangeHandler(
-    attributes.change,
-    attributes.data,
-    triggerChange,
-  );
-  const handleAttributeReferenceChange = createAttributeReferenceChangeHandler(
-    attributes.change,
-    triggerChange,
-  );
-  const handleAttributeMetadataChange = createAttributeReferenceMetadataHandler(
-    attributes.setMetadata,
-    triggerChange,
-  );
-  const handleFetchReferences = createFetchReferencesHandler(
-    attributes.data,
-    opts.assignReferencesAttributeId,
-    opts.fetchReferencePages,
-    opts.fetchReferenceProducts,
-  );
-  const handleFetchMoreReferences = createFetchMoreReferencesHandler(
-    attributes.data,
-    opts.assignReferencesAttributeId,
-    opts.fetchMoreReferencePages,
-    opts.fetchMoreReferenceProducts,
-  );
-  const handleAttributeFileChange = createAttributeFileChangeHandler(
-    attributes.change,
-    attributesWithNewFileValue.data,
-    attributesWithNewFileValue.add,
-    attributesWithNewFileValue.change,
-    triggerChange,
-  );
-  const handleAttributeValueReorder = createAttributeValueReorderHandler(
-    attributes.change,
-    attributes.data,
-    triggerChange,
-  );
   const handleStockAdd = (id: string, label: string) => {
     triggerChange();
     stocks.add({
@@ -305,14 +216,6 @@ function useProductVariantUpdateForm(
   );
   const data: ProductVariantUpdateData = {
     ...formData,
-    attributes: getAttributesDisplayData(
-      attributes.data,
-      attributesWithNewFileValue.data,
-      opts.referencePages,
-      opts.referenceProducts,
-      opts.referenceCollections,
-      opts.referenceCategories,
-    ),
     channelListings: channels.data,
     stocks: stocks.data,
   };
@@ -320,11 +223,6 @@ function useProductVariantUpdateForm(
   const getSubmitData = async (): Promise<ProductVariantUpdateSubmitData> => ({
     ...formData,
     addStocks,
-    attributes: mergeAttributes(
-      attributes.data,
-      getRichTextAttributesFromMap(attributes.data, await getAttributeRichTextValues()),
-    ),
-    attributesWithNewFileValue: attributesWithNewFileValue.data,
     channelListings: channels.data,
     removeStocks: stockDiff.removed,
     updateStocks,
@@ -338,13 +236,7 @@ function useProductVariantUpdateForm(
       return validationProductErrors;
     }
 
-    const apiErrors = await onSubmit(data);
-
-    if (!apiErrors?.length) {
-      attributesWithNewFileValue.set([]);
-    }
-
-    return apiErrors;
+    return await onSubmit(data);
   };
   const handleFormSubmit = useHandleFormSubmit({
     formId,
@@ -372,18 +264,9 @@ function useProductVariantUpdateForm(
       changePreorderEndDate: handlePreorderEndDateChange,
       changeMedia: handleMediaChange,
       deleteStock: handleStockDelete,
-      fetchMoreReferences: handleFetchMoreReferences,
-      fetchReferences: handleFetchReferences,
-      reorderAttributeValue: handleAttributeValueReorder,
-      selectAttribute: handleAttributeChangeWithName,
-      selectAttributeFile: handleAttributeFileChange,
-      selectAttributeMultiple: handleAttributeMultiChange,
-      selectAttributeReference: handleAttributeReferenceChange,
-      selectAttributeReferenceMetadata: handleAttributeMetadataChange,
     },
     submit,
     isSaveDisabled,
-    attributeRichTextGetters,
   };
 }
 

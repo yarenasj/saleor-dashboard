@@ -1,24 +1,11 @@
 // @ts-strict-ignore
 import placeholderImg from "@assets/images/placeholder255x255.png";
-import {
-  getAttributesAfterFileAttributesUpdate,
-  mergeAttributeValueDeleteErrors,
-  mergeFileUploadErrors,
-} from "@dashboard/attributes/utils/data";
-import {
-  handleDeleteMultipleAttributeValues,
-  handleUploadMultipleFiles,
-  prepareAttributesInput,
-} from "@dashboard/attributes/utils/handlers";
 import { createVariantChannels } from "@dashboard/channels/utils";
-import { AttributeInput } from "@dashboard/components/Attributes";
 import NotFoundPage from "@dashboard/components/NotFoundPage";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
 import { DEFAULT_INITIAL_SEARCH_DATA } from "@dashboard/config";
 import {
   ProductErrorWithAttributesFragment,
-  useAttributeValueDeleteMutation,
-  useFileUploadMutation,
   useProductVariantDetailsQuery,
   useProductVariantPreorderDeactivateMutation,
   useProductVariantReorderMutation,
@@ -33,10 +20,7 @@ import useOnSetDefaultVariant from "@dashboard/hooks/useOnSetDefaultVariant";
 import useShop from "@dashboard/hooks/useShop";
 import { commonMessages } from "@dashboard/intl";
 import { weight } from "@dashboard/misc";
-import {
-  getAttributeInputFromVariant,
-  mapFormsetStockToStockInput,
-} from "@dashboard/products/utils/data";
+import { mapFormsetStockToStockInput } from "@dashboard/products/utils/data";
 import { handleAssignMedia } from "@dashboard/products/utils/handlers";
 import useCategorySearch from "@dashboard/searches/useCategorySearch";
 import useCollectionSearch from "@dashboard/searches/useCollectionSearch";
@@ -90,7 +74,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
     ProductVariantEditUrlDialog,
     ProductVariantEditUrlQueryParams
   >(navigate, params => productVariantEditUrl(variantId, params), params);
-  const [uploadFile, uploadFileOpts] = useFileUploadMutation({});
   const [assignMedia, assignMediaOpts] = useVariantMediaAssignMutation({});
   const [unassignMedia, unassignMediaOpts] = useVariantMediaUnassignMutation({});
   const [deleteVariant, deleteVariantOpts] = useVariantDeleteMutation({
@@ -117,7 +100,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
       setErrors(data.productVariantUpdate.errors);
     },
   });
-  const [deleteAttributeValue, deleteAttributeValueOpts] = useAttributeValueDeleteMutation({});
   const { handleSubmitChannels, updateChannelsOpts } = useSubmitChannels();
 
   const variant = data?.productVariant;
@@ -146,28 +128,13 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
   );
   const disableFormSave =
     loading ||
-    uploadFileOpts.loading ||
     deleteVariantOpts.loading ||
     updateVariantOpts.loading ||
     assignMediaOpts.loading ||
     unassignMediaOpts.loading ||
     deactivatePreoderOpts.loading ||
-    reorderProductVariantsOpts.loading ||
-    deleteAttributeValueOpts.loading;
+    reorderProductVariantsOpts.loading;
   const handleUpdate = async (data: ProductVariantUpdateSubmitData) => {
-    const uploadFilesResult = await handleUploadMultipleFiles(
-      data.attributesWithNewFileValue,
-      variables => uploadFile({ variables }),
-    );
-    const deleteAttributeValuesResult = await handleDeleteMultipleAttributeValues(
-      data.attributesWithNewFileValue,
-      variant?.nonSelectionAttributes,
-      variables => deleteAttributeValue({ variables }),
-    );
-    const updatedFileAttributes = getAttributesAfterFileAttributesUpdate(
-      data.attributesWithNewFileValue,
-      uploadFilesResult,
-    );
     const assignMediaErrors = await handleAssignMedia(
       data.media,
       variant,
@@ -177,11 +144,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
     const result = await updateVariant({
       variables: {
         addStocks: data.addStocks.map(mapFormsetStockToStockInput),
-        attributes: prepareAttributesInput({
-          attributes: data.attributes,
-          prevAttributes: getAttributeInputFromVariant(variant),
-          updatedFileAttributes,
-        }),
         id: variantId,
         removeStocks: data.removeStocks,
         sku: data.sku,
@@ -202,8 +164,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
     const channelErrors = await handleSubmitChannels(data, variant);
 
     return [
-      ...mergeFileUploadErrors(uploadFilesResult),
-      ...mergeAttributeValueDeleteErrors(deleteAttributeValuesResult),
       ...(result.data?.productVariantStocksCreate.errors ?? []),
       ...(result.data?.productVariantStocksDelete.errors ?? []),
       ...(result.data?.productVariantStocksUpdate.errors ?? []),
@@ -212,14 +172,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
       ...channelErrors,
     ];
   };
-  const handleAssignAttributeReferenceClick = (attribute: AttributeInput) =>
-    navigate(
-      productVariantEditUrl(variantId, {
-        ...params,
-        action: "assign-attribute-value",
-        id: attribute.id,
-      }),
-    );
   const {
     loadMore: loadMorePages,
     search: searchPages,
@@ -293,7 +245,6 @@ export const ProductVariant = ({ variantId, params }: ProductUpdateProps) => {
         variantDeactivatePreoderButtonState={deactivatePreoderOpts.status}
         onVariantReorder={handleVariantReorder}
         assignReferencesAttributeId={params.action === "assign-attribute-value" && params.id}
-        onAssignReferencesClick={handleAssignAttributeReferenceClick}
         referencePages={mapEdgesToItems(searchPagesOpts?.data?.search) || []}
         referenceProducts={mapEdgesToItems(searchProductsOpts?.data?.search) || []}
         referenceCategories={mapEdgesToItems(searchCategoriesOpts?.data?.search) || []}

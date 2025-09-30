@@ -1,13 +1,5 @@
 // @ts-strict-ignore
 import {
-  mergeAttributeValueDeleteErrors,
-  mergeFileUploadErrors,
-} from "@dashboard/attributes/utils/data";
-import {
-  handleDeleteMultipleAttributeValues,
-  handleUploadMultipleFiles,
-} from "@dashboard/attributes/utils/handlers";
-import {
   AttributeErrorFragment,
   ErrorPolicyEnum,
   MetadataErrorFragment,
@@ -16,8 +8,6 @@ import {
   ProductErrorWithAttributesFragment,
   ProductFragment,
   UploadErrorFragment,
-  useAttributeValueDeleteMutation,
-  useFileUploadMutation,
   useProductChannelListingUpdateMutation,
   useProductUpdateMutation,
   useProductVariantBulkCreateMutation,
@@ -76,7 +66,6 @@ export function useProductUpdateHandler(
   const [updateVariants] = useProductVariantBulkUpdateMutation();
   const [createVariants] = useProductVariantBulkCreateMutation();
   const [deleteVariants] = useProductVariantBulkDeleteMutation();
-  const [uploadFile] = useFileUploadMutation();
   const [updateProduct, updateProductOpts] = useProductUpdateMutation();
   const [updateChannels, updateChannelsOpts] = useProductChannelListingUpdateMutation({
     onCompleted: data => {
@@ -90,21 +79,11 @@ export function useProductUpdateHandler(
       }
     },
   });
-  const [deleteAttributeValue] = useAttributeValueDeleteMutation();
   const sendMutations = async (
     data: ProductUpdateSubmitData,
   ): Promise<UseProductUpdateHandlerError[]> => {
     let errors: UseProductUpdateHandlerError[] = [];
     const variantErrors: ProductVariantListError[] = [];
-    const uploadFilesResult = await handleUploadMultipleFiles(
-      data.attributesWithNewFileValue,
-      variables => uploadFile({ variables }),
-    );
-    const deleteAttributeValuesResult = await handleDeleteMultipleAttributeValues(
-      data.attributesWithNewFileValue,
-      product?.attributes,
-      variables => deleteAttributeValue({ variables }),
-    );
     const updateProductChannelsData = getProductChannelsUpdateVariables(product, data);
 
     if (hasProductChannelsUpdate(updateProductChannelsData.input)) {
@@ -128,7 +107,7 @@ export function useProductUpdateHandler(
     }
 
     const updateProductResult = await updateProduct({
-      variables: getProductUpdateVariables(product, data, uploadFilesResult),
+      variables: getProductUpdateVariables(product, data),
     });
 
     if (data.variants.added.length > 0) {
@@ -175,12 +154,7 @@ export function useProductUpdateHandler(
       }
     }
 
-    errors = [
-      ...errors,
-      ...mergeFileUploadErrors(uploadFilesResult),
-      ...mergeAttributeValueDeleteErrors(deleteAttributeValuesResult),
-      ...(updateProductResult?.data?.productUpdate?.errors ?? []),
-    ];
+    errors = [...errors, ...(updateProductResult?.data?.productUpdate?.errors ?? [])];
     setVariantListErrors(variantErrors);
 
     return errors;

@@ -1,7 +1,6 @@
 // @ts-strict-ignore
 import ActionDialog from "@dashboard/components/ActionDialog";
 import useAppChannel from "@dashboard/components/AppLayout/AppChannelContext";
-import { AttributeInput } from "@dashboard/components/Attributes";
 import NotFoundPage from "@dashboard/components/NotFoundPage";
 import { useShopLimitsQuery } from "@dashboard/components/Shop/queries";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
@@ -23,7 +22,6 @@ import useCategorySearch from "@dashboard/searches/useCategorySearch";
 import useCollectionSearch from "@dashboard/searches/useCollectionSearch";
 import usePageSearch from "@dashboard/searches/usePageSearch";
 import useProductSearch from "@dashboard/searches/useProductSearch";
-import { useTaxClassFetchMore } from "@dashboard/taxes/utils/useTaxClassFetchMore";
 import { getProductErrorMessage } from "@dashboard/utils/errors";
 import useAttributeValueSearchHandler from "@dashboard/utils/handlers/attributeValueSearchHandler";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
@@ -181,15 +179,6 @@ export const ProductUpdate = ({ id, params }: ProductUpdateProps) => {
   const handleImageReorder = createImageReorderHandler(product, variables =>
     reorderProductImages({ variables }),
   );
-  const handleAssignAttributeReferenceClick = (attribute: AttributeInput) =>
-    navigate(
-      productUrl(id, {
-        ...params,
-        action: "assign-attribute-value",
-        id: attribute.id,
-      }),
-      { resetScroll: false },
-    );
   const disableFormSave =
     submitOpts.loading ||
     createProductImageOpts.loading ||
@@ -215,7 +204,6 @@ export const ProductUpdate = ({ id, params }: ProductUpdateProps) => {
     loading: !!searchAttributeValuesOpts.loading,
     onFetchMore: loadMoreAttributeValues,
   };
-  const { taxClasses, fetchMoreTaxClasses } = useTaxClassFetchMore();
 
   if (product === null) {
     return <NotFoundPage onBack={handleBack} />;
@@ -244,8 +232,6 @@ export const ProductUpdate = ({ id, params }: ProductUpdateProps) => {
         media={data?.product?.media}
         header={product?.name}
         product={product}
-        taxClasses={taxClasses ?? []}
-        fetchMoreTaxClasses={fetchMoreTaxClasses}
         variants={product?.variants}
         onDelete={() => openModal("remove")}
         onImageReorder={handleImageReorder}
@@ -261,7 +247,6 @@ export const ProductUpdate = ({ id, params }: ProductUpdateProps) => {
         fetchMoreCategories={fetchMoreCategories}
         fetchMoreCollections={fetchMoreCollections}
         assignReferencesAttributeId={params.action === "assign-attribute-value" && params.id}
-        onAssignReferencesClick={handleAssignAttributeReferenceClick}
         referencePages={mapEdgesToItems(searchPagesOpts?.data?.search) || []}
         referenceProducts={mapEdgesToItems(searchProductsOpts?.data?.search) || []}
         referenceCategories={mapEdgesToItems(searchCategoriesOpts?.data?.search) || []}

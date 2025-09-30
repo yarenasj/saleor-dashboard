@@ -1,12 +1,10 @@
 // @ts-strict-ignore
-import { attributeListUrl } from "@dashboard/attributes/urls";
 import { useUser } from "@dashboard/auth";
 import { channelsListUrl } from "@dashboard/channels/urls";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
 import { APP_VERSION as dashboardVersion } from "@dashboard/config";
 import { PermissionEnum } from "@dashboard/graphql";
 import useShop from "@dashboard/hooks/useShop";
-import Attributes from "@dashboard/icons/Attributes";
 import Channels from "@dashboard/icons/Channels";
 import PermissionGroups from "@dashboard/icons/PermissionGroups";
 import ProductTypes from "@dashboard/icons/ProductTypes";
@@ -22,7 +20,6 @@ import { productTypeListUrl } from "@dashboard/productTypes/urls";
 import { shippingZonesListUrl } from "@dashboard/shipping/urls";
 import { siteSettingsUrl } from "@dashboard/siteSettings/urls";
 import { staffListUrl } from "@dashboard/staff/urls";
-import { taxConfigurationListUrl } from "@dashboard/taxes/urls";
 import { warehouseSection } from "@dashboard/warehouses/urls";
 import React from "react";
 import { IntlShape, useIntl } from "react-intl";
@@ -35,25 +32,10 @@ export function createConfigurationMenu(intl: IntlShape): MenuSection[] {
   return [
     {
       label: intl.formatMessage({
-        id: "HP6m+q",
-        defaultMessage: "Attributes and Product Types",
+        id: "jFrdB5",
+        defaultMessage: "Product Settings",
       }),
       menuItems: [
-        {
-          description: intl.formatMessage({
-            id: "19/lwV",
-            defaultMessage: "Determine attributes used to create product types",
-          }),
-          icon: <Attributes />,
-          requireAllPermissions: true,
-          permissions: [
-            PermissionEnum.MANAGE_PRODUCT_TYPES_AND_ATTRIBUTES,
-            PermissionEnum.MANAGE_PAGE_TYPES_AND_ATTRIBUTES,
-          ],
-          title: intl.formatMessage(sectionNames.attributes),
-          url: attributeListUrl(),
-          testId: "configuration-menu-attributes",
-        },
         {
           description: intl.formatMessage({
             id: "n0RwMK",
@@ -64,24 +46,6 @@ export function createConfigurationMenu(intl: IntlShape): MenuSection[] {
           title: intl.formatMessage(sectionNames.productTypes),
           url: productTypeListUrl(),
           testId: "configuration-menu-product-types",
-        },
-      ],
-    },
-    {
-      label: intl.formatMessage({
-        id: "jFrdB5",
-        defaultMessage: "Product Settings",
-      }),
-      menuItems: [
-        {
-          description: intl.formatMessage({
-            id: "EIULpW",
-            defaultMessage: "Manage how your store charges tax",
-          }),
-          icon: <Taxes />,
-          title: intl.formatMessage(sectionNames.taxes),
-          url: taxConfigurationListUrl(),
-          testId: "configuration-menu-taxes",
         },
       ],
     },

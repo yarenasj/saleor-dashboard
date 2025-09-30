@@ -1,4 +1,3 @@
-import { attributeAddUrl, attributeListUrl } from "@dashboard/attributes/urls";
 import { categoryAddUrl, categoryListUrl } from "@dashboard/categories/urls";
 import { channelAddUrl, channelsListUrl } from "@dashboard/channels/urls";
 import { collectionAddUrl, collectionListUrl } from "@dashboard/collections/urls";
@@ -182,40 +181,6 @@ const allActions: TriggerDescriptor[] = [
       <Box onClick={onClick}>
         <ActionLinkItem href={collectionListUrl()}>
           <FormattedMessage id="ITYiRy" defaultMessage="Go to collections" />
-        </ActionLinkItem>
-      </Box>
-    ),
-  },
-  {
-    section: {
-      id: "7OW8BT",
-      defaultMessage: "Configuration",
-    },
-    name: {
-      id: "LLS4re",
-      defaultMessage: "Go to model attributes",
-    },
-    Component: ({ onClick }) => (
-      <Box onClick={onClick}>
-        <ActionLinkItem href={attributeListUrl()}>
-          <FormattedMessage id="LLS4re" defaultMessage="Go to attributes" />
-        </ActionLinkItem>
-      </Box>
-    ),
-  },
-  {
-    section: {
-      id: "7OW8BT",
-      defaultMessage: "Configuration",
-    },
-    name: {
-      id: "5FSIZp",
-      defaultMessage: "Create new attribute",
-    },
-    Component: ({ onClick }) => (
-      <Box onClick={onClick}>
-        <ActionLinkItem href={attributeAddUrl()}>
-          <FormattedMessage id="5FSIZp" defaultMessage="Create new attribute" />
         </ActionLinkItem>
       </Box>
     ),

@@ -14,12 +14,10 @@ import {
   ShippingMethodTypeEnum,
   ShippingMethodTypeFragment,
   ShippingZoneQuery,
-  TaxClassBaseFragment,
 } from "@dashboard/graphql";
 import useForm, { SubmitPromise } from "@dashboard/hooks/useForm";
 import useHandleFormSubmit from "@dashboard/hooks/useHandleFormSubmit";
 import useNavigator from "@dashboard/hooks/useNavigator";
-import { useStateUpdate } from "@dashboard/hooks/useStateUpdate";
 import { validatePrice } from "@dashboard/products/utils/validation";
 import OrderValue from "@dashboard/shipping/components/OrderValue";
 import OrderWeight from "@dashboard/shipping/components/OrderWeight";
@@ -27,7 +25,7 @@ import PricingCard from "@dashboard/shipping/components/PricingCard";
 import ShippingMethodProducts from "@dashboard/shipping/components/ShippingMethodProducts";
 import ShippingRateInfo from "@dashboard/shipping/components/ShippingRateInfo";
 import { createChannelsChangeHandler } from "@dashboard/shipping/handlers";
-import { FetchMoreProps, ListActions, ListProps } from "@dashboard/types";
+import { ListActions, ListProps } from "@dashboard/types";
 import { mapEdgesToItems, mapMetadataItemToInput } from "@dashboard/utils/maps";
 import { RichTextContext } from "@dashboard/utils/richText/context";
 import useRichText from "@dashboard/utils/richText/useRichText";
@@ -63,8 +61,6 @@ export interface ShippingZoneRatesPageProps
   onProductAssign: () => void;
   onProductUnassign: (ids: string[]) => void;
   variant: ShippingMethodTypeEnum;
-  taxClasses: TaxClassBaseFragment[];
-  fetchMoreTaxClasses: FetchMoreProps;
 }
 
 export const ShippingZoneRatesPage = ({
@@ -88,8 +84,6 @@ export const ShippingZoneRatesPage = ({
   postalCodeRules,
   variant,
   formId,
-  taxClasses,
-  fetchMoreTaxClasses,
   ...listProps
 }: ShippingZoneRatesPageProps) => {
   const navigate = useNavigator();
@@ -116,7 +110,6 @@ export const ShippingZoneRatesPage = ({
     setIsSubmitDisabled,
     triggerChange,
   } = useForm(initialForm, undefined, { confirmLeave: true, formId });
-  const [taxClassDisplayName, setTaxClassDisplayName] = useStateUpdate(rate?.taxClass?.name ?? "");
   const handleFormSubmit = useHandleFormSubmit({
     formId,
     onSubmit,

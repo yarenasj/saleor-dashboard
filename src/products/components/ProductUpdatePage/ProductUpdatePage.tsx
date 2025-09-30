@@ -1,17 +1,10 @@
 // @ts-strict-ignore
-import {
-  getReferenceAttributeEntityTypeFromAttribute,
-  mergeAttributeValues,
-} from "@dashboard/attributes/utils/data";
 import { useUser } from "@dashboard/auth";
 import { hasPermission } from "@dashboard/auth/misc";
 import { ChannelData } from "@dashboard/channels/utils";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
-import AssignAttributeValueDialog from "@dashboard/components/AssignAttributeValueDialog";
-import { AttributeInput, Attributes } from "@dashboard/components/Attributes";
 import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
-import { useDevModeContext } from "@dashboard/components/DevModePanel/hooks";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
 import { Savebar } from "@dashboard/components/Savebar";
 import {
@@ -29,7 +22,6 @@ import {
   SearchCollectionsQuery,
   SearchPagesQuery,
   SearchProductsQuery,
-  TaxClassBaseFragment,
 } from "@dashboard/graphql";
 import { useBackLinkWithState } from "@dashboard/hooks/useBackLinkWithState";
 import { SubmitPromise } from "@dashboard/hooks/useForm";
@@ -39,7 +31,6 @@ import { maybe } from "@dashboard/misc";
 import ProductExternalMediaDialog from "@dashboard/products/components/ProductExternalMediaDialog";
 import { ProductOrganization } from "@dashboard/products/components/ProductOrganization/ProductOrganization";
 import { mapByChannel } from "@dashboard/products/components/ProductUpdatePage/utils";
-import { defaultGraphiQLQuery } from "@dashboard/products/queries";
 import { productImageUrl, productListPath, productListUrl } from "@dashboard/products/urls";
 import { ChoiceWithAncestors, getChoicesWithAncestors } from "@dashboard/products/utils/utils";
 import { ProductVariantListError } from "@dashboard/products/views/ProductUpdate/handlers/errors";
@@ -48,17 +39,17 @@ import { TranslationsButton } from "@dashboard/translations/components/Translati
 import { productUrl as createTranslateProductUrl } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
 import { FetchMoreProps, RelayToFlat } from "@dashboard/types";
-import { Box, Option } from "@saleor/macaw-ui-next";
+import { Option } from "@saleor/macaw-ui-next";
 import React from "react";
 import { useIntl } from "react-intl";
 
-import { AttributeValuesMetadata, getChoices } from "../../utils/data";
+import { getChoices } from "../../utils/data";
 import { ProductDetailsForm } from "../ProductDetailsForm";
 import ProductMedia from "../ProductMedia";
 import ProductVariants from "../ProductVariants";
 import ProductUpdateForm from "./form";
 import ProductChannelsListingsDialog from "./ProductChannelsListingsDialog";
-import { ProductUpdateData, ProductUpdateHandlers, ProductUpdateSubmitData } from "./types";
+import { ProductUpdateSubmitData } from "./types";
 
 export interface ProductUpdatePageProps {
   channels: ChannelFragment[];
@@ -79,8 +70,6 @@ export interface ProductUpdatePageProps {
   product?: ProductDetailsQuery["product"];
   header: string;
   saveButtonBarState: ConfirmButtonTransitionState;
-  taxClasses: TaxClassBaseFragment[];
-  fetchMoreTaxClasses: FetchMoreProps;
   referencePages?: RelayToFlat<SearchPagesQuery["search"]>;
   referenceProducts?: RelayToFlat<SearchProductsQuery["search"]>;
   referenceCategories?: RelayToFlat<SearchCategoriesQuery["search"]>;
@@ -97,7 +86,6 @@ export interface ProductUpdatePageProps {
   fetchAttributeValues: (query: string, attributeId: string) => void;
   refetch: () => Promise<any>;
   onAttributeValuesSearch: (id: string, query: string) => Promise<Option[]>;
-  onAssignReferencesClick: (attribute: AttributeInput) => void;
   onCloseDialog: () => void;
   onImageDelete: (id: string) => () => void;
   onSubmit: (data: ProductUpdateSubmitData) => SubmitPromise;
@@ -118,7 +106,6 @@ export const ProductUpdatePage = ({
   channelsErrors,
   variantListErrors,
   collections: collectionChoiceList,
-  attributeValues,
   isSimpleProduct,
   errors,
   fetchCategories,
@@ -131,8 +118,6 @@ export const ProductUpdatePage = ({
   product,
   saveButtonBarState,
   variants,
-  taxClasses,
-  fetchMoreTaxClasses,
   referencePages = [],
   referenceProducts = [],
   referenceCategories = [],
@@ -143,21 +128,15 @@ export const ProductUpdatePage = ({
   onImageUpload,
   onMediaUrlUpload,
   onVariantShow,
-  onSeoClick,
   onSubmit,
   isMediaUrlModalVisible,
   assignReferencesAttributeId,
   onAttributeValuesSearch,
-  onAssignReferencesClick,
   fetchReferencePages,
   fetchMoreReferencePages,
   fetchReferenceProducts,
   fetchMoreReferenceProducts,
-  fetchAttributeValues,
-  fetchMoreAttributeValues,
   refetch,
-  onCloseDialog,
-  onAttributeSelectBlur,
 }: ProductUpdatePageProps) => {
   const intl = useIntl();
   const { user } = useUser();
@@ -172,35 +151,12 @@ export const ProductUpdatePage = ({
   const [selectedCollections, setSelectedCollections] = useStateFromProps(
     getChoices(maybe(() => product.collections, [])),
   );
-  const [selectedTaxClass, setSelectedTaxClass] = useStateFromProps(product?.taxClass?.name ?? "");
   const categories = getChoicesWithAncestors(categoryChoiceList);
   const selectedProductCategory = product?.category
     ? getChoicesWithAncestors([product.category as ChoiceWithAncestors])[0]
     : undefined;
   const collections = getChoices(collectionChoiceList);
   const hasVariants = product?.productType?.hasVariants;
-  const taxClassesChoices =
-    taxClasses?.map(taxClass => ({
-      label: taxClass.name,
-      value: taxClass.id,
-    })) || [];
-  const canOpenAssignReferencesAttributeDialog = !!assignReferencesAttributeId;
-  const handleAssignReferenceAttribute = (
-    attributeValues: AttributeValuesMetadata[],
-    data: ProductUpdateData,
-    handlers: ProductUpdateHandlers,
-  ) => {
-    handlers.selectAttributeReference(
-      assignReferencesAttributeId,
-      mergeAttributeValues(
-        assignReferencesAttributeId,
-        attributeValues.map(({ value }) => value),
-        data.attributes,
-      ),
-    );
-    handlers.selectAttributeReferenceMetadata(assignReferencesAttributeId, attributeValues);
-    onCloseDialog();
-  };
   const productErrors = React.useMemo(
     () =>
       errors.filter(
@@ -215,12 +171,6 @@ export const ProductUpdatePage = ({
       ) as Array<ProductErrorFragment | ProductChannelListingErrorFragment>,
     [errors, channelsErrors],
   );
-  const context = useDevModeContext();
-  const openPlaygroundURL = () => {
-    context.setDevModeContent(defaultGraphiQLQuery);
-    context.setVariables(`{ "id": "${product?.id}" }`);
-    context.setDevModeVisibility(true);
-  };
   const backLinkProductUrl = useBackLinkWithState({
     path: productListPath,
   });
@@ -235,8 +185,6 @@ export const ProductUpdatePage = ({
       selectedCollections={selectedCollections}
       setSelectedCategory={setSelectedCategory}
       setSelectedCollections={setSelectedCollections}
-      setSelectedTaxClass={setSelectedTaxClass}
-      taxClasses={taxClassesChoices}
       hasVariants={hasVariants}
       referencePages={referencePages}
       referenceProducts={referenceProducts}
@@ -250,7 +198,7 @@ export const ProductUpdatePage = ({
       disabled={disabled}
       refetch={refetch}
     >
-      {({ change, data, handlers, submit, isSaveDisabled, attributeRichTextGetters }) => {
+      {({ change, data, handlers, submit, isSaveDisabled }) => {
         const availabilityCommonProps = {
           managePermissions: [PermissionEnum.MANAGE_PRODUCTS],
           messages: {
@@ -275,11 +223,6 @@ export const ProductUpdatePage = ({
 
         const byChannel = mapByChannel(channels);
         const listings = data.channels.updateChannels?.map<ChannelData>(byChannel);
-
-        const entityType = getReferenceAttributeEntityTypeFromAttribute(
-          assignReferencesAttributeId,
-          data.attributes,
-        );
 
         return (
           <DetailPageLayout>
@@ -309,25 +252,6 @@ export const ProductUpdatePage = ({
                 openMediaUrlModal={() => setMediaUrlModalStatus(true)}
                 getImageEditUrl={imageId => productImageUrl(productId, imageId)}
               />
-              {data.attributes.length > 0 && (
-                <Attributes
-                  attributes={data.attributes}
-                  attributeValues={attributeValues}
-                  errors={productErrors}
-                  loading={disabled}
-                  disabled={disabled}
-                  onChange={handlers.selectAttribute}
-                  onMultiChange={handlers.selectAttributeMultiple}
-                  onFileChange={handlers.selectAttributeFile}
-                  onReferencesRemove={handlers.selectAttributeReference}
-                  onReferencesAddClick={onAssignReferencesClick}
-                  onReferencesReorder={handlers.reorderAttributeValue}
-                  fetchAttributeValues={fetchAttributeValues}
-                  fetchMoreAttributeValues={fetchMoreAttributeValues}
-                  onAttributeSelectBlur={onAttributeSelectBlur}
-                  richTextGetters={attributeRichTextGetters}
-                />
-              )}
               <ProductVariants
                 productId={productId}
                 productName={product?.name}
@@ -373,35 +297,6 @@ export const ProductUpdatePage = ({
                 disabled={isSaveDisabled}
               />
             </Savebar>
-
-            {canOpenAssignReferencesAttributeDialog && entityType && (
-              <AssignAttributeValueDialog
-                entityType={entityType}
-                confirmButtonState={"default"}
-                products={referenceProducts}
-                pages={referencePages}
-                collections={referenceCollections}
-                categories={referenceCategories}
-                attribute={data.attributes.find(({ id }) => id === assignReferencesAttributeId)}
-                hasMore={handlers.fetchMoreReferences?.hasMore}
-                open={canOpenAssignReferencesAttributeDialog}
-                onFetch={handlers.fetchReferences}
-                onFetchMore={handlers.fetchMoreReferences?.onFetchMore}
-                loading={handlers.fetchMoreReferences?.loading}
-                onClose={onCloseDialog}
-                onSubmit={attributeValues =>
-                  handleAssignReferenceAttribute(
-                    attributeValues.map(container => ({
-                      value: container.id,
-                      label: container.name,
-                    })),
-                    data,
-                    handlers,
-                  )
-                }
-              />
-            )}
-
             <ProductExternalMediaDialog
               product={product}
               onClose={() => setMediaUrlModalStatus(false)}

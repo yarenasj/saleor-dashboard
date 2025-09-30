@@ -1,25 +1,19 @@
 // @ts-strict-ignore
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
-import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
 import { Savebar } from "@dashboard/components/Savebar";
-import { ProductTypeKindEnum, TaxClassBaseFragment, WeightUnitsEnum } from "@dashboard/graphql";
+import { ProductTypeKindEnum, WeightUnitsEnum } from "@dashboard/graphql";
 import { SubmitPromise } from "@dashboard/hooks/useForm";
 import useNavigator from "@dashboard/hooks/useNavigator";
-import useStateFromProps from "@dashboard/hooks/useStateFromProps";
-import {
-  handleTaxClassChange,
-  makeProductTypeKindChangeHandler,
-} from "@dashboard/productTypes/handlers";
+import { makeProductTypeKindChangeHandler } from "@dashboard/productTypes/handlers";
 import { productTypeListUrl } from "@dashboard/productTypes/urls";
-import { FetchMoreProps, UserError } from "@dashboard/types";
+import { UserError } from "@dashboard/types";
 import React from "react";
 
 import ProductTypeDetails from "../ProductTypeDetails/ProductTypeDetails";
 import ProductTypeShipping from "../ProductTypeShipping/ProductTypeShipping";
-import ProductTypeTaxes from "../ProductTypeTaxes/ProductTypeTaxes";
 
 export interface ProductTypeForm {
   name: string;
@@ -35,11 +29,9 @@ export interface ProductTypeCreatePageProps {
   disabled: boolean;
   pageTitle: string;
   saveButtonBarState: ConfirmButtonTransitionState;
-  taxClasses: TaxClassBaseFragment[];
   kind: ProductTypeKindEnum;
   onChangeKind: (kind: ProductTypeKindEnum) => void;
   onSubmit: (data: ProductTypeForm) => SubmitPromise<any[]>;
-  onFetchMoreTaxClasses: FetchMoreProps;
 }
 
 const formInitialData: ProductTypeForm = {
@@ -55,14 +47,11 @@ const ProductTypeCreatePage = ({
   errors,
   pageTitle,
   saveButtonBarState,
-  taxClasses,
   kind,
   onChangeKind,
   onSubmit,
-  onFetchMoreTaxClasses,
 }: ProductTypeCreatePageProps) => {
   const navigate = useNavigator();
-  const [taxClassDisplayName, setTaxClassDisplayName] = useStateFromProps("");
   const initialData = {
     ...formInitialData,
     kind: kind || formInitialData.kind,
@@ -83,17 +72,6 @@ const ProductTypeCreatePage = ({
                 errors={errors}
                 onChange={change}
                 onKindChange={changeKind}
-              />
-              <CardSpacer />
-              <ProductTypeTaxes
-                disabled={disabled}
-                data={data}
-                taxClasses={taxClasses}
-                taxClassDisplayName={taxClassDisplayName}
-                onChange={event =>
-                  handleTaxClassChange(event, taxClasses, change, setTaxClassDisplayName)
-                }
-                onFetchMore={onFetchMoreTaxClasses}
               />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>

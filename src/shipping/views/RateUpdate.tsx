@@ -52,7 +52,6 @@ import {
   getPostalCodeRuleByMinMax,
   getRuleObject,
 } from "@dashboard/shipping/views/utils";
-import { useTaxClassFetchMore } from "@dashboard/taxes/utils/useTaxClassFetchMore";
 import { MinMax } from "@dashboard/types";
 import createDialogActionHandlers from "@dashboard/utils/handlers/dialogActionHandlers";
 import { mapEdgesToItems } from "@dashboard/utils/maps";
@@ -135,7 +134,6 @@ export const RateUpdate = ({ id, rateId, params }: RateUpdateProps) => {
     { closeModal, openModal },
     { formId: FORM_ID },
   );
-  const { taxClasses, fetchMoreTaxClasses } = useTaxClassFetchMore();
   const [updateShippingRate, updateShippingRateOpts] = useUpdateShippingRateMutation({});
   const handleSuccess = () => {
     notify({
@@ -358,8 +356,6 @@ export const RateUpdate = ({ id, rateId, params }: RateUpdateProps) => {
         onPostalCodeAssign={() => openModal("add-range")}
         onPostalCodeUnassign={onPostalCodeUnassign}
         postalCodeRules={state.postalCodeRules!}
-        taxClasses={taxClasses ?? []}
-        fetchMoreTaxClasses={fetchMoreTaxClasses}
       />
       <ShippingZonePostalCodeRangeDialog
         confirmButtonState={"default"}

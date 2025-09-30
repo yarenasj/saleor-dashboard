@@ -1,10 +1,6 @@
 // @ts-strict-ignore
-import { FetchResult } from "@apollo/client";
-import { getAttributesAfterFileAttributesUpdate } from "@dashboard/attributes/utils/data";
-import { prepareAttributesInput } from "@dashboard/attributes/utils/handlers";
 import { DatagridChangeOpts } from "@dashboard/components/Datagrid/hooks/useDatagridChange";
 import {
-  FileUploadMutation,
   ProductChannelListingAddInput,
   ProductChannelListingUpdateInput,
   ProductChannelListingUpdateMutationVariables,
@@ -14,7 +10,6 @@ import {
   VariantAttributeFragment,
 } from "@dashboard/graphql";
 import { ProductUpdateSubmitData } from "@dashboard/products/components/ProductUpdatePage/types";
-import { getAttributeInputFromProduct } from "@dashboard/products/utils/data";
 import { getParsedDataForJsonStringField } from "@dashboard/utils/richText/misc";
 import pick from "lodash/pick";
 import uniq from "lodash/uniq";
@@ -25,25 +20,10 @@ import { getNameData } from "./data/name";
 import { getSkuData } from "./data/sku";
 import { getStockData, getVaraintUpdateStockData } from "./data/stock";
 
-export function getProductUpdateVariables(
-  product: ProductFragment,
-  data: ProductUpdateSubmitData,
-  uploadFilesResult: Array<FetchResult<FileUploadMutation>>,
-) {
-  const updatedFileAttributes = getAttributesAfterFileAttributesUpdate(
-    data.attributesWithNewFileValue,
-    uploadFilesResult,
-  );
-
+export function getProductUpdateVariables(product: ProductFragment, data: ProductUpdateSubmitData) {
   const variables: ProductUpdateMutationVariables = {
     id: product.id,
-    input: {
-      attributes: prepareAttributesInput({
-        attributes: data.attributes,
-        prevAttributes: getAttributeInputFromProduct(product),
-        updatedFileAttributes,
-      }),
-    },
+    input: {},
   };
 
   if (data.category) {

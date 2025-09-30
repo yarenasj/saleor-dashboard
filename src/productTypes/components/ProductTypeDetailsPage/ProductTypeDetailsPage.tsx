@@ -1,34 +1,20 @@
 // @ts-strict-ignore
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
-import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
 import Form from "@dashboard/components/Form";
 import { DetailPageLayout } from "@dashboard/components/Layouts";
 import { Savebar } from "@dashboard/components/Savebar";
-import {
-  ProductAttributeType,
-  ProductTypeDetailsQuery,
-  ProductTypeKindEnum,
-  TaxClassBaseFragment,
-  WeightUnitsEnum,
-} from "@dashboard/graphql";
+import { ProductTypeDetailsQuery, ProductTypeKindEnum, WeightUnitsEnum } from "@dashboard/graphql";
 import { useBackLinkWithState } from "@dashboard/hooks/useBackLinkWithState";
 import { SubmitPromise } from "@dashboard/hooks/useForm";
 import useNavigator from "@dashboard/hooks/useNavigator";
-import useStateFromProps from "@dashboard/hooks/useStateFromProps";
 import { maybe } from "@dashboard/misc";
-import { handleTaxClassChange } from "@dashboard/productTypes/handlers";
 import { productTypeListPath } from "@dashboard/productTypes/urls";
-import { FetchMoreProps, ListActions, ReorderEvent, UserError } from "@dashboard/types";
-import { Box, Text, Toggle } from "@saleor/macaw-ui-next";
+import { ListActions, UserError } from "@dashboard/types";
 import React from "react";
-import { FormattedMessage } from "react-intl";
 
-import ProductTypeAttributes from "../ProductTypeAttributes/ProductTypeAttributes";
 import ProductTypeDetails from "../ProductTypeDetails/ProductTypeDetails";
 import ProductTypeShipping from "../ProductTypeShipping/ProductTypeShipping";
-import ProductTypeTaxes from "../ProductTypeTaxes/ProductTypeTaxes";
-import ProductTypeVariantAttributes from "../ProductTypeVariantAttributes/ProductTypeVariantAttributes";
 
 interface ChoiceType {
   label: string;
@@ -54,17 +40,10 @@ export interface ProductTypeDetailsPageProps {
   pageTitle: string;
   productAttributeList: ListActions;
   saveButtonBarState: ConfirmButtonTransitionState;
-  taxClasses: TaxClassBaseFragment[];
-  variantAttributeList: ListActions;
-  onAttributeAdd: (type: ProductAttributeType) => void;
-  onAttributeReorder: (event: ReorderEvent, type: ProductAttributeType) => void;
-  onAttributeUnassign: (id: string) => void;
   onDelete: () => void;
-  onHasVariantsToggle: (hasVariants: boolean) => void;
   onSubmit: (data: ProductTypeForm) => SubmitPromise;
   setSelectedVariantAttributes: (data: string[]) => void;
   selectedVariantAttributes: string[];
-  onFetchMoreTaxClasses: FetchMoreProps;
 }
 
 const ProductTypeDetailsPage = ({
@@ -73,27 +52,14 @@ const ProductTypeDetailsPage = ({
   errors,
   pageTitle,
   productType,
-  productAttributeList,
   saveButtonBarState,
-  taxClasses,
-  variantAttributeList,
-  onAttributeAdd,
-  onAttributeUnassign,
-  onAttributeReorder,
   onDelete,
-  onHasVariantsToggle,
   onSubmit,
-  setSelectedVariantAttributes,
-  selectedVariantAttributes,
-  onFetchMoreTaxClasses,
 }: ProductTypeDetailsPageProps) => {
   const navigate = useNavigator();
   const productTypeListBackLink = useBackLinkWithState({
     path: productTypeListPath,
   });
-  const [taxClassDisplayName, setTaxClassDisplayName] = useStateFromProps(
-    productType?.taxClass?.name ?? "",
-  );
   const formInitialData: ProductTypeForm = {
     hasVariants:
       maybe(() => productType.hasVariants) !== undefined ? productType.hasVariants : false,
@@ -140,67 +106,6 @@ const ProductTypeDetailsPage = ({
                 onChange={change}
                 onKindChange={change}
               />
-              <CardSpacer />
-              <ProductTypeTaxes
-                disabled={disabled}
-                data={data}
-                taxClasses={taxClasses}
-                taxClassDisplayName={taxClassDisplayName}
-                onChange={event =>
-                  handleTaxClassChange(event, taxClasses, change, setTaxClassDisplayName)
-                }
-                onFetchMore={onFetchMoreTaxClasses}
-              />
-              <CardSpacer />
-              <ProductTypeAttributes
-                testId="assign-products-attributes"
-                attributes={maybe(() => productType.productAttributes)}
-                disabled={disabled}
-                type={ProductAttributeType.PRODUCT}
-                onAttributeAssign={onAttributeAdd}
-                onAttributeReorder={(event: ReorderEvent) =>
-                  onAttributeReorder(event, ProductAttributeType.PRODUCT)
-                }
-                onAttributeUnassign={onAttributeUnassign}
-                {...productAttributeList}
-              />
-              <CardSpacer />
-
-              <Box marginLeft={6}>
-                <Toggle
-                  pressed={data.hasVariants}
-                  disabled={disabled}
-                  name="hasVariants"
-                  onPressedChange={pressed => onHasVariantsToggle(pressed)}
-                >
-                  <Text>
-                    <FormattedMessage
-                      id="5pHBSU"
-                      defaultMessage="Product type uses Variant Attributes"
-                      description="switch button"
-                    />
-                  </Text>
-                </Toggle>
-              </Box>
-              {data.hasVariants && (
-                <>
-                  <CardSpacer />
-                  <ProductTypeVariantAttributes
-                    testId="assign-variants-attributes"
-                    assignedVariantAttributes={productType?.assignedVariantAttributes}
-                    disabled={disabled}
-                    type={ProductAttributeType.VARIANT}
-                    onAttributeAssign={onAttributeAdd}
-                    onAttributeReorder={(event: ReorderEvent) =>
-                      onAttributeReorder(event, ProductAttributeType.VARIANT)
-                    }
-                    onAttributeUnassign={onAttributeUnassign}
-                    setSelectedVariantAttributes={setSelectedVariantAttributes}
-                    selectedVariantAttributes={selectedVariantAttributes}
-                    {...variantAttributeList}
-                  />
-                </>
-              )}
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>
               <ProductTypeShipping

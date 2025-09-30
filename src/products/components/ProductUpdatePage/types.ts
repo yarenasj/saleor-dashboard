@@ -1,6 +1,4 @@
 // @ts-strict-ignore
-import { RichTextProps } from "@dashboard/attributes/utils/data";
-import { AttributeInput } from "@dashboard/components/Attributes";
 import { ChannelOpts } from "@dashboard/components/ChannelsAvailabilityCard/types";
 import {
   DatagridChangeOpts,
@@ -21,15 +19,9 @@ import {
   FormErrors,
   SubmitPromise,
 } from "@dashboard/hooks/useForm";
-import {
-  FormsetAtomicData,
-  FormsetChange,
-  FormsetData,
-  FormsetMetadataChange,
-} from "@dashboard/hooks/useFormset";
-import { AttributeValuesMetadata } from "@dashboard/products/utils/data";
 import { UseProductUpdateHandlerError } from "@dashboard/products/views/ProductUpdate/handlers/useProductUpdateHandler";
-import { FetchMoreProps, RelayToFlat, ReorderEvent } from "@dashboard/types";
+import { FetchMoreProps, RelayToFlat } from "@dashboard/types";
+import { RichTextContextValues } from "@dashboard/utils/richText/context";
 import { OutputData } from "@editorjs/editorjs";
 import { Option } from "@saleor/macaw-ui-next";
 
@@ -37,7 +29,6 @@ import { ProductChannelsListingDialogSubmit } from "./ProductChannelsListingsDia
 
 export interface ProductUpdateFormData {
   category: string | null;
-  taxClassId: string;
   collections: Option[];
   isAvailable: boolean;
   name: string;
@@ -54,23 +45,11 @@ export interface ProductUpdateFormData {
   preorderEndDateTime?: string;
   weight: string;
 }
-export interface FileAttributeInputData {
-  attributeId: string;
-  file: File;
-}
-export type FileAttributeInput = FormsetAtomicData<FileAttributeInputData, string[]>;
-
-export interface FileAttributesSubmitData {
-  fileAttributes: FileAttributeInput[];
-}
 export interface ProductUpdateData extends ProductUpdateFormData {
-  attributes: AttributeInput[];
   channels: ProductChannelListingUpdateInput;
   description: OutputData;
 }
 export interface ProductUpdateSubmitData extends ProductUpdateFormData {
-  attributes: AttributeInput[];
-  attributesWithNewFileValue: FormsetData<null, File>;
   channels: ProductChannelListingUpdateInput;
   collections: Option[];
   description: OutputData;
@@ -78,27 +57,17 @@ export interface ProductUpdateSubmitData extends ProductUpdateFormData {
 }
 
 export interface ProductUpdateHandlers
-  extends Record<
-      "changeMetadata" | "selectCategory" | "selectCollection" | "selectTaxClass",
-      FormChange
-    >,
-    Record<"selectAttribute" | "selectAttributeMultiple", FormsetChange<string>> {
+  extends Record<"changeMetadata" | "selectCategory" | "selectCollection", FormChange> {
   changeChannels: (id: string, data: ChannelOpts) => void;
-  selectAttributeReference: FormsetChange<string[]>;
-  selectAttributeReferenceMetadata: FormsetMetadataChange<AttributeValuesMetadata[]>;
-  selectAttributeFile: FormsetChange<File>;
-  reorderAttributeValue: FormsetChange<ReorderEvent>;
   changeVariants: (data: DatagridChangeOpts) => void;
-  fetchReferences: (value: string) => void;
-  fetchMoreReferences: FetchMoreProps;
   updateChannelList: ProductChannelsListingDialogSubmit;
 }
 
 export interface UseProductUpdateFormOutput
-  extends CommonUseFormResultWithHandlers<ProductUpdateData, ProductUpdateHandlers>,
-    RichTextProps {
+  extends CommonUseFormResultWithHandlers<ProductUpdateData, ProductUpdateHandlers> {
   datagrid: UseDatagridChangeState;
   formErrors: FormErrors<ProductUpdateSubmitData>;
+  richText: RichTextContextValues;
 }
 
 export type UseProductUpdateFormRenderProps = Omit<
@@ -106,11 +75,9 @@ export type UseProductUpdateFormRenderProps = Omit<
   "datagrid" | "richText"
 >;
 
-export interface UseProductUpdateFormOpts
-  extends Record<"categories" | "collections" | "taxClasses", Option[]> {
+export interface UseProductUpdateFormOpts extends Record<"categories" | "collections", Option[]> {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
   setSelectedCollections: React.Dispatch<React.SetStateAction<Option[]>>;
-  setSelectedTaxClass: React.Dispatch<React.SetStateAction<string>>;
   selectedCollections: Option[];
   hasVariants: boolean;
   referencePages: RelayToFlat<SearchPagesQuery["search"]>;
