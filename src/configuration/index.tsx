@@ -6,20 +6,15 @@ import { APP_VERSION as dashboardVersion } from "@dashboard/config";
 import { PermissionEnum } from "@dashboard/graphql";
 import useShop from "@dashboard/hooks/useShop";
 import Channels from "@dashboard/icons/Channels";
-import PermissionGroups from "@dashboard/icons/PermissionGroups";
 import ProductTypes from "@dashboard/icons/ProductTypes";
 import ShippingMethods from "@dashboard/icons/ShippingMethods";
 import SiteSettings from "@dashboard/icons/SiteSettings";
-import StaffMembers from "@dashboard/icons/StaffMembers";
-import Taxes from "@dashboard/icons/Taxes";
 import Warehouses from "@dashboard/icons/Warehouses";
 import { sectionNames } from "@dashboard/intl";
 import { maybe } from "@dashboard/misc";
-import { permissionGroupListUrl } from "@dashboard/permissionGroups/urls";
 import { productTypeListUrl } from "@dashboard/productTypes/urls";
 import { shippingZonesListUrl } from "@dashboard/shipping/urls";
 import { siteSettingsUrl } from "@dashboard/siteSettings/urls";
-import { staffListUrl } from "@dashboard/staff/urls";
 import { warehouseSection } from "@dashboard/warehouses/urls";
 import React from "react";
 import { IntlShape, useIntl } from "react-intl";
@@ -46,36 +41,6 @@ export function createConfigurationMenu(intl: IntlShape): MenuSection[] {
           title: intl.formatMessage(sectionNames.productTypes),
           url: productTypeListUrl(),
           testId: "configuration-menu-product-types",
-        },
-      ],
-    },
-    {
-      label: intl.formatMessage({
-        id: "UN+yTt",
-        defaultMessage: "Staff Settings",
-      }),
-      menuItems: [
-        {
-          description: intl.formatMessage({
-            id: "RQUkVW",
-            defaultMessage: "Manage your employees and their permissions",
-          }),
-          icon: <StaffMembers />,
-          permissions: [PermissionEnum.MANAGE_STAFF],
-          title: intl.formatMessage(sectionNames.staff),
-          url: staffListUrl(),
-          testId: "configuration-menu-staff",
-        },
-        {
-          description: intl.formatMessage({
-            id: "ivJ1qt",
-            defaultMessage: "Manage your permission groups and their permissions",
-          }),
-          icon: <PermissionGroups />,
-          permissions: [PermissionEnum.MANAGE_STAFF],
-          title: intl.formatMessage(sectionNames.permissionGroups),
-          url: permissionGroupListUrl(),
-          testId: "configuration-menu-permission-groups",
         },
       ],
     },

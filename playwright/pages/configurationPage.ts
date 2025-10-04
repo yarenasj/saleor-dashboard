@@ -7,7 +7,6 @@ export class ConfigurationPage extends BasePage {
   constructor(
     page: Page,
     readonly pluginsButton = page.locator("[data-test-id*='plugins']"),
-    readonly permissionGroupsButton = page.locator("[data-test-id*='permission-groups']"),
     readonly staffMembersButton = page.locator("[data-test-id*='staff members']"),
     readonly siteSettingsButton = page.locator("[data-test-id*='site-settings']"),
     readonly channelsButton = page.locator("[data-test-id*='channels']"),
@@ -31,10 +30,6 @@ export class ConfigurationPage extends BasePage {
 
   async openChannels() {
     await this.channelsButton.click();
-  }
-
-  async openPermissionGroups() {
-    await this.permissionGroupsButton.click();
   }
 
   async openStaffMembers() {

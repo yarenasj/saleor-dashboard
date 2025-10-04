@@ -2,7 +2,6 @@
 import { OrderEventFragment, OrderEventsEnum } from "@dashboard/graphql";
 import { getFullName } from "@dashboard/misc";
 import { orderUrl } from "@dashboard/orders/urls";
-import { staffMemberDetailsUrl } from "@dashboard/staff/urls";
 import { IntlShape, MessageDescriptor } from "react-intl";
 
 export const getEventSecondaryTitle = (event: OrderEventFragment): [MessageDescriptor, any?] => {
@@ -84,7 +83,7 @@ export const getEmployeeNameLink = (event: OrderEventFragment, intl: IntlShape) 
   const { id } = event.user;
 
   return {
-    link: staffMemberDetailsUrl(id),
+    link: `${id}`,
     text:
       selectEmployeeName(event.user) ||
       intl.formatMessage({

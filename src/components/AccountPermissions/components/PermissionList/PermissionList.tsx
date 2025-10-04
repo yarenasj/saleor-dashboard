@@ -1,4 +1,3 @@
-import { PermissionData } from "@dashboard/permissionGroups/components/PermissionGroupDetailsPage";
 import { Box, Checkbox, Skeleton, Text, Tooltip } from "@saleor/macaw-ui-next";
 import React from "react";
 import { useIntl } from "react-intl";
@@ -8,7 +7,7 @@ import { hasPermissionSelected } from "../../utils";
 import styles from "./PermissionList.module.css";
 
 interface PermissionListProps {
-  permissions: PermissionData[];
+  permissions: any[];
   selectedPermissions: string[];
   disabled?: boolean;
   onPermissionChange: (key: string, value: boolean) => void;
@@ -23,7 +22,7 @@ function renderWithWbrAfterUnderscore(str: string) {
     .flatMap((part, idx, arr) => (idx < arr.length - 1 ? [part, "_", <wbr key={idx} />] : [part]));
 }
 
-function getPermissionColumns(permissions: PermissionData[]) {
+function getPermissionColumns(permissions: any[]) {
   if (permissions.length > 1) {
     const mid = Math.ceil(permissions.length / 2);
 

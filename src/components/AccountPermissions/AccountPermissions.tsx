@@ -1,5 +1,4 @@
 import { useUser } from "@dashboard/auth";
-import { PermissionData } from "@dashboard/permissionGroups/components/PermissionGroupDetailsPage";
 import { Box, Text } from "@saleor/macaw-ui-next";
 import React, { ChangeEvent } from "react";
 import { useIntl } from "react-intl";
@@ -10,7 +9,7 @@ import { PermissionList } from "./components/PermissionList";
 import { messages } from "./messages";
 
 interface AccountPermissionsProps {
-  permissions: PermissionData[];
+  permissions: any[];
   permissionsExceeded: boolean;
   data: {
     hasFullAccess: boolean;

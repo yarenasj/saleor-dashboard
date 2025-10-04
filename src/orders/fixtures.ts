@@ -34,7 +34,6 @@ import {
   TransactionKind,
   WeightUnitsEnum,
 } from "@dashboard/graphql";
-import { staffMember } from "@dashboard/staff/fixtures";
 import { RelayToFlat } from "@dashboard/types";
 import { warehouseForPickup, warehouseList } from "@dashboard/warehouses/fixtures";
 import { MessageDescriptor } from "react-intl";
@@ -42,6 +41,19 @@ import { MessageDescriptor } from "react-intl";
 import { transformOrderStatus, transformPaymentStatus } from "../misc";
 
 export const MOCK_PAYMENT_GATEWAY_ID = "saleor.dummy.payment";
+
+const staffMember: any = {
+  __typename: "User",
+  avatar: { __typename: "Image" as const, url: "" },
+  email: "admin@example.com",
+  firstName: "Jacob",
+  id: "VXNlcjoyMQ==",
+  isActive: true,
+  lastName: "Smith",
+  permissionGroups: [],
+  userPermissions: [],
+  metadata: [],
+};
 
 export const prepareMoney = (amount?: number): OrderDetailsQuery["order"]["totalAuthorized"] => ({
   __typename: "Money",

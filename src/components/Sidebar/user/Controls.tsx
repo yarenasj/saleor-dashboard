@@ -1,5 +1,4 @@
 import { useUser } from "@dashboard/auth";
-import { staffMemberDetailsUrl } from "@dashboard/staff/urls";
 import { useTheme } from "@dashboard/theme";
 import { useTheme as useLegacyTheme } from "@saleor/macaw-ui";
 import {
@@ -83,7 +82,7 @@ export const UserControls = () => {
                   onClick={() => setOpen(false)}
                 >
                   <Link
-                    to={staffMemberDetailsUrl(user?.id || "")}
+                    to={user?.id || ""}
                     className={sprinkles({
                       display: "block",
                       width: "100%",
