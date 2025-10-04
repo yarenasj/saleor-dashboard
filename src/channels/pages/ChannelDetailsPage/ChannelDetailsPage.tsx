@@ -1,5 +1,4 @@
 // @ts-strict-ignore
-import ChannelAllocationStrategy from "@dashboard/channels/components/ChannelAllocationStrategy";
 import ShippingZones from "@dashboard/channels/components/ShippingZones";
 import Warehouses from "@dashboard/channels/components/Warehouses";
 import { channelsListUrl } from "@dashboard/channels/urls";
@@ -304,7 +303,6 @@ const ChannelDetailsPage = function <TErrors extends ChannelErrorFragment[]>({
                 />
                 <CardSpacer />
               </RequirePermissions>
-              <ChannelAllocationStrategy data={data} disabled={disabled} onChange={change} />
             </DetailPageLayout.RightSidebar>
             <Savebar>
               <Savebar.DeleteButton onClick={onDelete} />
