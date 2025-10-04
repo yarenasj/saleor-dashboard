@@ -126,21 +126,6 @@ const SiteSettingsPage = (props: SiteSettingsPageProps) => {
             />
             <DetailPageLayout.Content>
               <Box gap={2}>
-                <Box display="grid" __gridTemplateColumns="1fr 3fr" paddingLeft={6}>
-                  <PageSectionHeader
-                    title={intl.formatMessage(messages.sectionCheckoutTitle)}
-                    description={intl.formatMessage(messages.sectionCheckoutDescription)}
-                  />
-                  <SiteCheckoutSettingsCard
-                    data={data}
-                    errors={errors}
-                    disabled={disabled}
-                    onChange={change}
-                  />
-                </Box>
-
-                <Divider />
-
                 <Box
                   display="grid"
                   __gridTemplateColumns="1fr 3fr"
@@ -165,36 +150,6 @@ const SiteSettingsPage = (props: SiteSettingsPageProps) => {
                     onChange={change}
                     onCountryChange={handleCountrySelect}
                   />
-                </Box>
-
-                <Divider />
-
-                <Box
-                  display="grid"
-                  __gridTemplateColumns="1fr 3fr"
-                  paddingLeft={6}
-                  paddingBottom={8}
-                >
-                  <PageSectionHeader
-                    title={intl.formatMessage(messages.sectionEmailConfirmationTitle)}
-                    description={intl.formatMessage(messages.sectionEmailConfirmationDescription)}
-                  />
-                  <DashboardCard>
-                    <DashboardCard.Header>
-                      <DashboardCard.Title>
-                        {intl.formatMessage(messages.sectionEmailConfirmationHeader)}
-                      </DashboardCard.Title>
-                    </DashboardCard.Header>
-                    <DashboardCard.Content>
-                      <Checkbox
-                        data-test-id="require-email-confirmation-checkbox"
-                        checked={data.emailConfirmation}
-                        onCheckedChange={handleEmailConfirmationChange}
-                      >
-                        <Text>{intl.formatMessage(messages.sectionEmailConfirmationHeader)}</Text>
-                      </Checkbox>
-                    </DashboardCard.Content>
-                  </DashboardCard>
                 </Box>
               </Box>
 

@@ -1,10 +1,7 @@
 import { MetadataItemFragment } from "@dashboard/graphql";
-import useDebounce from "@dashboard/hooks/useDebounce";
 import { useRef } from "react";
 
-import { byDuplicates } from "./byDuplicates";
 import { PersistedColumn, RawColumn } from "./persistedColumn";
-import { useMetadata } from "./useMetadata";
 
 const parseGridMetadata = (metadata?: MetadataItemFragment) => {
   try {
@@ -18,25 +15,13 @@ const parseGridMetadata = (metadata?: MetadataItemFragment) => {
   }
 };
 
-const toRaw = (column: PersistedColumn) => column.asRaw();
-
 export const usePersistance = (gridName?: string) => {
-  const { metadata, persist } = useMetadata(gridName || "");
-  const columnsState = useRef<PersistedColumn[]>(parseGridMetadata(metadata));
-
-  const saveMetadata = useDebounce((columns: PersistedColumn[]) => {
-    const rawColumns = columnsState.current.concat(columns).map(toRaw).filter(byDuplicates);
-
-    const metadata = [{ key: `grid_${gridName}`, value: JSON.stringify(rawColumns) }];
-
-    persist(metadata);
-  }, 500);
+  const columnsState = useRef<PersistedColumn[]>(parseGridMetadata());
 
   const update = (columns: PersistedColumn[]) => {
     if (!gridName) return;
 
     columnsState.current = columns;
-    saveMetadata(columns);
   };
 
   return {

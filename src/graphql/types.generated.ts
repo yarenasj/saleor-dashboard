@@ -10332,48 +10332,6 @@ export type DevModeRunQueryVariables = Exact<{
 
 export type DevModeRunQuery = { __typename: 'Query', orders: { __typename: 'OrderCountableConnection', edges: Array<{ __typename: 'OrderCountableEdge', node: { __typename: 'Order', id: string, number: string, status: OrderStatus, isShippingRequired: boolean, canFinalize: boolean, created: any, customerNote: string, paymentStatus: PaymentChargeStatusEnum, userEmail: string | null, isPaid: boolean } }> } | null };
 
-export type PermissionGroupDeleteMutationVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type PermissionGroupDeleteMutation = { __typename: 'Mutation', permissionGroupDelete: { __typename: 'PermissionGroupDelete', errors: Array<{ __typename: 'PermissionGroupError', code: PermissionGroupErrorCode, field: string | null, message: string | null }> } | null };
-
-export type PermissionGroupCreateMutationVariables = Exact<{
-  input: PermissionGroupCreateInput;
-}>;
-
-
-export type PermissionGroupCreateMutation = { __typename: 'Mutation', permissionGroupCreate: { __typename: 'PermissionGroupCreate', errors: Array<{ __typename: 'PermissionGroupError', code: PermissionGroupErrorCode, field: string | null, message: string | null }>, group: { __typename: 'Group', restrictedAccessToChannels: boolean, id: string, name: string, userCanManage: boolean, accessibleChannels: Array<{ __typename: 'Channel', id: string, isActive: boolean, name: string, slug: string, currencyCode: string, defaultCountry: { __typename: 'CountryDisplay', code: string, country: string }, stockSettings: { __typename: 'StockSettings', allocationStrategy: AllocationStrategyEnum } }> | null, permissions: Array<{ __typename: 'Permission', code: PermissionEnum, name: string }> | null, users: Array<{ __typename: 'User', id: string, firstName: string, lastName: string, email: string, isActive: boolean, avatar: { __typename: 'Image', url: string } | null }> | null } | null } | null };
-
-export type PermissionGroupUpdateMutationVariables = Exact<{
-  id: Scalars['ID'];
-  input: PermissionGroupUpdateInput;
-}>;
-
-
-export type PermissionGroupUpdateMutation = { __typename: 'Mutation', permissionGroupUpdate: { __typename: 'PermissionGroupUpdate', errors: Array<{ __typename: 'PermissionGroupError', code: PermissionGroupErrorCode, field: string | null, message: string | null }>, group: { __typename: 'Group', restrictedAccessToChannels: boolean, id: string, name: string, userCanManage: boolean, accessibleChannels: Array<{ __typename: 'Channel', id: string, isActive: boolean, name: string, slug: string, currencyCode: string, defaultCountry: { __typename: 'CountryDisplay', code: string, country: string }, stockSettings: { __typename: 'StockSettings', allocationStrategy: AllocationStrategyEnum } }> | null, permissions: Array<{ __typename: 'Permission', code: PermissionEnum, name: string }> | null, users: Array<{ __typename: 'User', id: string, firstName: string, lastName: string, email: string, isActive: boolean, avatar: { __typename: 'Image', url: string } | null }> | null } | null } | null };
-
-export type PermissionGroupListQueryVariables = Exact<{
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  filter?: InputMaybe<PermissionGroupFilterInput>;
-  sort?: InputMaybe<PermissionGroupSortingInput>;
-}>;
-
-
-export type PermissionGroupListQuery = { __typename: 'Query', permissionGroups: { __typename: 'GroupCountableConnection', edges: Array<{ __typename: 'GroupCountableEdge', node: { __typename: 'Group', id: string, name: string, userCanManage: boolean, users: Array<{ __typename: 'User', id: string, firstName: string, lastName: string }> | null } }>, pageInfo: { __typename: 'PageInfo', endCursor: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor: string | null } } | null };
-
-export type PermissionGroupDetailsQueryVariables = Exact<{
-  id: Scalars['ID'];
-  userId: Scalars['ID'];
-}>;
-
-
-export type PermissionGroupDetailsQuery = { __typename: 'Query', permissionGroup: { __typename: 'Group', restrictedAccessToChannels: boolean, id: string, name: string, userCanManage: boolean, accessibleChannels: Array<{ __typename: 'Channel', id: string, isActive: boolean, name: string, slug: string, currencyCode: string, defaultCountry: { __typename: 'CountryDisplay', code: string, country: string }, stockSettings: { __typename: 'StockSettings', allocationStrategy: AllocationStrategyEnum } }> | null, permissions: Array<{ __typename: 'Permission', code: PermissionEnum, name: string }> | null, users: Array<{ __typename: 'User', id: string, firstName: string, lastName: string, email: string, isActive: boolean, avatar: { __typename: 'Image', url: string } | null }> | null } | null, user: { __typename: 'User', editableGroups: Array<{ __typename: 'Group', id: string }> | null, userPermissions: Array<{ __typename: 'UserPermission', code: PermissionEnum, sourcePermissionGroups: Array<{ __typename: 'Group', id: string }> | null }> | null } | null };
-
 export type ProductTypeDeleteMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -11124,82 +11082,6 @@ export type SiteSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SiteSettingsQuery = { __typename: 'Query', shop: { __typename: 'Shop', customerSetPasswordUrl: string | null, defaultMailSenderAddress: string | null, defaultMailSenderName: string | null, description: string | null, name: string, reserveStockDurationAnonymousUser: number | null, reserveStockDurationAuthenticatedUser: number | null, limitQuantityPerCheckout: number | null, enableAccountConfirmationByEmail: boolean | null, companyAddress: { __typename: 'Address', city: string, cityArea: string, companyName: string, countryArea: string, firstName: string, id: string, lastName: string, phone: string | null, postalCode: string, streetAddress1: string, streetAddress2: string, country: { __typename: 'CountryDisplay', code: string, country: string } } | null, countries: Array<{ __typename: 'CountryDisplay', code: string, country: string }>, domain: { __typename: 'Domain', host: string } } };
-
-export type StaffMemberAddMutationVariables = Exact<{
-  input: StaffCreateInput;
-}>;
-
-
-export type StaffMemberAddMutation = { __typename: 'Mutation', staffCreate: { __typename: 'StaffCreate', errors: Array<{ __typename: 'StaffError', code: AccountErrorCode, field: string | null, message: string | null }>, user: { __typename: 'User', id: string, email: string, firstName: string, isActive: boolean, lastName: string, permissionGroups: Array<{ __typename: 'Group', id: string, name: string, userCanManage: boolean }> | null, userPermissions: Array<{ __typename: 'UserPermission', code: PermissionEnum, name: string }> | null, avatar: { __typename: 'Image', url: string } | null, metadata: Array<{ __typename: 'MetadataItem', key: string, value: string }> } | null } | null };
-
-export type StaffMemberUpdateMutationVariables = Exact<{
-  id: Scalars['ID'];
-  input: StaffUpdateInput;
-}>;
-
-
-export type StaffMemberUpdateMutation = { __typename: 'Mutation', staffUpdate: { __typename: 'StaffUpdate', errors: Array<{ __typename: 'StaffError', code: AccountErrorCode, field: string | null, message: string | null }>, user: { __typename: 'User', id: string, email: string, firstName: string, isActive: boolean, lastName: string, permissionGroups: Array<{ __typename: 'Group', id: string, name: string, userCanManage: boolean }> | null, userPermissions: Array<{ __typename: 'UserPermission', code: PermissionEnum, name: string }> | null, avatar: { __typename: 'Image', url: string } | null, metadata: Array<{ __typename: 'MetadataItem', key: string, value: string }> } | null } | null };
-
-export type UserPassowrdChangeMutationVariables = Exact<{
-  newPassword: Scalars['String'];
-  oldPassword: Scalars['String'];
-}>;
-
-
-export type UserPassowrdChangeMutation = { __typename: 'Mutation', passwordChange: { __typename: 'PasswordChange', errors: Array<{ __typename: 'AccountError', code: AccountErrorCode, field: string | null, addressType: AddressTypeEnum | null, message: string | null }> } | null };
-
-export type UserAccountUpdateMutationVariables = Exact<{
-  input: AccountInput;
-}>;
-
-
-export type UserAccountUpdateMutation = { __typename: 'Mutation', accountUpdate: { __typename: 'AccountUpdate', user: { __typename: 'User', metadata: Array<{ __typename: 'MetadataItem', key: string, value: string }> } | null, errors: Array<{ __typename: 'AccountError', code: AccountErrorCode, field: string | null, addressType: AddressTypeEnum | null, message: string | null }> } | null };
-
-export type StaffMemberDeleteMutationVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type StaffMemberDeleteMutation = { __typename: 'Mutation', staffDelete: { __typename: 'StaffDelete', errors: Array<{ __typename: 'StaffError', code: AccountErrorCode, field: string | null, message: string | null }> } | null };
-
-export type UserAvatarUpdateMutationVariables = Exact<{
-  image: Scalars['Upload'];
-}>;
-
-
-export type UserAvatarUpdateMutation = { __typename: 'Mutation', userAvatarUpdate: { __typename: 'UserAvatarUpdate', errors: Array<{ __typename: 'AccountError', code: AccountErrorCode, field: string | null, addressType: AddressTypeEnum | null, message: string | null }>, user: { __typename: 'User', id: string, avatar: { __typename: 'Image', url: string } | null } | null } | null };
-
-export type UserAvatarDeleteMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserAvatarDeleteMutation = { __typename: 'Mutation', userAvatarDelete: { __typename: 'UserAvatarDelete', errors: Array<{ __typename: 'AccountError', code: AccountErrorCode, field: string | null, addressType: AddressTypeEnum | null, message: string | null }>, user: { __typename: 'User', id: string, avatar: { __typename: 'Image', url: string } | null } | null } | null };
-
-export type ChangeUserPasswordMutationVariables = Exact<{
-  newPassword: Scalars['String'];
-  oldPassword: Scalars['String'];
-}>;
-
-
-export type ChangeUserPasswordMutation = { __typename: 'Mutation', passwordChange: { __typename: 'PasswordChange', errors: Array<{ __typename: 'AccountError', code: AccountErrorCode, field: string | null, addressType: AddressTypeEnum | null, message: string | null }> } | null };
-
-export type StaffListQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']>;
-  after?: InputMaybe<Scalars['String']>;
-  last?: InputMaybe<Scalars['Int']>;
-  before?: InputMaybe<Scalars['String']>;
-  filter?: InputMaybe<StaffUserInput>;
-  sort?: InputMaybe<UserSortingInput>;
-}>;
-
-
-export type StaffListQuery = { __typename: 'Query', staffUsers: { __typename: 'UserCountableConnection', edges: Array<{ __typename: 'UserCountableEdge', cursor: string, node: { __typename: 'User', id: string, email: string, firstName: string, isActive: boolean, lastName: string, avatar: { __typename: 'Image', url: string } | null } }>, pageInfo: { __typename: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string | null, endCursor: string | null } } | null };
-
-export type StaffMemberDetailsQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type StaffMemberDetailsQuery = { __typename: 'Query', user: { __typename: 'User', id: string, email: string, firstName: string, isActive: boolean, lastName: string, permissionGroups: Array<{ __typename: 'Group', id: string, name: string, userCanManage: boolean }> | null, userPermissions: Array<{ __typename: 'UserPermission', code: PermissionEnum, name: string }> | null, avatar: { __typename: 'Image', url: string } | null, metadata: Array<{ __typename: 'MetadataItem', key: string, value: string }> } | null };
 
 export type UpdateProductTranslationsMutationVariables = Exact<{
   id: Scalars['ID'];
