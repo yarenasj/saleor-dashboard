@@ -12,7 +12,6 @@ import { useBackLinkWithState } from "@dashboard/hooks/useBackLinkWithState";
 import { SubmitPromise } from "@dashboard/hooks/useForm";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import { TranslationsIcon } from "@dashboard/icons/Translations";
-import { TranslationsButton } from "@dashboard/translations/components/TranslationsButton/TranslationsButton";
 import { languageEntityUrl, TranslatableEntities } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
 import { sprinkles } from "@saleor/macaw-ui-next";
@@ -93,23 +92,7 @@ export const CategoryUpdatePage = ({
     <CategoryUpdateForm category={category} onSubmit={onSubmit} disabled={disabled}>
       {({ data, change, handlers, submit, isSaveDisabled }) => (
         <DetailPageLayout gridTemplateColumns={1}>
-          <TopNav href={backHref} title={category?.name}>
-            {canTranslate && (
-              <TranslationsButton
-                variant="secondary"
-                icon={<TranslationsIcon />}
-                onClick={() =>
-                  navigate(
-                    languageEntityUrl(
-                      lastUsedLocaleOrFallback,
-                      TranslatableEntities.categories,
-                      categoryId,
-                    ),
-                  )
-                }
-              />
-            )}
-          </TopNav>
+          <TopNav href={backHref} title={category?.name}></TopNav>
           <DetailPageLayout.Content>
             <CategoryDetailsForm
               data={data}

@@ -17,7 +17,6 @@ import {
 import { useBackLinkWithState } from "@dashboard/hooks/useBackLinkWithState";
 import { SubmitPromise } from "@dashboard/hooks/useForm";
 import useNavigator from "@dashboard/hooks/useNavigator";
-import { TranslationsButton } from "@dashboard/translations/components/TranslationsButton/TranslationsButton";
 import { languageEntityUrl, TranslatableEntities } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
 import React from "react";
@@ -81,21 +80,7 @@ const CollectionDetailsPage = ({
     >
       {({ change, data, handlers, submit, isSaveDisabled }) => (
         <DetailPageLayout>
-          <TopNav href={collectionListBackLink} title={collection?.name}>
-            {canTranslate && (
-              <TranslationsButton
-                onClick={() =>
-                  navigate(
-                    languageEntityUrl(
-                      lastUsedLocaleOrFallback,
-                      TranslatableEntities.collections,
-                      collection.id,
-                    ),
-                  )
-                }
-              />
-            )}
-          </TopNav>
+          <TopNav href={collectionListBackLink} title={collection?.name}></TopNav>
           <DetailPageLayout.Content>
             <CollectionDetails data={data} disabled={disabled} errors={errors} onChange={change} />
             <CollectionImage

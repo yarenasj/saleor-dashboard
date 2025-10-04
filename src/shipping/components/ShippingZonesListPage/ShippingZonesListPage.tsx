@@ -50,18 +50,6 @@ const ShippingZonesListPage = ({
         withoutBorder
       >
         <Box display="flex" alignItems="end" gap={2}>
-          <RequirePermissions requiredPermissions={[PermissionEnum.MANAGE_SETTINGS]}>
-            <TopNav.Menu
-              dataTestId="shipping-zones-menu"
-              items={[
-                {
-                  label: intl.formatMessage(messages.shippingZonesConfig),
-                  onSelect: onWeightUnitChange,
-                  testId: "weight-unit-configuration",
-                },
-              ]}
-            />
-          </RequirePermissions>
           <Button data-test-id="add-shipping-zone" onClick={() => navigate(shippingZoneAddUrl)}>
             <FormattedMessage {...messages.createShippingZone} />
           </Button>

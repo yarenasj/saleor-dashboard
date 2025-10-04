@@ -1,6 +1,5 @@
 import { DashboardCard } from "@dashboard/components/Card";
 import Link from "@dashboard/components/Link";
-import PreviewPill from "@dashboard/components/PreviewPill";
 import { NewRadioGroupField as RadioGroupField } from "@dashboard/components/RadioGroupField";
 import {
   WarehouseClickAndCollectOptionEnum,
@@ -49,13 +48,7 @@ const useStyles = makeStyles(
     name: "WarehouseInfoProps",
   },
 );
-const WarehouseSettings = ({
-  zones,
-  disabled,
-  data,
-  onChange,
-  setData,
-}: WarehouseSettingsProps) => {
+const WarehouseSettings = ({ zones, disabled, data, setData }: WarehouseSettingsProps) => {
   React.useEffect(() => {
     if (data.isPrivate && data.clickAndCollectOption === WarehouseClickAndCollectOptionEnum.LOCAL) {
       setData({
@@ -92,50 +85,6 @@ const WarehouseSettings = ({
       value: "false",
     },
   ];
-  const clickAndCollectChoicesPublic = [
-    {
-      label: (
-        <>
-          <FormattedMessage {...messages.warehouseSettingsDisabled} />
-          <WarehouseRadioSubtitle>
-            <FormattedMessage {...messages.warehouseSettingsDisabledDescription} />
-          </WarehouseRadioSubtitle>
-        </>
-      ),
-      value: WarehouseClickAndCollectOptionEnum.DISABLED,
-    },
-    {
-      label: (
-        <>
-          <FormattedMessage {...messages.warehouseSettingsLocal} />
-          <WarehouseRadioSubtitle>
-            <FormattedMessage
-              {...messages.warehouseSettingsLocalDescription}
-              values={{ break: <br /> }}
-            />
-          </WarehouseRadioSubtitle>
-        </>
-      ),
-      value: WarehouseClickAndCollectOptionEnum.LOCAL,
-    },
-    {
-      label: (
-        <>
-          <FormattedMessage {...messages.warehouseSettingsAllWarehouses} />
-          <WarehouseRadioSubtitle>
-            <FormattedMessage
-              {...messages.warehouseSettingsAllWarehousesDescription}
-              values={{ break: <br /> }}
-            />
-          </WarehouseRadioSubtitle>
-        </>
-      ),
-      value: WarehouseClickAndCollectOptionEnum.ALL,
-    },
-  ];
-  const clickAndCollectChoices = clickAndCollectChoicesPublic.filter(
-    choice => choice.value !== WarehouseClickAndCollectOptionEnum.LOCAL,
-  );
 
   return (
     <DashboardCard>
@@ -147,16 +96,7 @@ const WarehouseSettings = ({
       <DashboardCard.Content>
         {renderCollection(
           zones,
-          zone =>
-            zone ? (
-              <div className={classes.link} key={zone.id}>
-                <Link underline href={shippingZoneUrl(zone.id)}>
-                  {zone.name}
-                </Link>
-              </div>
-            ) : (
-              <Skeleton />
-            ),
+          zone => (zone ? <Text color="default1">{zone.name}</Text> : <Skeleton />),
           () => (
             <Text color="default2">
               <FormattedMessage {...messages.warehouseSettingsNoShippingZonesAssigned} />
@@ -176,22 +116,6 @@ const WarehouseSettings = ({
           name="isPrivate"
           value={data.isPrivate.toString()}
           onChange={booleanRadioHandler}
-          disabled={disabled}
-        />
-      </DashboardCard.Content>
-      <Divider />
-      <DashboardCard.Header>
-        <DashboardCard.Title>
-          <FormattedMessage {...messages.warehouseSettingsPickupTitle} />
-          <PreviewPill className={classes.preview} />
-        </DashboardCard.Title>
-      </DashboardCard.Header>
-      <DashboardCard.Content>
-        <RadioGroupField
-          choices={data.isPrivate ? clickAndCollectChoices : clickAndCollectChoicesPublic}
-          name="clickAndCollectOption"
-          value={data.clickAndCollectOption}
-          onChange={onChange}
           disabled={disabled}
         />
       </DashboardCard.Content>

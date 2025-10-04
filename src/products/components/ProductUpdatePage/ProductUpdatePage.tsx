@@ -35,7 +35,6 @@ import { productImageUrl, productListPath, productListUrl } from "@dashboard/pro
 import { ChoiceWithAncestors, getChoicesWithAncestors } from "@dashboard/products/utils/utils";
 import { ProductVariantListError } from "@dashboard/products/views/ProductUpdate/handlers/errors";
 import { UseProductUpdateHandlerError } from "@dashboard/products/views/ProductUpdate/handlers/useProductUpdateHandler";
-import { TranslationsButton } from "@dashboard/translations/components/TranslationsButton/TranslationsButton";
 import { productUrl as createTranslateProductUrl } from "@dashboard/translations/urls";
 import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
 import { FetchMoreProps, RelayToFlat } from "@dashboard/types";
@@ -226,16 +225,7 @@ export const ProductUpdatePage = ({
 
         return (
           <DetailPageLayout>
-            <TopNav href={backLinkProductUrl} title={header}>
-              {canTranslate && (
-                <TranslationsButton
-                  marginRight={3}
-                  onClick={() =>
-                    navigate(createTranslateProductUrl(lastUsedLocaleOrFallback, productId))
-                  }
-                />
-              )}
-            </TopNav>
+            <TopNav href={backLinkProductUrl} title={header}></TopNav>
 
             <DetailPageLayout.Content>
               <ProductDetailsForm

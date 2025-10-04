@@ -1,6 +1,4 @@
 // @ts-strict-ignore
-import { useUser } from "@dashboard/auth";
-import { hasPermission } from "@dashboard/auth/misc";
 import { TopNav } from "@dashboard/components/AppLayout/TopNav";
 import CardSpacer from "@dashboard/components/CardSpacer";
 import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
@@ -10,9 +8,7 @@ import { DetailPageLayout } from "@dashboard/components/Layouts";
 import { Savebar } from "@dashboard/components/Savebar";
 import {
   ChannelFragment,
-  PermissionEnum,
   ShippingErrorFragment,
-  ShippingMethodTypeEnum,
   ShippingZoneDetailsFragment,
   ShippingZoneQuery,
 } from "@dashboard/graphql";
@@ -20,9 +16,6 @@ import { useBackLinkWithState } from "@dashboard/hooks/useBackLinkWithState";
 import { SubmitPromise } from "@dashboard/hooks/useForm";
 import useNavigator from "@dashboard/hooks/useNavigator";
 import { shippingZonesListPath } from "@dashboard/shipping/urls";
-import { TranslationsButton } from "@dashboard/translations/components/TranslationsButton/TranslationsButton";
-import { languageEntityUrl, TranslatableEntities } from "@dashboard/translations/urls";
-import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
 import { Option } from "@saleor/macaw-ui-next";
 import React from "react";
 import { defineMessages, useIntl } from "react-intl";
@@ -31,7 +24,6 @@ import { getStringOrPlaceholder } from "../../../misc";
 import { ChannelProps, FetchMoreProps, SearchProps } from "../../../types";
 import { ShippingZoneUpdateFormData } from "../../components/ShippingZoneDetailsPage/types";
 import ShippingZoneInfo from "../ShippingZoneInfo";
-import ShippingZoneRates from "../ShippingZoneRates";
 import ShippingZoneSettingsCard from "../ShippingZoneSettingsCard";
 import { getInitialFormData } from "./utils";
 
@@ -87,24 +79,15 @@ const ShippingZoneDetailsPage = ({
   onCountryRemove,
   onDelete,
   onFetchMore,
-  onPriceRateAdd,
-  getPriceRateEditHref,
-  onRateRemove,
   onSearchChange,
   onSubmit,
   onWarehouseAdd,
-  onWeightRateAdd,
-  getWeightRateEditHref,
   saveButtonBarState,
-  selectedChannelId,
   shippingZone,
   warehouses,
   allChannels,
 }: ShippingZoneDetailsPageProps) => {
   const intl = useIntl();
-  const { user } = useUser();
-  const canTranslate = user && hasPermission(PermissionEnum.MANAGE_TRANSLATIONS, user);
-  const { lastUsedLocaleOrFallback } = useCachedLocales();
   const navigate = useNavigator();
   const initialForm = getInitialFormData(shippingZone);
   const warehouseChoices = warehouses.map(warehouseToChoice);
@@ -118,21 +101,7 @@ const ShippingZoneDetailsPage = ({
       {({ change, data, isSaveDisabled, submit }) => {
         return (
           <DetailPageLayout>
-            <TopNav href={shippingZonesListBackLink} title={shippingZone?.name}>
-              {canTranslate && (
-                <TranslationsButton
-                  onClick={() =>
-                    navigate(
-                      languageEntityUrl(
-                        lastUsedLocaleOrFallback,
-                        TranslatableEntities.shippingMethods,
-                        shippingZone?.id,
-                      ),
-                    )
-                  }
-                />
-              )}
-            </TopNav>
+            <TopNav href={shippingZonesListBackLink} title={shippingZone?.name}></TopNav>
             <DetailPageLayout.Content>
               <ShippingZoneInfo data={data} disabled={disabled} errors={errors} onChange={change} />
               <CardSpacer />
@@ -145,32 +114,6 @@ const ShippingZoneDetailsPage = ({
                 onCountryAssign={onCountryAdd}
                 onCountryUnassign={onCountryRemove}
                 title={intl.formatMessage(messages.countries)}
-              />
-              <CardSpacer />
-              <ShippingZoneRates
-                disabled={disabled}
-                onRateAdd={onPriceRateAdd}
-                getRateEditHref={getPriceRateEditHref}
-                onRateRemove={onRateRemove}
-                rates={shippingZone?.shippingMethods?.filter(
-                  method => method.type === ShippingMethodTypeEnum.PRICE,
-                )}
-                variant="price"
-                selectedChannelId={selectedChannelId}
-                testId="add-price-rate"
-              />
-              <CardSpacer />
-              <ShippingZoneRates
-                disabled={disabled}
-                onRateAdd={onWeightRateAdd}
-                getRateEditHref={getWeightRateEditHref}
-                onRateRemove={onRateRemove}
-                rates={shippingZone?.shippingMethods?.filter(
-                  method => method.type === ShippingMethodTypeEnum.WEIGHT,
-                )}
-                variant="weight"
-                selectedChannelId={selectedChannelId}
-                testId="add-weight-rate"
               />
             </DetailPageLayout.Content>
             <DetailPageLayout.RightSidebar>

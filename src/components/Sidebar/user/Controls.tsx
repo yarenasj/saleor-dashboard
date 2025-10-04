@@ -96,17 +96,6 @@ export const UserControls = () => {
                 </List.Item>
               </Dropdown.Item>
               <Dropdown.Item>
-                <List.Item {...listItemStyles} onClick={() => setFlagsModalOpen(true)}>
-                  <Text>
-                    <FormattedMessage
-                      id="38dc43"
-                      defaultMessage="Features preview"
-                      description="Features preview"
-                    />
-                  </Text>
-                </List.Item>
-              </Dropdown.Item>
-              <Dropdown.Item>
                 <List.Item onClick={logout} {...listItemStyles} data-test-id="log-out-button">
                   <Text>
                     <FormattedMessage id="qLbse5" defaultMessage="Log out" description="button" />
