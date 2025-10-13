@@ -3,7 +3,6 @@ import NotFoundPage from "@dashboard/components/NotFoundPage";
 import { WindowTitle } from "@dashboard/components/WindowTitle";
 import { DEFAULT_INITIAL_SEARCH_DATA } from "@dashboard/config";
 import {
-  useFileUploadMutation,
   useProductVariantChannelListingUpdateMutation,
   useProductVariantCreateDataQuery,
   useProductVariantReorderMutation,
@@ -62,7 +61,6 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
       firstValues: 10,
     },
   });
-  const [uploadFile, uploadFileOpts] = useFileUploadMutation({});
   const product = data?.product;
   const [variantCreate, variantCreateResult] = useVariantCreateMutation({
     onCompleted: data => {
@@ -111,6 +109,7 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
                 endDate: formData.preorderEndDateTime || null,
               }
             : undefined,
+          attributes: [],
         },
         firstValues: 10,
       },
@@ -186,10 +185,7 @@ export const ProductVariant = ({ productId, params }: ProductVariantCreateProps)
   };
   const attributeValues = mapEdgesToItems(searchAttributeValuesOpts?.data?.attribute.choices) || [];
   const disableForm =
-    productLoading ||
-    uploadFileOpts.loading ||
-    variantCreateResult.loading ||
-    reorderProductVariantsOpts.loading;
+    productLoading || variantCreateResult.loading || reorderProductVariantsOpts.loading;
 
   if (product === null) {
     return <NotFoundPage onBack={() => navigate(productListUrl())} />;
