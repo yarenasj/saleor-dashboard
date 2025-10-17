@@ -56,6 +56,7 @@ import SearchSection from "./search";
 import errorTracker from "./services/errorTracking";
 import ShippingSection from "./shipping";
 import SiteSettingsSection from "./siteSettings";
+import StaffSection from "./staff";
 import { paletteOverrides, themeOverrides } from "./themeOverrides";
 import TranslationsSection from "./translations";
 import WarehouseSection from "./warehouses";
@@ -204,6 +205,7 @@ const Routes = () => {
                 path="/product-types"
                 component={ProductTypesSection}
               />
+              <SectionRoute path="/staff" component={StaffSection} />
               <SectionRoute
                 permissions={[PermissionEnum.MANAGE_SETTINGS]}
                 path="/site-settings"
