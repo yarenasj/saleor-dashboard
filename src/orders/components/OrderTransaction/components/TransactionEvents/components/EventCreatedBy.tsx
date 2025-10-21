@@ -1,6 +1,7 @@
 import { UserAvatar } from "@dashboard/components/UserAvatar";
 import { AppAvatarFragment, StaffMemberAvatarFragment } from "@dashboard/graphql";
 import { getUserInitials, getUserName } from "@dashboard/misc";
+import { staffMemberDetailsUrl } from "@dashboard/staff/urls";
 import { Box } from "@saleor/macaw-ui-next";
 import React from "react";
 import { Link } from "react-router-dom";
