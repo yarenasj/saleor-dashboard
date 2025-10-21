@@ -436,9 +436,10 @@ export const getAttributesCaption = (
 ): string | undefined => {
   const separator = " / ";
 
-  const names = attributes
-    ?.map(attribute => attribute.values.map(attributeValue => attributeValue.name).join(", "))
-    .filter(Boolean);
+  const names =
+    attributes
+      ?.map(attribute => attribute.values.map(attributeValue => attributeValue.name).join(", "))
+      .filter(Boolean) ?? [];
 
   if (names.length === 0) {
     return "";
