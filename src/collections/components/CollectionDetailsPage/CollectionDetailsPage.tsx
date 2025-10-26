@@ -1,0 +1,143 @@
+// @ts-strict-ignore
+import { useUser } from "@dashboard/auth";
+import { hasPermission } from "@dashboard/auth/misc";
+import { ChannelCollectionData } from "@dashboard/channels/utils";
+import { collectionListPath, CollectionUrlQueryParams } from "@dashboard/collections/urls";
+import { TopNav } from "@dashboard/components/AppLayout/TopNav";
+import ChannelsAvailabilityCard from "@dashboard/components/ChannelsAvailabilityCard";
+import { ConfirmButtonTransitionState } from "@dashboard/components/ConfirmButton";
+import { DetailPageLayout } from "@dashboard/components/Layouts";
+import { Savebar } from "@dashboard/components/Savebar";
+import {
+  CollectionChannelListingErrorFragment,
+  CollectionDetailsQuery,
+  CollectionErrorFragment,
+  PermissionEnum,
+} from "@dashboard/graphql";
+import { useBackLinkWithState } from "@dashboard/hooks/useBackLinkWithState";
+import { SubmitPromise } from "@dashboard/hooks/useForm";
+import useNavigator from "@dashboard/hooks/useNavigator";
+import { languageEntityUrl, TranslatableEntities } from "@dashboard/translations/urls";
+import { useCachedLocales } from "@dashboard/translations/useCachedLocales";
+import React from "react";
+import { useIntl } from "react-intl";
+
+import { ChannelProps, PageListProps } from "../../../types";
+import CollectionDetails from "../CollectionDetails/CollectionDetails";
+import { CollectionImage } from "../CollectionImage/CollectionImage";
+import CollectionProducts from "../CollectionProducts/CollectionProducts";
+import CollectionUpdateForm, { CollectionUpdateData } from "./form";
+
+export interface CollectionDetailsPageProps extends PageListProps, ChannelProps {
+  channelsCount: number;
+  channelsErrors: CollectionChannelListingErrorFragment[];
+  collection: CollectionDetailsQuery["collection"];
+  currentChannels: ChannelCollectionData[];
+  errors: CollectionErrorFragment[];
+  saveButtonBarState: ConfirmButtonTransitionState;
+  onCollectionRemove: () => void;
+  onImageDelete: () => void;
+  onImageUpload: (file: File) => void;
+  onSubmit: (data: CollectionUpdateData) => SubmitPromise;
+  onChannelsChange: (data: ChannelCollectionData[]) => void;
+  openChannelsModal: () => void;
+  params: CollectionUrlQueryParams;
+}
+
+const CollectionDetailsPage = ({
+  channelsCount,
+  channelsErrors,
+  collection,
+  currentChannels = [],
+  disabled,
+  errors,
+  saveButtonBarState,
+  onCollectionRemove,
+  onImageDelete,
+  onImageUpload,
+  onSubmit,
+  onChannelsChange,
+  openChannelsModal,
+  ...collectionProductsProps
+}: CollectionDetailsPageProps) => {
+  const intl = useIntl();
+  const { lastUsedLocaleOrFallback } = useCachedLocales();
+  const navigate = useNavigator();
+  const { user } = useUser();
+  const canTranslate = user && hasPermission(PermissionEnum.MANAGE_TRANSLATIONS, user);
+
+  const collectionListBackLink = useBackLinkWithState({
+    path: collectionListPath,
+  });
+
+  return (
+    <CollectionUpdateForm
+      collection={collection}
+      currentChannels={currentChannels}
+      setChannels={onChannelsChange}
+      onSubmit={onSubmit}
+      disabled={disabled}
+    >
+      {({ change, data, handlers, submit, isSaveDisabled }) => (
+        <DetailPageLayout>
+          <TopNav href={collectionListBackLink} title={collection?.name}></TopNav>
+          <DetailPageLayout.Content>
+            <CollectionDetails data={data} disabled={disabled} errors={errors} onChange={change} />
+            <CollectionImage
+              data={data}
+              image={collection?.backgroundImage}
+              onImageDelete={onImageDelete}
+              onImageUpload={onImageUpload}
+              onChange={change}
+            />
+            <CollectionProducts
+              disabled={disabled}
+              collection={collection}
+              currentChannels={currentChannels}
+              {...collectionProductsProps}
+            />
+          </DetailPageLayout.Content>
+          <DetailPageLayout.RightSidebar>
+            <div>
+              <ChannelsAvailabilityCard
+                managePermissions={[PermissionEnum.MANAGE_PRODUCTS]}
+                messages={{
+                  hiddenLabel: intl.formatMessage({
+                    id: "V8FhTt",
+                    defaultMessage: "Hidden",
+                    description: "collection label",
+                  }),
+
+                  visibleLabel: intl.formatMessage({
+                    id: "9vQR6c",
+                    defaultMessage: "Visible",
+                    description: "collection label",
+                  }),
+                }}
+                errors={channelsErrors}
+                allChannelsCount={channelsCount}
+                channels={data.channelListings}
+                disabled={disabled}
+                onChange={handlers.changeChannels}
+                openModal={openChannelsModal}
+              />
+            </div>
+          </DetailPageLayout.RightSidebar>
+          <Savebar>
+            <Savebar.DeleteButton onClick={onCollectionRemove} />
+            <Savebar.Spacer />
+            <Savebar.CancelButton onClick={() => navigate(collectionListBackLink)} />
+            <Savebar.ConfirmButton
+              transitionState={saveButtonBarState}
+              onClick={submit}
+              disabled={isSaveDisabled}
+            />
+          </Savebar>
+        </DetailPageLayout>
+      )}
+    </CollectionUpdateForm>
+  );
+};
+
+CollectionDetailsPage.displayName = "CollectionDetailsPage";
+export default CollectionDetailsPage;
