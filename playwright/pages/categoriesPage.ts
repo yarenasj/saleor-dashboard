@@ -1,13 +1,10 @@
 import { URL_LIST } from "@data/url";
 import { DeleteDialog } from "@dialogs/deleteDialog";
-import { MetadataSeoPage } from "@pageElements/metadataSeoPage";
 import { BasePage } from "@pages/basePage";
 import type { Page } from "@playwright/test";
 
 export class CategoriesPage extends BasePage {
   readonly page: Page;
-
-  readonly metadataSeoPage: MetadataSeoPage;
 
   readonly deleteCategoriesDialog: DeleteDialog;
 
@@ -25,7 +22,6 @@ export class CategoriesPage extends BasePage {
   ) {
     super(page);
     this.page = page;
-    this.metadataSeoPage = new MetadataSeoPage(page);
     this.deleteCategoriesDialog = new DeleteDialog(page);
   }
 

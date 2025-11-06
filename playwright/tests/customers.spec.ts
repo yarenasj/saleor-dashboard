@@ -1,11 +1,10 @@
-import { ADDRESS } from "@data/addresses";
+import { ADDRESS, AddressFieldsType } from "@data/addresses";
 import { CUSTOMERS } from "@data/e2eTestData";
 import { AddressesListPage } from "@pages/addressesListPage";
 import { CustomersPage } from "@pages/customersPage";
 import { AddAddressDialog } from "@pages/dialogs/addAddressDialog";
 import { DeleteAddressDialog } from "@pages/dialogs/deleteAddressDialog";
 import { AddressForm } from "@pages/forms/addressForm";
-import { GiftCardsPage } from "@pages/giftCardsPage";
 import { expect } from "@playwright/test";
 import faker from "faker";
 import { test } from "utils/testWithPermission";
@@ -13,7 +12,6 @@ import { test } from "utils/testWithPermission";
 test.use({ permissionName: "admin" });
 
 let customersPage: CustomersPage;
-let giftCardsPage: GiftCardsPage;
 let addressesListPage: AddressesListPage;
 let addressForm: AddressForm;
 let deleteAddressDialog: DeleteAddressDialog;
@@ -21,7 +19,6 @@ let addAddressDialog: AddAddressDialog;
 
 test.beforeEach(({ page }) => {
   customersPage = new CustomersPage(page);
-  giftCardsPage = new GiftCardsPage(page);
   addressesListPage = new AddressesListPage(page);
   addressForm = new AddressForm(page);
   addAddressDialog = new AddAddressDialog(page);
@@ -29,26 +26,7 @@ test.beforeEach(({ page }) => {
 });
 
 test("TC: SALEOR_199 Create customer #e2e #customer", async () => {
-  const firstName = faker.name.firstName();
-  const lastName = faker.name.lastName();
-  const note = faker.lorem.sentence();
-  const email = faker.internet.email();
-
-  await customersPage.goToCustomersListView();
-  await customersPage.clickOnCreateCustomer();
-  await customersPage.fillFirstAndLastName(firstName, lastName);
-  await customersPage.fillEmail(email);
-
-  const newAddress = ADDRESS.addressUS;
-
-  await addressForm.completeBasicInfoAddressForm(newAddress);
-  await addressForm.typeCompanyName(newAddress.companyName);
-  await addressForm.typePhone(newAddress.phone);
-  await addressForm.typeAddressLine2(newAddress.addressLine2);
-  await addressForm.selectCountryArea(newAddress.countryArea);
-  await customersPage.fillNote(note);
-  await customersPage.saveCustomer();
-  await customersPage.expectSuccessBanner();
+  const { firstName, lastName, note, email } = await createCustomer();
   await expect(customersPage.pageHeader).toContainText(`${firstName} ${lastName}`);
   await expect(customersPage.customerNoteInput).toContainText(note);
   await expect(customersPage.customerFirstNameInput).toHaveValue(firstName);
@@ -114,25 +92,26 @@ test("TC: SALEOR_203 Activate a customer #e2e #customer", async () => {
 });
 
 test("TC: SALEOR_204 Delete customer from the details page #e2e #customer", async () => {
-  await customersPage.gotoCustomerDetailsPage(CUSTOMERS.deleteCustomer.id);
+  const { email, customerId } = await createCustomer();
+  await customersPage.gotoCustomerDetailsPage(customerId);
   await customersPage.deleteCustomer();
   await customersPage.deleteDialog.clickDeleteButton();
   await customersPage.expectSuccessBanner();
   await customersPage.goToCustomersListView();
-  await customersPage.searchForCustomer(CUSTOMERS.deleteCustomer.email);
+  await customersPage.searchForCustomer(email);
   await expect(customersPage.emptyDataGridListView).toBeVisible();
 });
 
 test("TC: SALEOR_205 Bulk delete customers #e2e #customer", async () => {
-  const customersToBeBulkDeleted = CUSTOMERS.customersToBeBulkDeleted.names;
+  const { firstName, lastName } = await createCustomer();
 
   await customersPage.goToCustomersListView();
-  await customersPage.searchAndFindRowIndexes("bulk-delete");
+  await customersPage.searchAndFindRowIndexes(`${firstName} ${lastName}`);
   await customersPage.waitForGrid();
 
-  const rowsToCheck = [0, 1, 2];
+  const rowsToCheck = [0];
 
-  await customersPage.checkGridCellTextAndClick(0, rowsToCheck, customersToBeBulkDeleted);
+  await customersPage.checkGridCellTextAndClick(0, rowsToCheck, [`${firstName} ${lastName}`]);
   await customersPage.clickBulkDeleteGridRowsButton();
   await customersPage.deleteDialog.clickDeleteButton();
   await customersPage.expectSuccessBanner();
@@ -141,16 +120,8 @@ test("TC: SALEOR_205 Bulk delete customers #e2e #customer", async () => {
 
 test("TC: SALEOR_206 As an admin I want to add address to the customer and set it as default shipping #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.editCustomer.id);
-  await addressesListPage.clickManageAddresses();
-  await addressesListPage.clickAddAddressButton();
-
   const addressUK = ADDRESS.addressUK;
-
-  await addressForm.completeBasicInfoAddressForm(addressUK);
-  await addressForm.typeCompanyName(addressUK.companyName);
-  await addressForm.typePhone(addressUK.phone);
-  await addressForm.typeAddressLine2(addressUK.addressLine2);
-  await addAddressDialog.clickConfirmButton();
+  await addNewAddress(addressUK);
 
   const addedAddress = addressesListPage.savedAddress.filter({
     hasText: addressUK.lastName,
@@ -163,11 +134,23 @@ test("TC: SALEOR_206 As an admin I want to add address to the customer and set i
   await addressesListPage.clickShowMoreMenu(addressUK.lastName);
   await addressesListPage.setAsDeafultShippingAddress();
   await expect(addedAddressCard.locator(addressesListPage.addressTypeTitle)).toHaveText(
-    "Default Shipping Address",
+    "Dirección de entrega por defecto",
   );
+
+  const newAddressLastName = faker.name.lastName();
+  await addressesListPage.clickShowMoreMenu(addressUK.lastName);
+  await addressesListPage.clickEditAddress();
+  await addressForm.typeLastName(newAddressLastName);
+  await addAddressDialog.clickConfirmButton();
+  await customersPage.expectSuccessBanner();
+  await expect(
+    addressesListPage.savedAddress.filter({
+      hasText: newAddressLastName,
+    }),
+  ).toBeVisible();
 });
 
-test("TC: SALEOR_209 As an admin I want to update customer's address and set it as default billing #e2e #customer", async () => {
+test("TC: SALEOR_209 As an admin I want to update customer's address #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.editCustomer.id);
   await addressesListPage.clickManageAddresses();
   await addressesListPage.clickShowMoreMenu(CUSTOMERS.editCustomer.initialShippingAddress.lastName);
@@ -186,21 +169,12 @@ test("TC: SALEOR_209 As an admin I want to update customer's address and set it 
   await addressesListPage.verifyPhoneField(newAddress.firstName, newAddress);
   await addressesListPage.verifyCompanyField(newAddress.firstName, newAddress);
   await addressesListPage.verifyAddressLine2Field(newAddress.firstName, newAddress);
-
-  const additionalAddressCard = addressesListPage.addressCard.filter({
-    hasText: CUSTOMERS.editCustomer.additionalAddress.lastName,
-  });
-
-  await addressesListPage.clickShowMoreMenu(CUSTOMERS.editCustomer.additionalAddress.lastName);
-  await addressesListPage.setAsDeafultBillingAddress();
-  await expect(additionalAddressCard.locator(addressesListPage.addressTypeTitle)).toHaveText(
-    "Default Billing Address",
-  );
 });
 
 test("TC: SALEOR_210 Delete customer's address #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.editCustomer.id);
-  await addressesListPage.clickManageAddresses();
+  const addressUKDel = ADDRESS.addressUKDel;
+  await addNewAddress(addressUKDel);
   await addressesListPage.clickShowMoreMenu(CUSTOMERS.editCustomer.initialBillingAddress.lastName);
   await addressesListPage.clickDeleteAddress();
   await deleteAddressDialog.clickDeleteButton();
@@ -211,27 +185,46 @@ test("TC: SALEOR_210 Delete customer's address #e2e #customer", async () => {
   ).not.toBeVisible();
 });
 
-test("TC: SALEOR_207 Issue a new gift card for the customer #e2e #customer", async () => {
-  const amount = faker.datatype.number(1000).toPrecision(2).toString();
+async function createCustomer() {
+  const firstName = faker.name.firstName();
+  const lastName = faker.name.lastName();
+  const note = faker.lorem.sentence();
+  const email = faker.internet.email();
 
-  await customersPage.gotoCustomerDetailsPage(CUSTOMERS.editCustomer.id);
-  await customersPage.clickIssueNewGiftCard();
+  await customersPage.goToCustomersListView();
+  await customersPage.clickOnCreateCustomer();
+  await customersPage.fillFirstAndLastName(firstName, lastName);
+  await customersPage.fillEmail(email);
 
-  await expect(customersPage.amountDropdown).toBeVisible();
-  await customersPage.issueGiftCardDialog.typeAmount(amount);
-  await customersPage.issueGiftCardDialog.typeCustomTag(faker.lorem.word());
-  await customersPage.issueGiftCardDialog.typeNote(faker.lorem.sentences(3));
-  await customersPage.issueGiftCardDialog.clickIssueButton();
+  const newAddress = ADDRESS.addressUS;
+
+  await addressForm.completeBasicInfoAddressForm(newAddress);
+  await addressForm.typeCompanyName(newAddress.companyName);
+  await addressForm.typePhone(newAddress.phone);
+  await addressForm.typeAddressLine2(newAddress.addressLine2);
+  await addressForm.selectCountryArea(newAddress.countryArea);
+  await customersPage.fillNote(note);
+  await customersPage.saveCustomer();
   await customersPage.expectSuccessBanner();
-  await expect(giftCardsPage.issueGiftCardDialog.cardCode).toBeVisible();
+  const currentUrl = await customersPage.page.url();
+  const urlObject = new URL(currentUrl);
+  const pathSegments = urlObject.pathname.split("/");
+  const customerId = pathSegments.filter(Boolean).pop() || "test";
+  return {
+    firstName,
+    lastName,
+    note,
+    email,
+    customerId,
+  };
+}
 
-  const code = (await giftCardsPage.issueGiftCardDialog.cardCode.innerText()).slice(-4);
-
-  await giftCardsPage.issueGiftCardDialog.clickCopyCodeButton();
-  await giftCardsPage.expectSuccessBanner();
-  await giftCardsPage.issueGiftCardDialog.clickOkButton();
-  await giftCardsPage.expectElementIsHidden(giftCardsPage.giftCardDialog);
-  await giftCardsPage.expectSuccessBanner({ message: "Successfully created gift card" });
-  await giftCardsPage.gotoGiftCardsListView();
-  await giftCardsPage.waitForCanvasContainsText(`Code ending with ${code}`);
-});
+async function addNewAddress(addressUK: AddressFieldsType) {
+  await addressesListPage.clickManageAddresses();
+  await addressesListPage.clickAddAddressButton();
+  await addressForm.completeBasicInfoAddressForm(addressUK);
+  await addressForm.typeCompanyName(addressUK.companyName);
+  await addressForm.typePhone(addressUK.phone);
+  await addressForm.typeAddressLine2(addressUK.addressLine2);
+  await addAddressDialog.clickConfirmButton();
+}

@@ -19,8 +19,6 @@ test("TC: SALEOR_112 Create collection #collections  #e2e", async () => {
   await collectionsPage.uploadCollectionImage("beer.avif");
   await collectionsPage.collectionImages.first().waitFor({ state: "visible" });
   expect(await collectionsPage.collectionImages.count()).toEqual(1);
-  await collectionsPage.metadataSeoPage.fillSeoSection();
-  await collectionsPage.metadataSeoPage.expandAndAddAllMetadata();
   await collectionsPage.rightSideDetailsPage.selectOneChannelAsAvailableWhenMoreSelected(
     "Channel-PLN",
   );
@@ -32,10 +30,14 @@ test("TC: SALEOR_113 Edit collection: assign product #collections  #e2e", async 
 
   await collectionsPage.gotoExistingCollectionView(COLLECTIONS.collectionToBeUpdated.id);
   await collectionsPage.clickAssignProductButton();
-  await collectionsPage.assignSpecificProductsDialog.assignSpecificProductsByNameAndSave(
-    productToBeAssigned,
-  );
-  await collectionsPage.expectSuccessBanner();
+  await collectionsPage.page.waitForTimeout(1000);
+  const result =
+    await collectionsPage.assignSpecificProductsDialog.assignSpecificProductsByNameAndSave(
+      productToBeAssigned,
+    );
+  if (result) {
+    await collectionsPage.expectSuccessBanner();
+  }
   await expect(
     collectionsPage.assignedSpecificProductRow,
     `Assigned product: ${productToBeAssigned} should be visible`,

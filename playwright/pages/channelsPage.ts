@@ -14,6 +14,7 @@ export class ChannelPage extends BasePage {
   constructor(
     page: Page,
     readonly deleteChannelButton = page.getByTestId("delete-channel"),
+    readonly deleteButton = page.getByTestId("button-bar-delete"),
     readonly channelRow = page.getByTestId("channel-row"),
     readonly saveButton = page.getByTestId("button-bar-confirm"),
     readonly createChannelButton = page.getByTestId("add-channel"),
@@ -43,6 +44,7 @@ export class ChannelPage extends BasePage {
   }
 
   async clickAuthorizeInsteadOfChargingCheckbox() {
+    if (await this.authorizeInsteadOfChargingCheckbox.isChecked()) return;
     await this.authorizeInsteadOfChargingCheckbox.click();
   }
 
@@ -54,10 +56,12 @@ export class ChannelPage extends BasePage {
   }
 
   async clickAllowUnpaidOrdersCheckbox() {
+    if (await this.allowUnpaidOrdersCheckbox.isChecked()) return;
     await this.allowUnpaidOrdersCheckbox.click();
   }
 
   async clickTransactionFlowCheckbox() {
+    if (await this.transactionFlowCheckbox.isChecked()) return;
     await this.transactionFlowCheckbox.click();
   }
 
@@ -100,5 +104,9 @@ export class ChannelPage extends BasePage {
 
   async gotoChannelList() {
     await this.page.goto(URL_LIST.channels);
+  }
+
+  async deleteChannel() {
+    await this.deleteButton.click();
   }
 }

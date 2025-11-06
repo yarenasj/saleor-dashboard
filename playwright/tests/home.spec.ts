@@ -17,9 +17,10 @@ test("TC: SALEOR_29 Correct information on dashboard home page #e2e", async ({ p
 
   await homePage.clickChannelSelectButton();
   await homePage.selectDifferentChannelThanGiven(defaultChannelName);
+  await homePage.page.waitForTimeout(1000);
 
   const selectedChannelName = await homePage.channelSelect.innerText();
 
-  await expect(defaultChannelName).not.toEqual(selectedChannelName);
+  expect(defaultChannelName).not.toEqual(selectedChannelName);
   await homePage.expectHomePageElementsToBeVisible();
 });

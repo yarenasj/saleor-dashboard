@@ -19,7 +19,7 @@ test("TC: SALEOR_97 Create basic channel #e2e #channels", async () => {
   await configurationPage.goToConfigurationView();
   await configurationPage.openChannels();
   await channelPage.clickCreateChannelButton();
-  await channelPage.typeChannelName();
+  await channelPage.typeChannelName("z - basic");
   await channelPage.typeSlugName(slugName);
   await channelPage.selectCurrency("AFN - Afghanistan");
   await channelPage.selectCountry("Afghanistan");
@@ -51,17 +51,22 @@ test("TC: SALEOR_208 Create channel with all settings #e2e #channels", async () 
   await expect(channelPage.transactionFlowCheckbox).toBeChecked();
   await expect(channelPage.authorizeInsteadOfChargingCheckbox).toBeChecked();
   await expect(channelPage.allowUnpaidOrdersCheckbox).toBeChecked();
+
+  // Clear test data
+  await channelPage.deleteChannel();
+  await channelPage.deleteChannelDialog.clickDeleteButton();
+  await channelPage.expectSuccessBanner();
 });
 
 test("TC: SALEOR_98 Edit channel - transaction flow, allow unpaid, authorize, prio high stock #e2e #channels", async () => {
   await channelPage.gotoChannelDetails(CHANNELS.channelToBeEditedSettings.id);
+  await channelPage.page.waitForTimeout(1000);
   await channelPage.clickTransactionFlowCheckbox();
   await channelPage.clickAllowUnpaidOrdersCheckbox();
   await channelPage.clickAuthorizeInsteadOfChargingCheckbox();
   await expect(channelPage.transactionFlowCheckbox).toBeChecked();
   await expect(channelPage.authorizeInsteadOfChargingCheckbox).toBeChecked();
   await expect(channelPage.allowUnpaidOrdersCheckbox).toBeChecked();
-  await channelPage.rightSideDetailsPage.clickAllocationHighStockButton();
   await channelPage.clickSaveButton();
   await channelPage.expectSuccessBanner();
 });

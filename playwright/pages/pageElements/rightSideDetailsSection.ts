@@ -48,7 +48,6 @@ export class RightSideDetailsPage extends BasePage {
     readonly addWarehousesButton = page.getByTestId("warehouse-add-link"),
     readonly shippingZonesSelect = page.getByTestId("shipping-auto-complete-select"),
     readonly warehouseSelect = page.getByTestId("warehouse-auto-complete-select"),
-    readonly allocationHighStockButton = page.getByTestId("PRIORITIZE_HIGH_STOCK"),
   ) {
     super(page);
     this.channelSelectDialog = new ChannelSelectDialog(page);
@@ -56,10 +55,6 @@ export class RightSideDetailsPage extends BasePage {
 
   async clickEditBillingAddressButton() {
     await this.editBillingAddressButton.click();
-  }
-
-  async clickAllocationHighStockButton() {
-    await this.allocationHighStockButton.click();
   }
 
   async clickEditShippingAddressButton() {

@@ -207,11 +207,11 @@ export const CUSTOMER_ADDRESS = {
 };
 export const CATEGORIES = {
   categoryToBeUpdated: {
-    id: "Q2F0ZWdvcnk6NTA3",
-    name: "a category to be updated",
+    id: "Q2F0ZWdvcnk6NDU%3D",
+    name: "Category to update",
   },
   categoriesToBeBulkDeleted: {
-    names: ["a cateogry to be bulk deleted 1/2", "a cateogry to be bulk deleted 2/2"],
+    names: ["Utils"],
   },
   e2eCategory: {
     id: "Q2F0ZWdvcnk6NTEx",
@@ -220,11 +220,11 @@ export const CATEGORIES = {
 };
 export const COLLECTIONS = {
   collectionToBeUpdated: {
-    id: "Q29sbGVjdGlvbjoxNjY%3D",
+    id: "Q29sbGVjdGlvbjo3",
     name: "Collection to be updated",
   },
   collectionsToBeBulkDeleted: {
-    names: ["Collection to be deleted 1/2", "Collection to be deleted 2/2"],
+    names: ["Saleor automation collection"],
   },
   e2eCollection: {
     id: "Q29sbGVjdGlvbjoxNjc=",
@@ -246,13 +246,10 @@ export const COUNTRIES = {
 };
 export const CHANNELS = {
   channelToBeEditedSettings: {
-    id: "Q2hhbm5lbDoyMzkx",
+    id: "Q2hhbm5lbDoy",
   },
   channelToBeDeleted: {
-    name: "z - channel to be deleted",
-  },
-  channelForTaxEdition: {
-    name: "a channel for tax tests",
+    name: "z - basic",
   },
   plnChannel: {
     id: "VGF4Q29uZmlndXJhdGlvbjox",
@@ -392,9 +389,9 @@ export const PRODUCTS = {
     info: "Product that contains single variant - to be deleted from details view",
   },
   productAvailableWithTransactionFlow: {
-    name: "Coconut Juice transaction flow",
-    id: "UHJvZHVjdDo3Ng%3D%3D",
-    variant1sku: "84725784",
+    name: "Dash Force",
+    id: "UHJvZHVjdDoxMjk=",
+    variant1sku: "618223581",
     info: "Product which is available within channel with activated transaction flow",
   },
   productsToBeBulkDeleted: {
@@ -720,15 +717,15 @@ export const PRODUCT_TYPES = {
 };
 export const CUSTOMERS = {
   deleteCustomer: {
-    id: "VXNlcjoxMzY3",
+    id: "VXNlcjo1OQ%3D%3D",
     email: "e2e_customer@delete.com",
   },
   editCustomer: {
-    id: "VXNlcjoxMzY2",
-    email: "e2e_customer_with_addresses@saleor.io",
-    note: "simple note",
+    id: "VXNlcjoy",
+    email: "edward.cook@example.com",
+    note: "Value film tax rock few. Federal board night loss front something. Buy break marriage also friend reach.",
     initialShippingAddress: {
-      firstName: "e2e_customer_with_addresses",
+      firstName: "Edward",
       lastName: "to-be-edited",
       companyName: "Saleor",
       phone: "+48225042123",
@@ -739,7 +736,7 @@ export const CUSTOMERS = {
       country: "Poland",
     },
     initialBillingAddress: {
-      firstName: "address",
+      firstName: "Edward",
       lastName: "to-be-deleted",
       companyName: "Saleor",
       phone: "+48225042123",
@@ -750,8 +747,8 @@ export const CUSTOMERS = {
       country: "Poland",
     },
     additionalAddress: {
-      firstName: "Test",
-      lastName: "Test",
+      firstName: "Edward",
+      lastName: "Williamson",
       addressLine1: "Nowy Świat",
       city: "WARSZAWA",
       zip: "00-504",
@@ -759,20 +756,16 @@ export const CUSTOMERS = {
     },
   },
   customersToBeBulkDeleted: {
-    names: [
-      "e2e_customer_1 bulk-delete",
-      "e2e_customer_2 bulk-delete",
-      "e2e_customer_3 bulk-delete",
-    ],
+    names: ["e2e_customer_1 bulk-delete", "e2e_customer_2 bulk-delete"],
   },
   customerToBeActivated: {
-    id: "VXNlcjoxMzY0",
-    email: "e2e-customer@activate.com",
+    id: "VXNlcjo1Ng%3D%3D",
+    email: "e2e-customer@deactivate.com",
     firstName: "e2e-customer",
     lastName: "to-be-activated",
   },
   customerToBeDeactivated: {
-    id: "VXNlcjoxMzY1",
+    id: "VXNlcjo1Ng%3D%3D",
     email: "e2e-customer@deactivate.com",
     firstName: "e2e-customer",
     lastName: "to-be-deactivated",

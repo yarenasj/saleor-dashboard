@@ -1,6 +1,5 @@
 import { URL_LIST } from "@data/url";
 import { AssignSpecificProductsDialog } from "@dialogs/assignSpecificProductsDialog";
-import { MetadataSeoPage } from "@pageElements/metadataSeoPage";
 import { RightSideDetailsPage } from "@pageElements/rightSideDetailsSection";
 import { BasePage } from "@pages/basePage";
 import type { Page } from "@playwright/test";
@@ -10,8 +9,6 @@ import { DeleteDialog } from "./dialogs/deleteDialog";
 
 export class CollectionsPage extends BasePage {
   readonly page: Page;
-
-  readonly metadataSeoPage: MetadataSeoPage;
 
   readonly rightSideDetailsPage: RightSideDetailsPage;
 
@@ -34,7 +31,6 @@ export class CollectionsPage extends BasePage {
   ) {
     super(page);
     this.page = page;
-    this.metadataSeoPage = new MetadataSeoPage(page);
     this.rightSideDetailsPage = new RightSideDetailsPage(page);
     this.deleteCollectionDialog = new DeleteDialog(page);
     this.assignSpecificProductsDialog = new AssignSpecificProductsDialog(page);

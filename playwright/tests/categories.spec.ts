@@ -16,8 +16,6 @@ test("TC: SALEOR_102 Create basic category #e2e #category", async () => {
   await categoriesPage.clickCreateNewCategoryButton();
   await categoriesPage.typeCategoryName("Utils");
   await categoriesPage.typeCategoryDescription("Utils description");
-  await categoriesPage.metadataSeoPage.fillSeoSection();
-  await categoriesPage.metadataSeoPage.expandAndAddAllMetadata();
   await categoriesPage.clickSaveButton();
   await categoriesPage.expectSuccessBanner();
 });

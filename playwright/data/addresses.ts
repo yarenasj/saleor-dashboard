@@ -4,6 +4,7 @@ export type AddressType = {
   addressUK: AddressFieldsType;
   addressPL: AddressFieldsType;
   addressUS: AddressFieldsType;
+  addressUKDel: AddressFieldsType;
 };
 
 export type AddressFieldsType = {
@@ -46,7 +47,19 @@ export const ADDRESS: AddressType = {
   },
   addressUK: {
     firstName: faker.name.firstName(),
-    lastName: faker.name.lastName(),
+    lastName: "to-be-edited",
+    companyName: faker.company.companyName(),
+    phone: "+445556667777",
+    addressLine1: "Albert Street",
+    addressLine2: "78/2",
+    city: "Edinburgh",
+    zip: "EH7 5LR",
+    country: "United Kingdom",
+    countryArea: "",
+  },
+  addressUKDel: {
+    firstName: faker.name.firstName(),
+    lastName: "to-be-deleted",
     companyName: faker.company.companyName(),
     phone: "+445556667777",
     addressLine1: "Albert Street",

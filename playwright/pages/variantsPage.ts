@@ -1,14 +1,11 @@
 import { URL_LIST } from "@data/url";
 import { ChannelSelectDialog } from "@dialogs/channelSelectDialog";
 import { DeleteVariantDialog } from "@dialogs/deleteVariantDialog";
-import { MetadataSeoPage } from "@pageElements/metadataSeoPage";
 import { BasePage } from "@pages/basePage";
 import type { Page } from "@playwright/test";
 
 export class VariantsPage extends BasePage {
   channelSelectDialog: ChannelSelectDialog;
-
-  metadataSeoPage: MetadataSeoPage;
 
   deleteVariantDialog: DeleteVariantDialog;
 
@@ -37,7 +34,6 @@ export class VariantsPage extends BasePage {
     readonly allChannels = page.locator("[name='allChannels']"),
   ) {
     super(page);
-    this.metadataSeoPage = new MetadataSeoPage(page);
     this.channelSelectDialog = new ChannelSelectDialog(page);
     this.deleteVariantDialog = new DeleteVariantDialog(page);
   }
@@ -126,10 +122,6 @@ export class VariantsPage extends BasePage {
 
     await quantityInput.clear();
     await quantityInput.fill(quantity);
-  }
-
-  async addAllMetaData() {
-    await this.metadataSeoPage.expandAndAddAllMetadata();
   }
 
   async gotoExistingVariantPage(productId: string, variantId: string) {

@@ -4,7 +4,6 @@ import { FiltersPage } from "@pageElements/filtersPage";
 import { BasePage } from "@pages/basePage";
 import { ChannelSelectDialog } from "@pages/dialogs/channelSelectDialog";
 import { ExportProductsDialog } from "@pages/dialogs/exportProductsDialog";
-import { MetadataSeoPage } from "@pages/pageElements/metadataSeoPage";
 import { RightSideDetailsPage } from "@pages/pageElements/rightSideDetailsSection";
 import { Page } from "@playwright/test";
 import * as faker from "faker";
@@ -14,8 +13,6 @@ const productName = `e2e-productName-${faker.datatype.number()}`;
 const productDescription = `e2e-productDescription-${faker.datatype.number()}`;
 
 export class ProductPage extends BasePage {
-  readonly metadataSeoPage: MetadataSeoPage;
-
   readonly exportProductsDialog: ExportProductsDialog;
 
   readonly rightSideDetailsPage: RightSideDetailsPage;
@@ -79,7 +76,6 @@ export class ProductPage extends BasePage {
     this.exportProductsDialog = new ExportProductsDialog(page);
     this.deleteProductDialog = new DeleteDialog(page);
     this.channelSelectDialog = new ChannelSelectDialog(page);
-    this.metadataSeoPage = new MetadataSeoPage(page);
     this.rightSideDetailsPage = new RightSideDetailsPage(page);
     this.filtersPage = new FiltersPage(page);
   }
@@ -136,20 +132,12 @@ export class ProductPage extends BasePage {
     await this.submitButton.click();
   }
 
-  async addSeo() {
-    await this.metadataSeoPage.fillSeoSection();
-  }
-
   async selectFirstCategory() {
     await this.rightSideDetailsPage.selectFirstCategory();
   }
 
   async selectFirstTaxOption() {
     await this.rightSideDetailsPage.selectFirstTax();
-  }
-
-  async addAllMetaData() {
-    await this.metadataSeoPage.expandAndAddAllMetadata();
   }
 
   async typeNameDescAndRating() {
