@@ -182,7 +182,7 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
     },
   });
   const handleSubmit = async (data: ProductCreateData) => {
-    const errors = await createHandler(
+    const { errors } = await createHandler(
       selectedProductType?.productType,
       variables => productCreate({ variables }),
       variables => productVariantCreate({ variables }),
@@ -191,7 +191,7 @@ export const ProductCreateView = ({ params }: ProductCreateProps) => {
       deleteProduct,
     )(data);
 
-    if (!errors) {
+    if (!errors?.length) {
       setProductCreateComplete(true);
     }
 

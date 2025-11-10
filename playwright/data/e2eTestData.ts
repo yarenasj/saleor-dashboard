@@ -319,11 +319,11 @@ export const WAREHOUSES = {
 
 export const PRODUCTS = {
   singleProductType: {
-    id: "UHJvZHVjdFR5cGU6Njcy",
+    id: "UHJvZHVjdFR5cGU6NDQ%3D?",
     info: "Single product type",
   },
   singleProductTypeToBeUpdated: {
-    id: "UHJvZHVjdDo3NjE%3D",
+    id: "UHJvZHVjdDoyMTc%3D",
     info: "Single product type to be updated",
   },
   e2eProduct1: {
@@ -336,12 +336,12 @@ export const PRODUCTS = {
   },
   productAvailableOnlyInPlnChannel: {
     id: "UHJvZHVjdDo3NjM%3D",
-    name: "a beer available only in pln channel",
+    name: "Apple",
     info: "Product available only in PLN channel",
   },
   productAvailableOnlyInUsdChannel: {
     id: "UHJvZHVjdDo3NjQ%3D",
-    name: "a beer available only in USD channel",
+    name: "Apple",
     info: "Product available only in USD channel",
   },
   productToAddVariants: {
@@ -362,7 +362,7 @@ export const PRODUCTS = {
     variantName: "S",
   },
   productWithOneVariant: {
-    id: "UHJvZHVjdDo3MzM%3D",
+    id: "UHJvZHVjdDoyNjQ%3D",
     info: "Product that contains single variant",
   },
   singleVariantDeleteProduct: {
@@ -377,9 +377,9 @@ export const PRODUCTS = {
     info: "Delete multiple variants via grid product page",
   },
   productWithVariantWhichWillBeUpdated: {
-    id: "UHJvZHVjdDo3NjU%3D",
+    id: "UHJvZHVjdDoyNjM%3D",
     name: "product with variant which will be updated",
-    variantId: "UHJvZHVjdFZhcmlhbnQ6MTIzMg%3D%3D",
+    variantId: "UHJvZHVjdFZhcmlhbnQ6NTE5",
     variantName: "update variant",
     info: "Product with variant which will be updated",
   },
@@ -395,11 +395,7 @@ export const PRODUCTS = {
     info: "Product which is available within channel with activated transaction flow",
   },
   productsToBeBulkDeleted: {
-    names: [
-      "a product to be deleted via bulk 1/3",
-      "a product to be deleted via bulk 2/3",
-      "a product to be deleted via bulk 3/3",
-    ],
+    names: ["a product to be deleted via bulk"],
   },
   productWithPriceHigherThan20: {
     id: "HJvZHVjdDo2NA==",
@@ -416,12 +412,12 @@ export const PRODUCTS = {
     name: "Power Juice",
   },
   productWithDiscountChannelPLN: {
-    id: "UHJvZHVjdDo3NzA=",
-    name: "e2e-do-not-touch",
+    id: "UHJvZHVjdDoxMjk=",
+    name: "Dash Force",
     rewardPercentageDiscountValue: 40,
     variant: {
-      id: "UHJvZHVjdFZhcmlhbnQ6MTIzOQ==",
-      sku: "TEST-123",
+      id: "618223581",
+      sku: "618223581",
       undiscountedPrice: 100,
       discountedPrice: 60,
     },
@@ -473,7 +469,7 @@ export const ORDERS = {
     ],
   },
   fullyPaidOrderWithSeveralTransactions: {
-    id: "T3JkZXI6MTVhYTEwMzYtZWE3OS00MzJiLTliODctNDhlYTMwYmU1NmNl",
+    id: "T3JkZXI6ZmZjY2E1NDQtZTc2Mi00ZjM2LThhMGQtNWNjN2QzNGRmY2Ix",
     transactionToRefundId:
       "VHJhbnNhY3Rpb25JdGVtOjExNzQxZmQ3LWJkZjAtNDIxNi1hNTVkLTFkZDhiNTk4YTA5Mw==",
   },

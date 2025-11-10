@@ -136,12 +136,15 @@ export class ProductPage extends BasePage {
     await this.rightSideDetailsPage.selectFirstCategory();
   }
 
-  async selectFirstTaxOption() {
-    await this.rightSideDetailsPage.selectFirstTax();
+  async fillAllPriceFields(value: string) {
+    const priceFields = await this.priceFieldInput.all();
+    for (const field of priceFields) {
+      await field.fill(value);
+    }
   }
 
-  async typeNameDescAndRating() {
-    await this.typeProductName();
+  async typeNameDescAndRating(name?: string) {
+    await this.typeProductName(name);
     await this.typeProductRating();
     await this.typeProductDescription();
   }
@@ -193,8 +196,8 @@ export class ProductPage extends BasePage {
     await this.datagridFullscreenButton.nth(nthChild).click();
   }
 
-  async gotoProductListPage() {
-    await this.page.goto(URL_LIST.products);
+  async gotoProductListPage(extra = "") {
+    await this.page.goto(URL_LIST.products + extra);
     await this.waitForGrid();
   }
 

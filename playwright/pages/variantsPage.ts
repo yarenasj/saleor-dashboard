@@ -15,8 +15,6 @@ export class VariantsPage extends BasePage {
     readonly skuTextField = page.getByTestId("sku"),
     readonly variantsList = page.getByTestId("variants-list"),
     readonly variantsNames = page.getByTestId("variant-name"),
-    readonly attributeOption = page.getByTestId("select-option"),
-    readonly attributeSelector = page.getByTestId("attribute-value"),
     readonly addWarehouseButton = page.getByTestId("add-warehouse"),
     readonly chooseMediaButton = page.getByTestId("choose-media-button"),
     readonly addVariantButton = page.getByTestId("button-add-variant"),
@@ -100,16 +98,6 @@ export class VariantsPage extends BasePage {
 
   async clickSaveVariantButton() {
     await this.saveButton.click();
-  }
-
-  async selectFirstAttributeValue() {
-    await this.attributeSelector.click();
-    await this.attributeOption.first().click();
-  }
-
-  async selectLastAttributeValue() {
-    await this.attributeSelector.locator("input").clear();
-    await this.attributeOption.last().click();
   }
 
   async selectWarehouse(warehouse = "Oceania") {

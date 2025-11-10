@@ -51,7 +51,7 @@ export class OrdersPage extends BasePage {
     readonly salesChannel = page.getByTestId("salesChannel"),
     readonly addShippingCarrierLink = page.getByTestId("add-shipping-carrier"),
     readonly finalizeButton = page.getByTestId("button-bar-confirm"),
-    readonly addRefundButton = page.getByTestId("add-new-refund-button"),
+    readonly addRefundButton = page.getByTestId("refund-button"),
     readonly customerEmail = page.getByTestId("customer-email"),
     readonly orderRefundModal = page.getByTestId("order-refund-dialog"),
     readonly orderRefundSection = page.getByTestId("order-refund-section"),
@@ -132,7 +132,6 @@ export class OrdersPage extends BasePage {
 
   async clickAddRefundButton() {
     await this.addRefundButton.click();
-    await this.orderRefundModal.waitFor({ state: "visible" });
   }
 
   async clickEditRefundButton(refundInfo: string) {

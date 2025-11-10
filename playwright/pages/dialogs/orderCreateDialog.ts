@@ -28,7 +28,7 @@ export class OrderCreateDialog {
 
   async completeOrderCreateDialogWithTransactionChannel() {
     await this.expandChannelsSearchList();
-    await this.channelOption.filter({ hasText: "transaction flow channel" }).click();
+    await this.channelOption.filter({ hasText: "Channel-PLN" }).click();
     await this.clickConfirmButton();
   }
 }

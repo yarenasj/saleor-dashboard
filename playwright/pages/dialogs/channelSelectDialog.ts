@@ -18,6 +18,14 @@ export class ChannelSelectDialog {
   }
 
   async selectChannel(channelName: string) {
+    if (
+      await this.displayedChannels
+        .filter({ hasText: channelName })
+        .locator(this.displayedChannelsCheckboxes)
+        .isChecked()
+    ) {
+      return;
+    }
     await this.displayedChannels
       .filter({ hasText: channelName })
       .locator(this.displayedChannelsCheckboxes)

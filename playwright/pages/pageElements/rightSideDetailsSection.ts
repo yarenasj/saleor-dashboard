@@ -19,10 +19,8 @@ export class RightSideDetailsPage extends BasePage {
     readonly pickupDisabledButton = page.getByTestId("DISABLED"),
     readonly pickupAllWarehousesButton = page.getByTestId("ALL"),
     readonly categorySelectOption = page.locator("[data-test-id*='select-option']"),
-    readonly taxSelectOption = page.locator("[data-test-id*='select-option']"),
     readonly selectOption = page.getByTestId("select-option"),
     readonly categoryInput = page.getByTestId("category"),
-    readonly taxInput = page.getByTestId("taxes"),
     readonly categoryItem = page.getByTestId("select-option"),
     readonly collectionInput = page.getByTestId("collections"),
     readonly autocompleteDropdown = page.getByTestId("autocomplete-dropdown"),
@@ -109,17 +107,6 @@ export class RightSideDetailsPage extends BasePage {
     await this.categorySelectOption.first().click();
   }
 
-  async selectFirstTax() {
-    await expect(this.taxInput.locator("input")).not.toBeDisabled();
-    await this.taxInput.click();
-    await this.taxSelectOption.first().click();
-  }
-
-  async selectTaxIndex(taxIndexOnList: number) {
-    await this.taxInput.click();
-    await this.taxSelectOption.nth(taxIndexOnList).click();
-  }
-
   async selectFirstCollection() {
     await this.collectionInput.click();
     await this.selectOption.first().click();
@@ -175,7 +162,7 @@ export class RightSideDetailsPage extends BasePage {
     await this.page.getByRole("option", { name: warehouseName });
   }
 
-  async selectCustomer(customer = "allison.freeman@example.com") {
+  async selectCustomer(customer = "ashley.cook@example.com") {
     await this.selectCustomerOption.locator(`text=${customer}`).click();
     await this.waitForDOMToFullyLoad();
   }

@@ -31,6 +31,7 @@ export class BasePage {
     readonly submitButton = page.getByTestId("submit"),
     readonly giftCardInTable = page.locator('[href*="/dashboard/gift-cards/.*]'),
     readonly selectAllCheckbox = page.getByTestId("select-all-checkbox").locator("input"),
+    readonly priceFieldInput = page.getByTestId("price-field"),
   ) {
     this.page = page;
   }
@@ -277,7 +278,13 @@ export class BasePage {
     for (const rowIndex of rowIndexes) {
       await this.clickGridCell(0, rowIndex);
     }
-    await expect(searchText.length).toEqual(rowIndexes.length);
+    expect(searchText.length).toEqual(rowIndexes.length);
+  }
+
+  async checkListRowsBasedOnIndexes(rowIndexes: number[]) {
+    for (const rowIndex of rowIndexes) {
+      await this.clickGridCell(0, rowIndex);
+    }
   }
 
   async clickListRowBasedOnContainingText(searchText: string) {
