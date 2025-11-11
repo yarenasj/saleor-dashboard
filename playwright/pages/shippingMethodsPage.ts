@@ -15,8 +15,6 @@ export class ShippingMethodsPage extends BasePage {
   constructor(
     page: Page,
     readonly assignCountryButton = page.getByTestId("assign-country"),
-    readonly addPriceRateButton = page.getByTestId("add-price-rate"),
-    readonly addWeightRateButton = page.getByTestId("add-weight-rate"),
     readonly createShippingZoneButton = page.getByTestId("add-shipping-zone"),
     readonly shippingZoneNameInput = page.getByTestId("shipping-zone-name"),
     readonly shippingZoneDescriptionField = page
@@ -30,8 +28,6 @@ export class ShippingMethodsPage extends BasePage {
       .getByTestId("shipping-method-row")
       .getByRole("button")
       .getByTestId("delete-button"),
-    readonly priceBasedRatesSection = page.getByTestId("price-based-rates"),
-    readonly weightBasedRatesSection = page.getByTestId("weight-based-rates"),
   ) {
     super(page);
     this.rightSideDetailsPage = new RightSideDetailsPage(page);
@@ -39,20 +35,14 @@ export class ShippingMethodsPage extends BasePage {
     this.deleteShippingMethodDialog = new DeleteShippingMethodDialog(page);
   }
 
-  async clickAddWeightRateButton() {
-    await this.addWeightRateButton.click();
-  }
-
-  async clickAddPriceRateButton() {
-    await this.addPriceRateButton.click();
-  }
-
   async clickAssignCountryButton() {
     await this.assignCountryButton.click();
   }
 
   async typeShippingZoneName(shippingZoneName = "e2e shipping zone") {
-    await this.shippingZoneNameInput.fill(`${shippingZoneName} - ${new Date().toISOString()}`);
+    const name = `${shippingZoneName} - ${new Date().toISOString()}`;
+    await this.shippingZoneNameInput.fill(name);
+    return name;
   }
 
   async typeShippingZoneDescription(shippingDescription = "Biggest zone in e2e world") {
@@ -95,10 +85,6 @@ export class ShippingMethodsPage extends BasePage {
 
   async clickCreateShippingZoneButton() {
     await this.createShippingZoneButton.click();
-  }
-
-  async clickDeletePriceBasedShippingMethod() {
-    await this.priceBasedRatesSection.locator(this.deleteShippingRateButtonOnList).click();
   }
 
   async clickDeleteShippingRateButton() {

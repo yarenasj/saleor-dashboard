@@ -74,8 +74,11 @@ export class RightSideDetailsPage extends BasePage {
   async typeAndSelectSingleWarehouseShippingPage(warehouse = "Europe") {
     await this.selectWarehouseShippingMethodButton.fill(warehouse);
 
-    await this.selectOption.filter({ hasText: warehouse }).first().click();
-    // below click hides prompted options
+    const specificOption = this.selectOption.filter({ hasText: warehouse }).first();
+
+    await specificOption.waitFor({ state: "visible" });
+    await specificOption.click({ force: true });
+
     this.clickWarehouseSelectShippingPage();
   }
 
@@ -94,6 +97,12 @@ export class RightSideDetailsPage extends BasePage {
 
   async selectSingleChannelShippingPage(channel = "PLN") {
     await this.selectOption.filter({ hasText: `Channel-${channel}` }).click();
+    // below click hides prompted options
+    this.clickChannelsSelectShippingPage();
+  }
+
+  async selectChannelShippingPage(channel = "PLN") {
+    await this.selectOption.filter({ hasText: channel }).click();
     // below click hides prompted options
     this.clickChannelsSelectShippingPage();
   }

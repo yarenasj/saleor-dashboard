@@ -259,9 +259,9 @@ export const CHANNELS = {
     name: "e2e-channel-do-not-delete",
     slug: "e2e-channel-do-not-delete",
   },
-  channelUSD: {
+  defaultChannel: {
     id: "Q2hhbm5lbDoyMjQz",
-    name: "Channel-USD",
+    name: "Default Channel",
   },
   channelPLN: {
     id: "Q2hhbm5lbDoyMjQ0",
@@ -520,9 +520,9 @@ export const SHIPPING_METHODS = {
     name: "Shipping method that is used to add rates",
   },
   shippingMethodToBeUpdated: {
-    id: "U2hpcHBpbmdab25lOjIzOTI=",
-    info: "Shipping zone to be updated",
-    name: "e2e-test-shippingZone-to-be-updated",
+    id: "U2hpcHBpbmdab25lOjEw",
+    info: "Test to update",
+    name: "Test to update",
   },
   shippingMethodToBeBulkDeleted1: {
     id: "U2hpcHBpbmdab25lOjIzOTM=",
