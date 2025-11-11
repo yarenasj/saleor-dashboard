@@ -11,11 +11,7 @@ test.beforeEach(({ page }) => {
   warehousePage = new WarehousePage(page);
 });
 test("TC: SALEOR_30 Create basic warehouse #e2e #warehouse", async () => {
-  await warehousePage.gotoWarehouseListView();
-  await warehousePage.clickCreateNewWarehouseButton();
-  await warehousePage.completeWarehouseForm();
-  await warehousePage.clickSaveButton();
-  await warehousePage.basePage.expectSuccessBanner();
+  await createWarehouse();
 });
 test("TC: SALEOR_100 Edit warehouse #e2e #warehouse", async () => {
   await warehousePage.gotoExistingWarehousePage(WAREHOUSES.warehouseToBeEdited.id);
@@ -25,7 +21,6 @@ test("TC: SALEOR_100 Edit warehouse #e2e #warehouse", async () => {
   await warehousePage.typeAddressLine2("edited warehouse address 2");
   await warehousePage.typePhone("+48655922888");
   await warehousePage.rightSideDetailsPage.clickPublicStockButton();
-  await warehousePage.rightSideDetailsPage.clickPickupAllWarehousesButton();
   await warehousePage.clickSaveButton();
   await warehousePage.basePage.expectSuccessBanner();
 });
@@ -38,3 +33,11 @@ test("TC: SALEOR_101 Delete warehouse #e2e #warehouse", async () => {
     WAREHOUSES.warehouseToBeDeleted.name,
   );
 });
+
+async function createWarehouse() {
+  await warehousePage.gotoWarehouseListView();
+  await warehousePage.clickCreateNewWarehouseButton();
+  await warehousePage.completeWarehouseForm();
+  await warehousePage.clickSaveButton();
+  await warehousePage.basePage.expectSuccessBanner();
+}

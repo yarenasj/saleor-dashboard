@@ -103,8 +103,6 @@ export class WarehousePage extends BasePage {
 
   async gotoExistingWarehousePage(warehouseId: string) {
     const existingWarehouseUrl = URL_LIST.warehouses + warehouseId;
-
-    await console.log("Navigating to warehouse details: " + existingWarehouseUrl);
     await this.page.goto(existingWarehouseUrl);
   }
 }

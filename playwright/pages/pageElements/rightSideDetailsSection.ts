@@ -17,7 +17,6 @@ export class RightSideDetailsPage extends BasePage {
       "select-channel-for-shipping-method",
     ),
     readonly pickupDisabledButton = page.getByTestId("DISABLED"),
-    readonly pickupAllWarehousesButton = page.getByTestId("ALL"),
     readonly categorySelectOption = page.locator("[data-test-id*='select-option']"),
     readonly selectOption = page.getByTestId("select-option"),
     readonly categoryInput = page.getByTestId("category"),
@@ -151,10 +150,6 @@ export class RightSideDetailsPage extends BasePage {
 
   async clickPickupDisabledButton() {
     await this.pickupDisabledButton.click();
-  }
-
-  async clickPickupAllWarehousesButton() {
-    await this.pickupAllWarehousesButton.click();
   }
 
   async clickPrivateStockButton() {
