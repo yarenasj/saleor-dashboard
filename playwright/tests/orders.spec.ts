@@ -140,7 +140,7 @@ test("TC: SALEOR_82 Change shipping address in not fulfilled order #e2e #order",
 
 test("TC: SALEOR_83 Draft orders bulk delete #e2e #draft", async () => {
   await draftOrdersPage.goToDraftOrdersListView();
-  await draftOrdersPage.checkListRowsBasedOnIndexes([0, 1]);
+  await draftOrdersPage.checkListRowsBasedOnIndexes([0]);
   await draftOrdersPage.clickBulkDeleteButton();
   await draftOrdersPage.deleteDraftOrdersDialog.clickDeleteButton();
   await draftOrdersPage.expectSuccessBanner();

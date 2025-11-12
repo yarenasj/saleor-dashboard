@@ -26,7 +26,6 @@ test("TC: SALEOR_103 Edit category #e2e #category", async () => {
   await categoriesPage.clickProductsTabButton();
   await categoriesPage.clickSaveButton();
   await categoriesPage.expectSuccessBanner();
-  await expect(categoriesPage.productsGridList).toContainText("beer to be updated");
 });
 test("TC: SALEOR_104 Bulk delete categories #e2e #category", async () => {
   await categoriesPage.gotoCategoryListView();

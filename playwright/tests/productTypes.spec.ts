@@ -65,6 +65,7 @@ test("TC: SALEOR_186 As a admin user I can delete several product types #e2e #pr
 
   await productTypePage.gotoProductTypeListPage();
   await expect(productTypePage.productTypeList).toBeVisible();
+  await productTypePage.page.waitForTimeout(1000);
   await productTypePage.checkProductTypesOnList([productTypeId]);
   await productTypePage.clickBulkDeleteButton();
   await productTypePage.deleteProductTypeDialog.clickConfirmDeleteButton();

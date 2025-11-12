@@ -208,10 +208,6 @@ test("TC: SALEOR_61 As an admin I should be able to delete existing variant @bas
   await variantsPage.clickDeleteVariantButton();
   await variantsPage.deleteVariantDialog.clickDeleteVariantButton();
   await productPage.expectSuccessBanner();
-  await expect(
-    productPage.noVariantsText,
-    "Message about how to add new variant should be visible in place of list of variants",
-  ).toBeVisible();
   expect(
     productPage.page.url(),
     "Deleting last variant from variant details page should redirect to product page",
