@@ -14,17 +14,17 @@ test.beforeEach(({ page }) => {
   shippingMethodsPage = new ShippingMethodsPage(page);
   shippingRatesPage = new ShippingRatesPage(page);
 });
-test("TC: SALEOR_31 Create basic shipping method #shipping-method #e2e", async () => {
+test("TC: SALEOR_51 Create basic shipping method #shipping-method #e2e", async () => {
   await createShippingMethod();
 });
-test("TC: SALEOR_36 Delete shipping zones in bulk #shipping-method #e2e", async () => {
+test("TC: SALEOR_52 Delete shipping zones in bulk #shipping-method #e2e", async () => {
   await shippingMethodsPage.gotoListView();
   await shippingMethodsPage.checkListRowsBasedOnContainingText(["e2e shipping zone -"]);
   await shippingMethodsPage.clickBulkDeleteGridRowsButton();
   await shippingMethodsPage.deleteShippingMethodDialog.clickDeleteButton();
   await shippingMethodsPage.expectSuccessBanner();
 });
-test("TC: SALEOR_37 Update a shipping method #shipping-method #e2e", async () => {
+test("TC: SALEOR_53 Update a shipping method #shipping-method #e2e", async () => {
   const { shippingMethodId, name } = await createShippingMethod();
   const channelSection = shippingMethodsPage.rightSideDetailsPage.channelSection;
   const alreadyAssignedChannels = [CHANNELS.channelPLN.name];

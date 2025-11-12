@@ -8,7 +8,7 @@ test.use({ permissionName: "admin" });
 
 const productTypeName = `e2e-product-type-${faker.datatype.number()}`;
 
-test("TC: SALEOR_1 Create basic product type #e2e #product-type", async ({ page }) => {
+test("TC: SALEOR_46 Create basic product type #e2e #product-type", async ({ page }) => {
   const productTypePage = new ProductTypePage(page);
 
   await productTypePage.gotoProductTypeListPage();
@@ -19,12 +19,12 @@ test("TC: SALEOR_1 Create basic product type #e2e #product-type", async ({ page 
   await productTypePage.expectSuccessBanner();
   await expect(productTypePage.nameInput).toHaveValue(productTypeName);
 });
-test("TC: SALEOR_2 Create gift card product type #e2e #product-type", async ({ page }) => {
+test("TC: SALEOR_47 Create gift card product type #e2e #product-type", async ({ page }) => {
   const productTypePage = new ProductTypePage(page);
   await createBasicProductType(productTypePage, productTypeName);
   await expect(productTypePage.nameInput).toHaveValue(productTypeName);
 });
-test("TC: SALEOR_184 As a admin I can edit product type #e2e #product-type", async ({ page }) => {
+test("TC: SALEOR_48 As a admin I can edit product type #e2e #product-type", async ({ page }) => {
   const productTypePage = new ProductTypePage(page);
   const updatedProductTypeName = `updated-e2e-product-type-${faker.datatype.number()}`;
 
@@ -38,7 +38,7 @@ test("TC: SALEOR_184 As a admin I can edit product type #e2e #product-type", asy
   await expect(productTypePage.shippingWeightInput).toHaveValue("10");
   await expect(productTypePage.nameInput).toHaveValue(updatedProductTypeName);
 });
-test("TC: SALEOR_185 As a admin user I can delete product type #e2e #product-type", async ({
+test("TC: SALEOR_49 As a admin user I can delete product type #e2e #product-type", async ({
   page,
 }) => {
   const productTypePage = new ProductTypePage(page);
@@ -55,7 +55,7 @@ test("TC: SALEOR_185 As a admin user I can delete product type #e2e #product-typ
   });
   await expect(productTypePage.productTypeList).not.toContainText(productTypeName);
 });
-test("TC: SALEOR_186 As a admin user I can delete several product types #e2e #product-type", async ({
+test("TC: SALEOR_50 As a admin user I can delete several product types #e2e #product-type", async ({
   page,
 }) => {
   const productTypePage = new ProductTypePage(page);

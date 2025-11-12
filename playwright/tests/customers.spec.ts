@@ -25,7 +25,7 @@ test.beforeEach(({ page }) => {
   deleteAddressDialog = new DeleteAddressDialog(page);
 });
 
-test("TC: SALEOR_199 Create customer #e2e #customer", async () => {
+test("TC: SALEOR_11 Create customer #e2e #customer", async () => {
   const { firstName, lastName, note, email } = await createCustomer();
   await expect(customersPage.pageHeader).toContainText(`${firstName} ${lastName}`);
   await expect(customersPage.customerNoteInput).toContainText(note);
@@ -34,7 +34,7 @@ test("TC: SALEOR_199 Create customer #e2e #customer", async () => {
   await expect(customersPage.customerEmailInput).toHaveValue(email.toLowerCase());
 });
 
-test("TC: SALEOR_200 As an admin I should not be able to create customer with duplicated email #e2e #customer", async () => {
+test("TC: SALEOR_12 As an admin I should not be able to create customer with duplicated email #e2e #customer", async () => {
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
   const note = faker.lorem.sentence();
@@ -56,7 +56,7 @@ test("TC: SALEOR_200 As an admin I should not be able to create customer with du
   await customersPage.expectErrorBannerMessage("User with this Email already exists.");
 });
 
-test("TC: SALEOR_201 Update customer account info #e2e #customer", async () => {
+test("TC: SALEOR_13 Update customer account info #e2e #customer", async () => {
   const firstName = faker.name.firstName();
   const lastName = faker.name.lastName();
   const email = faker.internet.email();
@@ -75,7 +75,7 @@ test("TC: SALEOR_201 Update customer account info #e2e #customer", async () => {
   await expect(customersPage.customerEmailInput).toHaveValue(email.toLowerCase());
 });
 
-test("TC: SALEOR_202 Deactivate a customer #e2e #customer", async () => {
+test("TC: SALEOR_14 Deactivate a customer #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.customerToBeDeactivated.id);
   await customersPage.customerActiveCheckbox.click();
   await customersPage.saveCustomer();
@@ -83,7 +83,7 @@ test("TC: SALEOR_202 Deactivate a customer #e2e #customer", async () => {
   await expect(customersPage.customerActiveCheckbox).not.toBeChecked();
 });
 
-test("TC: SALEOR_203 Activate a customer #e2e #customer", async () => {
+test("TC: SALEOR_15 Activate a customer #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.customerToBeActivated.id);
   await customersPage.customerActiveCheckbox.click();
   await customersPage.saveCustomer();
@@ -91,7 +91,7 @@ test("TC: SALEOR_203 Activate a customer #e2e #customer", async () => {
   await expect(customersPage.customerActiveCheckbox).toBeChecked();
 });
 
-test("TC: SALEOR_204 Delete customer from the details page #e2e #customer", async () => {
+test("TC: SALEOR_16 Delete customer from the details page #e2e #customer", async () => {
   const { email, customerId } = await createCustomer();
   await customersPage.gotoCustomerDetailsPage(customerId);
   await customersPage.deleteCustomer();
@@ -102,7 +102,7 @@ test("TC: SALEOR_204 Delete customer from the details page #e2e #customer", asyn
   await expect(customersPage.emptyDataGridListView).toBeVisible();
 });
 
-test("TC: SALEOR_205 Bulk delete customers #e2e #customer", async () => {
+test("TC: SALEOR_17 Bulk delete customers #e2e #customer", async () => {
   const { firstName, lastName } = await createCustomer();
 
   await customersPage.goToCustomersListView();
@@ -118,7 +118,7 @@ test("TC: SALEOR_205 Bulk delete customers #e2e #customer", async () => {
   await expect(customersPage.emptyDataGridListView).toBeVisible();
 });
 
-test("TC: SALEOR_206 As an admin I want to add address to the customer and set it as default shipping #e2e #customer", async () => {
+test("TC: SALEOR_18 As an admin I want to add address to the customer and set it as default shipping #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.editCustomer.id);
   const addressUK = ADDRESS.addressUK;
   await addNewAddress(addressUK);
@@ -150,7 +150,7 @@ test("TC: SALEOR_206 As an admin I want to add address to the customer and set i
   ).toBeVisible();
 });
 
-test("TC: SALEOR_209 As an admin I want to update customer's address #e2e #customer", async () => {
+test("TC: SALEOR_19 As an admin I want to update customer's address #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.editCustomer.id);
   await addressesListPage.clickManageAddresses();
   await addressesListPage.clickShowMoreMenu(CUSTOMERS.editCustomer.initialShippingAddress.lastName);
@@ -171,7 +171,7 @@ test("TC: SALEOR_209 As an admin I want to update customer's address #e2e #custo
   await addressesListPage.verifyAddressLine2Field(newAddress.firstName, newAddress);
 });
 
-test("TC: SALEOR_210 Delete customer's address #e2e #customer", async () => {
+test("TC: SALEOR_20 Delete customer's address #e2e #customer", async () => {
   await customersPage.gotoCustomerDetailsPage(CUSTOMERS.editCustomer.id);
   const addressUKDel = ADDRESS.addressUKDel;
   await addNewAddress(addressUKDel);

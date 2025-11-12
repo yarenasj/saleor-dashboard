@@ -10,7 +10,7 @@ let categoriesPage: CategoriesPage;
 test.beforeEach(({ page }) => {
   categoriesPage = new CategoriesPage(page);
 });
-test("TC: SALEOR_102 Create basic category #e2e #category", async () => {
+test("TC: SALEOR_1 Create basic category #e2e #category", async () => {
   await categoriesPage.gotoCategoryListView();
   await categoriesPage.waitForDatagridLoaderToDisappear();
   await categoriesPage.clickCreateNewCategoryButton();
@@ -19,7 +19,7 @@ test("TC: SALEOR_102 Create basic category #e2e #category", async () => {
   await categoriesPage.clickSaveButton();
   await categoriesPage.expectSuccessBanner();
 });
-test("TC: SALEOR_103 Edit category #e2e #category", async () => {
+test("TC: SALEOR_2 Edit category #e2e #category", async () => {
   await categoriesPage.gotoExistingCategoriesPage(CATEGORIES.categoryToBeUpdated.id);
   await categoriesPage.typeCategoryName("Updated category");
   await categoriesPage.typeCategoryDescription("Utils description updated");
@@ -27,7 +27,7 @@ test("TC: SALEOR_103 Edit category #e2e #category", async () => {
   await categoriesPage.clickSaveButton();
   await categoriesPage.expectSuccessBanner();
 });
-test("TC: SALEOR_104 Bulk delete categories #e2e #category", async () => {
+test("TC: SALEOR_3 Bulk delete categories #e2e #category", async () => {
   await categoriesPage.gotoCategoryListView();
   await categoriesPage.waitForDOMToFullyLoad();
   await categoriesPage.checkListRowsBasedOnContainingText(

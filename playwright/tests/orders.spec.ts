@@ -30,12 +30,12 @@ test.beforeEach(({ page }) => {
 
 const variantSKU = PRODUCTS.productAvailableWithTransactionFlow.variant1sku;
 
-test("TC: SALEOR_28 Create basic order #e2e #order", async () => {
+test("TC: SALEOR_24 Create basic order #e2e #order", async () => {
   await createOrder();
   await draftOrdersPage.expectSuccessBanner({ message: "finalizado" });
 });
 
-test("TC: SALEOR_76 Create order with transaction flow activated #e2e #order", async () => {
+test("TC: SALEOR_25 Create order with transaction flow activated #e2e #order", async () => {
   await ordersPage.goToOrdersListView();
   await ordersPage.clickCreateOrderButton();
   await ordersPage.orderCreateDialog.completeOrderCreateDialogWithTransactionChannel();
@@ -53,7 +53,7 @@ test("TC: SALEOR_76 Create order with transaction flow activated #e2e #order", a
   await draftOrdersPage.expectSuccessBanner({ message: "finalizado" });
 });
 
-test("TC: SALEOR_77 Mark order as paid and fulfill it with transaction flow activated #e2e #order", async () => {
+test("TC: SALEOR_26 Mark order as paid and fulfill it with transaction flow activated #e2e #order", async () => {
   const orderId = await createOrder();
   await ordersPage.goToExistingOrderPage(orderId);
   await ordersPage.clickMarkAsPaidButton();
@@ -65,7 +65,7 @@ test("TC: SALEOR_77 Mark order as paid and fulfill it with transaction flow acti
   await expect(ordersPage.pageHeaderStatusInfo).toContainText("Completada");
 });
 
-test("TC: SALEOR_79 Mark order as paid and fulfill it with regular flow #e2e #order", async () => {
+test("TC: SALEOR_27 Mark order as paid and fulfill it with regular flow #e2e #order", async () => {
   const orderId = await createOrder();
   await ordersPage.goToExistingOrderPage(orderId);
   await ordersPage.clickMarkAsPaidButton();
@@ -82,7 +82,7 @@ test("TC: SALEOR_79 Mark order as paid and fulfill it with regular flow #e2e #or
   await expect(ordersPage.pageHeaderStatusInfo).toContainText("Completada");
 });
 
-test("TC: SALEOR_80 Add tracking to order #e2e #order", async () => {
+test("TC: SALEOR_28 Add tracking to order #e2e #order", async () => {
   const orderId = await createOrder();
   await completeOrder(orderId);
   const trackingNumber = "123456789";
@@ -94,7 +94,7 @@ test("TC: SALEOR_80 Add tracking to order #e2e #order", async () => {
   await expect(ordersPage.setTrackingNumber).toContainText(trackingNumber);
 });
 
-test("TC: SALEOR_81 Change billing address in fulfilled order #e2e #order", async () => {
+test("TC: SALEOR_29 Change billing address in fulfilled order #e2e #order", async () => {
   const orderId = await createOrder();
   await ordersPage.goToExistingOrderPage(orderId);
   await ordersPage.rightSideDetailsPage.clickEditBillingAddressButton();
@@ -115,7 +115,7 @@ test("TC: SALEOR_81 Change billing address in fulfilled order #e2e #order", asyn
   await addressesListPage.verifyAddressLine2Field(newAddress.firstName, newAddress);
 });
 
-test("TC: SALEOR_82 Change shipping address in not fulfilled order #e2e #order", async () => {
+test("TC: SALEOR_30 Change shipping address in not fulfilled order #e2e #order", async () => {
   const orderId = await createOrder();
   await ordersPage.goToExistingOrderPage(orderId);
   await ordersPage.rightSideDetailsPage.clickEditShippingAddressButton();
@@ -138,7 +138,7 @@ test("TC: SALEOR_82 Change shipping address in not fulfilled order #e2e #order",
   );
 });
 
-test("TC: SALEOR_83 Draft orders bulk delete #e2e #draft", async () => {
+test("TC: SALEOR_31 Draft orders bulk delete #e2e #draft", async () => {
   await draftOrdersPage.goToDraftOrdersListView();
   await draftOrdersPage.checkListRowsBasedOnIndexes([0]);
   await draftOrdersPage.clickBulkDeleteButton();
@@ -151,7 +151,7 @@ test("TC: SALEOR_83 Draft orders bulk delete #e2e #draft", async () => {
   ).toEqual([]);
 });
 
-test("TC: SALEOR_217 Complete basic order for non existing customer #e2e #order", async () => {
+test("TC: SALEOR_32 Complete basic order for non existing customer #e2e #order", async () => {
   const nonExistingEmail = `customer-${faker.datatype.number()}@example.com`;
   const newAddress = ADDRESS.addressPL;
 

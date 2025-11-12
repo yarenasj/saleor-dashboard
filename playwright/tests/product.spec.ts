@@ -18,7 +18,7 @@ test.beforeEach(({ page }) => {
   productCreateDialog = new ProductCreateDialog(page);
   variantsPage = new VariantsPage(page);
 });
-test("TC: SALEOR_3 Create basic product with variants #e2e #product", async () => {
+test("TC: SALEOR_33 Create basic product with variants #e2e #product", async () => {
   await productPage.gotoProductListPage();
   await productPage.clickCreateProductButton();
   await productCreateDialog.selectProductTypeWithVariants();
@@ -29,10 +29,10 @@ test("TC: SALEOR_3 Create basic product with variants #e2e #product", async () =
   await productPage.clickSaveButton();
   await productPage.expectSuccessBanner();
 });
-test("TC: SALEOR_5 Create basic - single product type - product without variants #e2e #product", async () => {
+test("TC: SALEOR_32 Create basic - single product type - product without variants #e2e #product", async () => {
   await createBasicProduct();
 });
-test("TC: SALEOR_26 Create basic info variant - via edit variant page #e2e #product", async () => {
+test("TC: SALEOR_35 Create basic info variant - via edit variant page #e2e #product", async () => {
   const variantName = `TC: SALEOR_26 - variant name - ${new Date().toISOString()}`;
 
   await createProductVariant(PRODUCTS.productWithOneVariant.id, variantName);
@@ -43,7 +43,7 @@ test("TC: SALEOR_26 Create basic info variant - via edit variant page #e2e #prod
     `New variant name: ${variantName} should be visible on the list`,
   ).toBeVisible();
 });
-test("TC: SALEOR_27 Create full info variant - via edit variant page #e2e #product", async () => {
+test("TC: SALEOR_36 Create full info variant - via edit variant page #e2e #product", async () => {
   const variantName = `TC: SALEOR_27 - variant name - ${new Date().toISOString()}`;
   const productId = await createBasicProduct();
   await productPage.gotoExistingProductPage(productId);
@@ -70,7 +70,7 @@ test("TC: SALEOR_27 Create full info variant - via edit variant page #e2e #produ
   await variantsPage.clickSaveVariantButton();
   await variantsPage.expectSuccessBanner();
 });
-test("TC: SALEOR_44 As an admin I should be able to delete a several products @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_37 As an admin I should be able to delete a several products @basic-regression #product #e2e", async () => {
   await createBasicProduct("a product to be deleted via bulk");
   await productPage.gotoProductListPage(
     "?0%5Bs0.productType%5D=single-product-type&asc=false&sort=date",
@@ -88,7 +88,7 @@ test("TC: SALEOR_44 As an admin I should be able to delete a several products @b
     `Given products: ${PRODUCTS.productsToBeBulkDeleted.names} should be deleted from the list`,
   ).toEqual([]);
 });
-test("TC: SALEOR_45 As an admin I should be able to delete a single products @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_38 As an admin I should be able to delete a single products @basic-regression #product #e2e", async () => {
   const productId = await createBasicProduct("a product to be deleted");
   await productPage.gotoExistingProductPage(productId);
   await productPage.clickDeleteProductButton();
@@ -102,7 +102,7 @@ test("TC: SALEOR_45 As an admin I should be able to delete a single products @ba
     }),
   ).not.toBeVisible();
 });
-test("TC: SALEOR_46 As an admin, I should be able to update a product by uploading media and assigning channels @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_39 As an admin, I should be able to update a product by uploading media and assigning channels @basic-regression #product #e2e", async () => {
   const productId = await createBasicProduct();
 
   await productPage.gotoExistingProductPage(productId);
@@ -121,7 +121,7 @@ test("TC: SALEOR_46 As an admin, I should be able to update a product by uploadi
     "Newly added single image should be present",
   ).toEqual(1);
 });
-test("TC: SALEOR_57 As an admin, I should be able to search products on list view @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_40 As an admin, I should be able to search products on list view @basic-regression #product #e2e", async () => {
   await productPage.gotoProductListPage();
   await productPage.searchAndFindRowIndexes("apple");
   await productPage.checkListRowsBasedOnContainingText(["Apple"]);
@@ -130,7 +130,7 @@ test("TC: SALEOR_57 As an admin, I should be able to search products on list vie
     "There should be only one product visible on list",
   ).toEqual(1);
 });
-test("TC: SALEOR_58 As an admin I should be able use pagination on product list view @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_41 As an admin I should be able use pagination on product list view @basic-regression #product #e2e", async () => {
   await productPage.gotoProductListPage();
 
   const firstPageProductName = await productPage.getGridCellText(0, 0);
@@ -155,7 +155,7 @@ test("TC: SALEOR_58 As an admin I should be able use pagination on product list 
     `Product from first page: ${firstPageProductName} should be visible again`,
   ).toContainText(firstPageProductName);
 });
-test("TC: SALEOR_59 As an admin I should be able to filter products by channel on product list view @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_42 As an admin I should be able to filter products by channel on product list view @basic-regression #product #e2e", async () => {
   await productPage.gotoProductListPage();
   await productPage.searchAndFindRowIndexes(PRODUCTS.productAvailableOnlyInUsdChannel.name);
   expect(
@@ -171,7 +171,7 @@ test("TC: SALEOR_59 As an admin I should be able to filter products by channel o
     `Product: ${PRODUCTS.productAvailableOnlyInPlnChannel.name} should be visible on grid table`,
   ).toContainText(PRODUCTS.productAvailableOnlyInPlnChannel.name);
 });
-test("TC: SALEOR_60 As an admin I should be able update existing variant @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_43 As an admin I should be able update existing variant @basic-regression #product #e2e", async () => {
   const variantName = `TC: SALEOR_60 - variant name - ${new Date().toISOString()}`;
   const sku = `SALEOR_60-sku-${new Date().toISOString()}`;
   const productId = await createBasicProduct();
@@ -199,7 +199,7 @@ test("TC: SALEOR_60 As an admin I should be able update existing variant @basic-
     `Updated name: ${variantName} should be visible on list`,
   ).toBeVisible();
 });
-test("TC: SALEOR_61 As an admin I should be able to delete existing variant @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_44 As an admin I should be able to delete existing variant @basic-regression #product #e2e", async () => {
   const variantName = `TC: SALEOR_61 - variant name - ${new Date().toISOString()}`;
   const productId = await createBasicProduct();
   const variantId = await createProductVariant(productId, variantName);
@@ -213,7 +213,7 @@ test("TC: SALEOR_61 As an admin I should be able to delete existing variant @bas
     "Deleting last variant from variant details page should redirect to product page",
   ).toContain("http://localhost:9000/products/" + productId);
 });
-test("TC: SALEOR_62 As an admin I should be able to bulk delete existing variants @basic-regression #product #e2e", async () => {
+test("TC: SALEOR_45 As an admin I should be able to bulk delete existing variants @basic-regression #product #e2e", async () => {
   const variantName = `TC: SALEOR_62 - variant name - ${new Date().toISOString()}`;
   const variantName2 = `TC: SALEOR_62-2 - variant name - ${new Date().toISOString()}`;
   const productId = await createBasicProduct();
